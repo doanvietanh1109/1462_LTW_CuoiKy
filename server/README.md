@@ -12,7 +12,7 @@ This is the backend source code for the student room rental system. It provides 
 ## Folder Structure
 
 ```text
-backend/
+server/
 ├── src/
 │   ├── config/        # Database connection and environment config
 │   ├── controllers/   # Endpoint logic for Auth, Room, User, Order, etc.
@@ -35,14 +35,14 @@ npm install
 
 ### 2. Configure Environment Variables
 
-Create a `.env` file in `backend/` based on `.env.example`:
+Create a `.env` file in `server/` based on `.env.example`:
 
 ```env
 PORT=4000
 MONGO_URI=mongodb://127.0.0.1:27017/thuephongsv
 JWT_SECRET=super_secret_jwt_key
 JWT_EXPIRES_IN=7d
-CLIENT_URL=http://127.0.0.1:5500
+CLIENT_URL=http://localhost:5173
 ```
 
 Security note: do not commit `.env` to GitHub. Use a strong random value for `JWT_SECRET`.
@@ -57,7 +57,7 @@ npm run seed
 
 ### 4. Run In Development
 
-The development script uses Node's watch mode and restarts automatically when source files change:
+The development script uses Nodemon to restart the server automatically when source files change:
 
 ```bash
 npm run dev
