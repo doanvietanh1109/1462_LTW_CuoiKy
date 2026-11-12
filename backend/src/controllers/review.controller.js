@@ -1,0 +1,105 @@
+const { Review } = require("../models/review.model");
+const { sendSuccess, sendError } = require("../utils/response");
+const mongoose = require("mongoose");
+
+const getReviewsByRoomId = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.roomId)) {
+      return sendError(res, "Invalid room id", null, 400);
+    }
+
+    const reviews = await Review.find({ roomId: req.params.roomId }).sort({ createdAt: -1 });
+    return sendSuccess(res, "Reviews fetched successfully", { reviews });
+  } catch (error) {
+    console.error("Get reviews error:", error);
+    return sendError(res, "Server error while fetching reviews", null, 500);
+  }
+};
+
+const createReview = async (req, res) => {
+  try {
+    const { roomId, stars, content } = req.body;
+
+    if (!roomId) return sendError(res, "roomId is required", null, 400);
+    if (!mongoose.isValidObjectId(roomId)) return sendError(res, "Invalid room id", null, 400);
+    if (!stars || stars < 1 || stars > 5) return sendError(res, "stars must be from 1 to 5", null, 400);
+    if (!content) return sendError(res, "Review content is required", null, 400);
+
+    const review = await Review.create({
+      roomId,
+      userId: req.user ? req.user._id : undefined,
+      userName: req.user ? req.user.name : "Guest",
+      stars,
+      content,
+    });
+
+    return sendSuccess(res, "Review created successfully", { review }, 201);
+  } catch (error) {
+    console.error("Create review error:", error);
+    return sendError(res, "Server error while creating review", null, 500);
+  }
+};
+
+const updateReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { stars, content } = req.body;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return sendError(res, "Invalid review id", null, 400);
+    }
+
+    if (stars && (stars < 1 || stars > 5)) {
+      return sendError(res, "stars must be from 1 to 5", null, 400);
+    }
+
+    const review = await Review.findById(id);
+    if (!review) {
+      return sendError(res, "Review not found", null, 404);
+    }
+
+    // Check if user owns this review
+    if (req.user && review.userId && review.userId.toString() !== req.user._id.toString()) {
+      return sendError(res, "You can only edit your own reviews", null, 403);
+    }
+
+    if (stars) review.stars = stars;
+    if (content) review.content = content;
+
+    await review.save();
+
+    return sendSuccess(res, "Review updated successfully", { review });
+  } catch (error) {
+    console.error("Update review error:", error);
+    return sendError(res, "Server error while updating review", null, 500);
+  }
+};
+
+const deleteReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+      return sendError(res, "Invalid review id", null, 400);
+    }
+
+    const review = await Review.findById(id);
+    if (!review) {
+      return sendError(res, "Review not found", null, 404);
+    }
+
+    // Check if user owns this review
+    if (req.user && review.userId && review.userId.toString() !== req.user._id.toString()) {
+      return sendError(res, "You can only delete your own reviews", null, 403);
+    }
+
+    await Review.findByIdAndDelete(id);
+
+    return sendSuccess(res, "Review deleted successfully");
+  } catch (error) {
+    console.error("Delete review error:", error);
+    return sendError(res, "Server error while deleting review", null, 500);
+  }
+};
+
+module.exports = { getReviewsByRoomId, createReview, updateReview, deleteReview };
