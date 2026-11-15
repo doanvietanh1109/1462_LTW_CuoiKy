@@ -120,6 +120,28 @@
 - Không thêm retry, không tắt StrictMode.
 - Git cuối: branch `quality/project-review`; P0 code/tests commit `3fdcba1` (`fix: honor direct tenant invoice ownership`) và commit cập nhật tài liệu local trên cùng nhánh. Working tree sạch; chưa push/merge, `main` không đổi.
 
+## UI polish người thuê — hóa đơn, hợp đồng, thông báo, sửa chữa (2026-11-15)
+
+### Đã hoàn thành
+
+- Danh sách hóa đơn chuyển thành card responsive: kỳ, phòng, mã, hạn/đã thu, tổng và số còn phải trả dựa trên trạng thái Backend; lọc Tất cả/Chưa thanh toán/Đã thanh toán; bỏ phần chi tiết bung rộng trùng lặp. Link chi tiết cung cấp thao tác in/lưu PDF.
+- Chi tiết hóa đơn trình bày trạng thái và tổng tiền nổi bật, người cho thuê/người thuê, ngày phát hành/hạn, bốn khoản Backend (phòng, điện, nước, phí dịch vụ), chỉ số/tiêu thụ/đơn giá/thành tiền. Không thêm thuế, giảm giá, nợ cũ hay thanh toán một phần không có trong model.
+- Bản in có CSS khổ A4, tách nội dung chứng từ khỏi navbar/nút, cột và dòng khoản thu được bố trí lại trên viewport hẹp. Đây mới là triển khai CSS; PDF trình duyệt chưa được xem thực tế.
+- Hợp đồng đổi từ bảng phí dài thành nhóm thẻ thời hạn/thuê/cọc/điện/nước/dịch vụ; giữ thông tin hai bên và thao tác in/gia hạn/kết thúc; bỏ thông tin fallback giả về điện thoại/CCCD/chỉ số/tiện nghi/địa chỉ, bỏ tuyên bố ký số. In hợp đồng giữ qua `window.print`, chưa QA bản in.
+- Thông báo hiển thị tối đa 50 bản ghi API, lọc theo loại có trong model, phân biệt đọc/chưa đọc, đánh dấu tất cả đã đọc và mở invoice/contract/repair liên quan.
+- Yêu cầu sửa chữa có empty state và nút đưa tới form; card hỗ trợ trạng thái, ảnh và nội dung backend, tiến trình cho phép wrap trên mobile.
+- Bỏ QR chuyển khoản gắn cứng số tài khoản `MB-0987654321`; hệ thống không lưu tài khoản nhận tiền. Modal giờ nói rõ người thuê thanh toán theo thỏa thuận trước, gửi yêu cầu sau đó, và chủ trọ xác nhận mới đổi trạng thái.
+- File thay đổi: `client/src/pages/InvoiceDetailPage.jsx`, `client/src/pages/TenantPortalPage.jsx`, `client/src/styles/tenant.css`, `docs/QUALITY_PLAN.md`. Không sửa Backend hoặc database.
+
+### Kiểm thử, giới hạn và việc còn lại
+
+- `npm --prefix client run build`: PASS; `npm --prefix server test`: 39/39 PASS; `git diff --check`: PASS.
+- NOT VERIFIED: layout thực tại 390/768/1024/1440 px, browser Console/Network, print preview/PDF A4, trang chi tiết với hóa đơn thật, contract print. Cố chạy Vite dev server trên `127.0.0.1:5173` nhưng sandbox từ chối listen với `EPERM`; không có browser/database test chạy trong phiên.
+- Các test Backend đều dùng mock/unit; không có integration/E2E cho invoice list/detail/print, filter notifications, mark read/route navigation, contract actions, repair form/upload. Không sử dụng MongoDB thật.
+- Cần mở app từ đúng thư mục `client/` và backend test riêng, kiểm tra lần lượt 390, 768, 1024 và 1440 px; mở từng invoice, in PDF, xác nhận header/bảng/tổng/footnote không bị cắt; dùng fixture test chứ không ghi vào production.
+- Cần review ảnh tham khảo trực tiếp cạnh dashboard, notification, repair; hiện cấu trúc thông tin được hoàn thiện nhưng chưa có bằng chứng visual QA.
+- Git cuối: branch `quality/project-review`; UI commit `308e81e` (`feat: polish tenant invoice and contract experience`); commit ghi nhận tiến độ này sẽ theo ngay sau trên cùng nhánh. Working tree sạch sau khi ghi nhận; các commit P0 được giữ nguyên; không push/merge, `main` không đổi.
+
 ### Chưa hoàn thành và cách tiếp tục ở phiên sau
 
 - Chạy app trong browser với backend và DB test riêng; kiểm tra Network cho lịch sử thuê, invoices, old bookings URL và console. Không dùng MongoDB production.
