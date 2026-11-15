@@ -4,6 +4,9 @@ const { Contract } = require("../models/contract.model");
 const { Invoice } = require("../models/invoice.model");
 const { sendSuccess, sendError } = require("../utils/response");
 
+const isValidMeterValue = (value) => value !== "" && value !== null && value !== undefined && Number.isFinite(Number(value)) && Number(value) >= 0;
+const isValidPeriod = (month, year) => Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
+
 // Tính giá điện bậc thang (Tính năng nâng cao cộng điểm)
 const calculateTieredElectricity = (usage) => {
   if (usage <= 0) return 0;
@@ -30,8 +33,9 @@ const calculateTieredElectricity = (usage) => {
 const getMeterSheet = async (req, res, next) => {
   try {
     const now = new Date();
-    const month = Number(req.query.month) || now.getMonth() + 1;
-    const year = Number(req.query.year) || now.getFullYear();
+    const month = req.query.month === undefined ? now.getMonth() + 1 : Number(req.query.month);
+    const year = req.query.year === undefined ? now.getFullYear() : Number(req.query.year);
+    if (!isValidPeriod(month, year)) return sendError(res, "Tháng và năm không hợp lệ", null, 400);
 
     const roomQuery = { status: "rented" };
     if (req.user.role === "landlord") {
@@ -40,9 +44,9 @@ const getMeterSheet = async (req, res, next) => {
 
     const [rentedRooms, readings, invoices, activeContracts] = await Promise.all([
       Room.find(roomQuery).populate("blockId", "name").sort({ roomNumber: 1, title: 1 }).lean(),
-      MeterReading.find({ month, year }).lean(),
-      Invoice.find({ month, year }).lean(),
-      Contract.find({ status: "active" }).lean(),
+      MeterReading.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
+      Invoice.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
+      Contract.find({ status: "active", ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
     ]);
 
     const readingMap = new Map(readings.map((r) => [r.roomId.toString(), r]));
@@ -75,10 +79,10 @@ const getMeterSheet = async (req, res, next) => {
         blockName: room.blockId?.name || "Chưa phân dãy",
         tenantName: activeContract?.tenantName || room.tenant?.name || "Người thuê",
         tenantEmail: activeContract?.tenantEmail || room.tenant?.email || "",
-        roomPrice: activeContract?.rentPrice || room.price || 0,
-        electricityPrice: activeContract?.electricityPrice || room.electricityPrice || 3500,
-        waterPrice: activeContract?.waterPrice || room.waterPrice || 15000,
-        serviceFee: activeContract?.serviceFee || room.serviceFee || 100000,
+        roomPrice: activeContract?.rentPrice ?? room.price ?? 0,
+        electricityPrice: activeContract?.electricityPrice ?? room.electricityPrice ?? 3500,
+        waterPrice: activeContract?.waterPrice ?? room.waterPrice ?? 15000,
+        serviceFee: activeContract?.serviceFee ?? room.serviceFee ?? 100000,
         oldElectricity,
         newElectricity,
         oldWater,
@@ -109,16 +113,20 @@ const saveBatchMeterReadings = async (req, res, next) => {
     const numMonth = Number(month);
     const numYear = Number(year);
 
-    if (!numMonth || numMonth < 1 || numMonth > 12 || !numYear) {
+    if (!isValidPeriod(numMonth, numYear)) {
       return sendError(res, "Tháng và năm không hợp lệ", null, 400);
     }
 
     if (!Array.isArray(rows) || rows.length === 0) {
       return sendError(res, "Danh sách chỉ số điện nước trống", null, 400);
     }
+    if (typeof issueInvoices !== "boolean" || typeof useTieredElectricity !== "boolean") {
+      return sendError(res, "Tùy chọn phát hành hoặc cách tính điện không hợp lệ", null, 400);
+    }
 
     // Kiểm tra từng dòng ở server: từ chối chỉ số mới nhỏ hơn chỉ số cũ
     const rowErrors = {};
+    const seenRoomIds = new Set();
     rows.forEach((row, idx) => {
       const oldE = Number(row.oldElectricity);
       const newE = Number(row.newElectricity);
@@ -126,10 +134,16 @@ const saveBatchMeterReadings = async (req, res, next) => {
       const newW = Number(row.newWater);
       const key = row.roomId || `row_${idx}`;
 
-      if (Number.isNaN(oldE) || Number.isNaN(newE) || Number.isNaN(oldW) || Number.isNaN(newW)) {
+      if (typeof row.roomId !== "string" || !/^[a-f\d]{24}$/i.test(row.roomId)) {
+        rowErrors[key] = "Mã phòng không hợp lệ";
+      } else if (seenRoomIds.has(row.roomId)) {
+        rowErrors[key] = "Phòng bị lặp trong cùng bảng chỉ số";
+      } else {
+        seenRoomIds.add(row.roomId);
+      }
+
+      if (![row.oldElectricity, row.newElectricity, row.oldWater, row.newWater].every(isValidMeterValue)) {
         rowErrors[key] = "Chỉ số điện/nước phải là số hợp lệ";
-      } else if (oldE < 0 || newE < 0 || oldW < 0 || newW < 0) {
-        rowErrors[key] = "Chỉ số điện/nước không được là số âm";
       } else if (newE < oldE) {
         rowErrors[key] = `Số điện mới (${newE}) không được nhỏ hơn số điện cũ (${oldE})`;
       } else if (newW < oldW) {
@@ -146,18 +160,42 @@ const saveBatchMeterReadings = async (req, res, next) => {
       );
     }
 
+    // Validate every target before the first write. A batch can never touch another landlord's room.
+    const roomIds = rows.map((row) => row.roomId);
+    const roomQuery = { _id: { $in: roomIds }, status: "rented" };
+    if (req.user.role === "landlord") roomQuery.ownerId = req.user._id;
+    const targetRooms = await Room.find(roomQuery);
+    const targetById = new Map(targetRooms.map((room) => [room._id.toString(), room]));
+    for (const roomId of roomIds) {
+      if (!targetById.has(roomId)) rowErrors[roomId] = "Phòng không tồn tại, không đang thuê hoặc không thuộc quyền quản lý của bạn";
+    }
+    if (Object.keys(rowErrors).length) return sendError(res, "Có phòng không hợp lệ trong bảng chỉ số", { rowErrors }, 400);
+
+    // Load and validate contract rates for every row before mutating any record.
+    const activeContracts = await Contract.find({
+      roomId: { $in: roomIds },
+      status: "active",
+      ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
+    });
+    const contractByRoom = new Map(activeContracts.map((contract) => [contract.roomId.toString(), contract]));
+    for (const roomId of roomIds) {
+      const room = targetById.get(roomId);
+      const contract = contractByRoom.get(roomId);
+      const rates = [contract?.rentPrice ?? room.price, contract?.electricityPrice ?? room.electricityPrice, contract?.waterPrice ?? room.waterPrice, contract?.serviceFee ?? room.serviceFee];
+      if (!rates.every((value) => Number.isFinite(Number(value)) && Number(value) >= 0)) {
+        rowErrors[roomId] = "Tiền phòng, đơn giá điện/nước hoặc phí dịch vụ của phòng không hợp lệ";
+      }
+    }
+    if (Object.keys(rowErrors).length) return sendError(res, "Có đơn giá không hợp lệ trong bảng chỉ số", { rowErrors }, 400);
+
     const savedReadings = [];
     const createdInvoices = [];
     const skippedInvoices = [];
 
     for (const row of rows) {
-      const room = await Room.findById(row.roomId);
-      if (!room) continue;
+      const room = targetById.get(row.roomId);
 
-      const activeContract = await Contract.findOne({
-        roomId: room._id,
-        status: "active",
-      });
+      const activeContract = contractByRoom.get(row.roomId);
 
       const oldElectricity = Number(row.oldElectricity);
       const newElectricity = Number(row.newElectricity);
@@ -183,9 +221,13 @@ const saveBatchMeterReadings = async (req, res, next) => {
       savedReadings.push(reading);
 
       // Cập nhật chỉ số hiện tại trên phòng
-      room.currentElectricity = newElectricity;
-      room.currentWater = newWater;
-      await room.save();
+      // Historical corrections must not roll the room's current meter backwards.
+      const now = new Date();
+      if (numYear === now.getFullYear() && numMonth === now.getMonth() + 1) {
+        room.currentElectricity = newElectricity;
+        room.currentWater = newWater;
+        await room.save();
+      }
 
       // Nếu chọn phát hành hóa đơn luôn
       if (issueInvoices) {
@@ -205,8 +247,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
         }
 
         const roomPrice = activeContract?.rentPrice ?? room.price ?? 0;
-        const electricityPrice =
-          activeContract?.electricityPrice ?? room.electricityPrice ?? 3500;
+        const electricityPrice = activeContract?.electricityPrice ?? room.electricityPrice ?? 3500;
         const waterPrice = activeContract?.waterPrice ?? room.waterPrice ?? 15000;
         const serviceFee = activeContract?.serviceFee ?? room.serviceFee ?? 100000;
 
@@ -269,6 +310,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
       201
     );
   } catch (error) {
+    if (error.code === 11000) return sendError(res, "Dữ liệu tháng này đã được tạo bởi một yêu cầu khác; hãy tải lại bảng và thử lại", error.keyValue || null, 409);
     return next(error);
   }
 };
@@ -277,4 +319,6 @@ module.exports = {
   getMeterSheet,
   saveBatchMeterReadings,
   calculateTieredElectricity,
+  isValidMeterValue,
+  isValidPeriod,
 };
