@@ -46,9 +46,10 @@ const invoiceSchema = new mongoose.Schema(
     totalAmount: { type: Number, required: true, min: 0 },
     status: {
       type: String,
-      enum: ["unpaid", "paid"],
+      enum: ["unpaid", "pending_confirmation", "paid"],
       default: "unpaid",
     },
+    paymentSubmittedAt: { type: Date, default: null },
     paidAt: { type: Date, default: null },
     dueDate: { type: Date, default: null },
     reminderSentAt: { type: Date, default: null },

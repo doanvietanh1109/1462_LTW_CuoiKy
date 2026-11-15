@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest, formatVND, formatDateVN } from "../api/apiClient";
 import { StatusBadge } from "../components/common/StatusBadge";
-import { useAuth } from "../contexts/AuthContext";
-import { getLocalInvoiceById } from "../utils/tenantContractHelper";
 
 // Trang chi tiết hóa đơn (/invoices/:id) dùng useParams + hỗ trợ Xuất/In PDF (Tính năng nâng cao)
 export const InvoiceDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,16 +15,6 @@ export const InvoiceDetailPage = () => {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-
-    const localMatch = getLocalInvoiceById(id, user?.email);
-    if (localMatch && String(id).startsWith("inv-local-")) {
-      setInvoice(localMatch);
-      setError(null);
-      setLoading(false);
-      return () => {
-        isMounted = false;
-      };
-    }
 
     apiRequest(`/invoices/${id}`)
       .then((res) => {
@@ -38,13 +25,8 @@ export const InvoiceDetailPage = () => {
       })
       .catch((err) => {
         if (isMounted) {
-          if (localMatch && err.status !== 403) {
-            setInvoice(localMatch);
-            setError(null);
-          } else {
-            setError(err.message);
-            setErrorStatus(err.status);
-          }
+          setError(err.message);
+          setErrorStatus(err.status);
         }
       })
       .finally(() => {
@@ -54,7 +36,7 @@ export const InvoiceDetailPage = () => {
     return () => {
       isMounted = false;
     };
-  }, [id, user?.email]);
+  }, [id]);
 
   if (loading) {
     return (

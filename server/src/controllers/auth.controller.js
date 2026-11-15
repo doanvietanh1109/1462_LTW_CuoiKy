@@ -21,15 +21,18 @@ const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    if (!name || !email || !password) {
+    if (typeof name !== "string" || !name.trim() || typeof email !== "string" || !email.trim() || typeof password !== "string" || !password) {
       return sendError(res, "Please enter name, email, and password", null, 400);
     }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) return sendError(res, "Email không hợp lệ", null, 400);
 
     if (password.length < 6) {
       return sendError(res, "Password must be at least 6 characters", null, 400);
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return sendError(res, "Email is already in use", null, 400);
     }
@@ -39,7 +42,7 @@ const register = async (req, res) => {
 
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       role: normalizedRole,
     });
@@ -47,6 +50,7 @@ const register = async (req, res) => {
     const token = generateToken(user._id.toString());
     return sendSuccess(res, "Registered successfully", { user: toUserResponse(user), token }, 201);
   } catch (error) {
+    if (error.code === 11000) return sendError(res, "Email is already in use", null, 409);
     console.error("Register error:", error);
     return sendError(res, "Server error while registering", null, 500);
   }
@@ -56,11 +60,11 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (typeof email !== "string" || !email.trim() || typeof password !== "string" || !password) {
       return sendError(res, "Please enter email and password", null, 400);
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
     if (!user || !user.password) {
       return sendError(res, "Email or password is incorrect", null, 401);
     }

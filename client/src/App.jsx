@@ -1,26 +1,26 @@
-import React, { useLayoutEffect } from "react";
+import React, { Suspense, lazy, useLayoutEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { PublicLayout } from "./components/layouts/PublicLayout";
 import { LandlordLayout } from "./components/layouts/LandlordLayout";
 import { ProtectedRoute } from "./components/common/ProtectedRoute";
-import { GuestHomePage } from "./pages/GuestHomePage";
-import { SearchPage } from "./pages/SearchPage";
-import { BookmarksPage } from "./pages/BookmarksPage";
-import { ComparePage } from "./pages/ComparePage";
-import { RoomDetailPage } from "./pages/RoomDetailPage";
-import { InvoiceDetailPage } from "./pages/InvoiceDetailPage";
-import { TenantPortalPage } from "./pages/TenantPortalPage";
-import { LoginPage } from "./pages/LoginPage";
-import { NotFoundPage } from "./pages/NotFoundPage";
-import { AdminDashboardPage } from "./pages/AdminDashboardPage";
-import { LandlordDashboardPage } from "./pages/landlord/LandlordDashboardPage";
-import { LandlordBlocksPage } from "./pages/landlord/LandlordBlocksPage";
-import { LandlordRoomsPage } from "./pages/landlord/LandlordRoomsPage";
-import { LandlordContractsPage } from "./pages/landlord/LandlordContractsPage";
-import { LandlordMetersPage } from "./pages/landlord/LandlordMetersPage";
-import { LandlordInvoicesPage } from "./pages/landlord/LandlordInvoicesPage";
-import { LandlordRepairsPage } from "./pages/landlord/LandlordRepairsPage";
-import { LandlordContactsPage } from "./pages/landlord/LandlordContactsPage";
+const GuestHomePage = lazy(() => import("./pages/GuestHomePage").then((m) => ({ default: m.GuestHomePage })));
+const SearchPage = lazy(() => import("./pages/SearchPage").then((m) => ({ default: m.SearchPage })));
+const BookmarksPage = lazy(() => import("./pages/BookmarksPage").then((m) => ({ default: m.BookmarksPage })));
+const ComparePage = lazy(() => import("./pages/ComparePage").then((m) => ({ default: m.ComparePage })));
+const RoomDetailPage = lazy(() => import("./pages/RoomDetailPage").then((m) => ({ default: m.RoomDetailPage })));
+const InvoiceDetailPage = lazy(() => import("./pages/InvoiceDetailPage").then((m) => ({ default: m.InvoiceDetailPage })));
+const TenantPortalPage = lazy(() => import("./pages/TenantPortalPage").then((m) => ({ default: m.TenantPortalPage })));
+const LoginPage = lazy(() => import("./pages/LoginPage").then((m) => ({ default: m.LoginPage })));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
+const AdminDashboardPage = lazy(() => import("./pages/AdminDashboardPage").then((m) => ({ default: m.AdminDashboardPage })));
+const LandlordDashboardPage = lazy(() => import("./pages/landlord/LandlordDashboardPage").then((m) => ({ default: m.LandlordDashboardPage })));
+const LandlordBlocksPage = lazy(() => import("./pages/landlord/LandlordBlocksPage").then((m) => ({ default: m.LandlordBlocksPage })));
+const LandlordRoomsPage = lazy(() => import("./pages/landlord/LandlordRoomsPage").then((m) => ({ default: m.LandlordRoomsPage })));
+const LandlordContractsPage = lazy(() => import("./pages/landlord/LandlordContractsPage").then((m) => ({ default: m.LandlordContractsPage })));
+const LandlordMetersPage = lazy(() => import("./pages/landlord/LandlordMetersPage").then((m) => ({ default: m.LandlordMetersPage })));
+const LandlordInvoicesPage = lazy(() => import("./pages/landlord/LandlordInvoicesPage").then((m) => ({ default: m.LandlordInvoicesPage })));
+const LandlordRepairsPage = lazy(() => import("./pages/landlord/LandlordRepairsPage").then((m) => ({ default: m.LandlordRepairsPage })));
+const LandlordContactsPage = lazy(() => import("./pages/landlord/LandlordContactsPage").then((m) => ({ default: m.LandlordContactsPage })));
 
 export const App = () => {
   const location = useLocation();
@@ -64,6 +64,7 @@ export const App = () => {
   }, [location.pathname]);
 
   return (
+    <Suspense fallback={<div className="text-center py-5" role="status">Đang tải trang...</div>}>
     <Routes>
       {/* Nested Routes cho Khách & Người thuê (<PublicLayout /> có <Outlet />) */}
       <Route path="/" element={<PublicLayout />}>
@@ -128,6 +129,7 @@ export const App = () => {
         <Route path="contacts" element={<LandlordContactsPage />} />
       </Route>
     </Routes>
+    </Suspense>
   );
 };
 

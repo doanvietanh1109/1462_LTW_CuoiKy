@@ -3,6 +3,18 @@ const { RentalHistory } = require("../models/rentalHistory.model");
 const { sendSuccess, sendError } = require("../utils/response");
 const cloudinary = require("../config/cloudinary");
 const mongoose = require("mongoose");
+const { MotelBlock } = require("../models/motelBlock.model");
+
+const isNonNegativeNumber = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value)) && Number(value) >= 0;
+const sanitizeRoomForPublic = (room, req) => {
+  if (req.user?.role === "admin" || (req.user?.role === "landlord" && room.ownerId?.toString() === req.user._id.toString())) return room;
+  const result = room.toObject ? room.toObject() : { ...room };
+  delete result.tenant;
+  delete result.ownerId;
+  delete result.currentElectricity;
+  delete result.currentWater;
+  return result;
+};
 
 const canManageRoom = (user, room) => {
   if (!user) return false;
@@ -29,13 +41,15 @@ const getRooms = async (req, res) => {
     } = req.query;
     const query = { status: { $ne: "deleted" } }; // Exclude deleted rooms
 
-    // Only filter by status if NOT querying by ownerId (landlord view)
-    // Public search should only show available rooms
-    if (status && status !== "all") {
-      query.status = status;
-    } else if (!ownerId) {
+    if (req.user?.role === "landlord") {
+      query.ownerId = req.user._id;
+    } else if (req.user?.role === "admin") {
+      if (ownerId) query.ownerId = ownerId;
+    } else {
+      // Public and tenant listings must never expose occupied/hidden rooms through query params.
       query.status = "available";
     }
+    if (["landlord", "admin"].includes(req.user?.role) && status && status !== "all") query.status = status;
 
     if (search) {
       query.$or = [
@@ -46,19 +60,24 @@ const getRooms = async (req, res) => {
     }
     if (category && category !== "all") query.category = category;
     if (district) query.district = { $regex: district, $options: "i" };
-    if (ownerId) query.ownerId = ownerId;
     if (blockId && blockId !== "all") query.blockId = blockId;
 
-    if (minPrice || maxPrice) {
+    if ((minPrice !== undefined && minPrice !== "") || (maxPrice !== undefined && maxPrice !== "")) {
+      if ((minPrice !== undefined && minPrice !== "" && !isNonNegativeNumber(minPrice)) || (maxPrice !== undefined && maxPrice !== "" && !isNonNegativeNumber(maxPrice))) {
+        return sendError(res, "Khoảng giá không hợp lệ", null, 400);
+      }
       query.price = {};
-      if (minPrice) query.price.$gte = Number(minPrice);
-      if (maxPrice) query.price.$lte = Number(maxPrice);
+      if (minPrice !== undefined && minPrice !== "") query.price.$gte = Number(minPrice);
+      if (maxPrice !== undefined && maxPrice !== "") query.price.$lte = Number(maxPrice);
     }
 
-    if (minArea || maxArea) {
+    if ((minArea !== undefined && minArea !== "") || (maxArea !== undefined && maxArea !== "")) {
+      if ((minArea !== undefined && minArea !== "" && !isNonNegativeNumber(minArea)) || (maxArea !== undefined && maxArea !== "" && !isNonNegativeNumber(maxArea))) {
+        return sendError(res, "Khoảng diện tích không hợp lệ", null, 400);
+      }
       query.area = {};
-      if (minArea) query.area.$gte = Number(minArea);
-      if (maxArea) query.area.$lte = Number(maxArea);
+      if (minArea !== undefined && minArea !== "") query.area.$gte = Number(minArea);
+      if (maxArea !== undefined && maxArea !== "") query.area.$lte = Number(maxArea);
     }
 
     if (amenities) {
@@ -71,8 +90,11 @@ const getRooms = async (req, res) => {
     }
 
     if (page && limit) {
-      const pageNum = Math.max(1, Number(page) || 1);
-      const limitNum = Math.max(1, Number(limit) || 10);
+      if (!Number.isInteger(Number(page)) || !Number.isInteger(Number(limit)) || Number(page) < 1 || Number(limit) < 1) {
+        return sendError(res, "Phân trang không hợp lệ", null, 400);
+      }
+      const pageNum = Number(page);
+      const limitNum = Math.min(100, Number(limit));
       const skip = (pageNum - 1) * limitNum;
 
       const [rooms, total] = await Promise.all([
@@ -85,7 +107,7 @@ const getRooms = async (req, res) => {
       ]);
 
       return sendSuccess(res, "Rooms fetched successfully", {
-        rooms,
+          rooms: rooms.map((room) => sanitizeRoomForPublic(room, req)),
         pagination: {
           page: pageNum,
           limit: limitNum,
@@ -96,7 +118,7 @@ const getRooms = async (req, res) => {
     }
 
     const rooms = await Room.find(query).populate("blockId", "name address").sort({ createdAt: -1 });
-    return sendSuccess(res, "Rooms fetched successfully", { rooms });
+    return sendSuccess(res, "Rooms fetched successfully", { rooms: rooms.map((room) => sanitizeRoomForPublic(room, req)) });
   } catch (error) {
     console.error("Get rooms error:", error);
     return sendError(res, "Server error while fetching rooms", null, 500);
@@ -114,7 +136,10 @@ const getRoomById = async (req, res) => {
       return sendError(res, "Room not found", null, 404);
     }
 
-    return sendSuccess(res, "Room fetched successfully", { room });
+    const isManager = req.user?.role === "admin" || (req.user?.role === "landlord" && room.ownerId?.toString() === req.user._id.toString());
+    if (!isManager && room.status !== "available") return sendError(res, "Room not found", null, 404);
+
+    return sendSuccess(res, "Room fetched successfully", { room: sanitizeRoomForPublic(room, req) });
   } catch (error) {
     console.error("Get room by id error:", error);
     return sendError(res, "Server error while fetching room", null, 500);
@@ -142,9 +167,26 @@ const createRoom = async (req, res) => {
       image,
     } = req.body;
 
-    if (!title || !category || !price || !district) {
+    if (typeof title !== "string" || !title.trim() || typeof category !== "string" || !category.trim() || price === undefined || typeof district !== "string" || !district.trim()) {
       return sendError(res, "title, category, price, and district are required", null, 400);
     }
+    const numericFields = { price, area, electricityPrice, waterPrice, serviceFee, currentElectricity, currentWater };
+    if (Object.entries(numericFields).some(([key, value]) => value !== undefined && !isNonNegativeNumber(value))) {
+      return sendError(res, "Giá, diện tích, đơn giá và chỉ số phải là số không âm hợp lệ", null, 400);
+    }
+    if (blockId) {
+      if (!mongoose.isValidObjectId(blockId)) return sendError(res, "Mã dãy trọ không hợp lệ", null, 400);
+      const block = await MotelBlock.findOne({ _id: blockId, ownerId: req.user._id });
+      if (!block) return sendError(res, "Dãy trọ không tồn tại hoặc không thuộc quyền quản lý của bạn", null, 403);
+    }
+    if (status !== undefined && !["available", "maintenance", "hidden"].includes(status)) {
+      return sendError(res, "Trạng thái phòng tạo mới không hợp lệ", null, 400);
+    }
+    let normalizedAmenities = amenities || [];
+    if (typeof amenities === "string") {
+      try { normalizedAmenities = JSON.parse(amenities); } catch { return sendError(res, "Danh sách tiện ích không hợp lệ", null, 400); }
+    }
+    if (!Array.isArray(normalizedAmenities)) return sendError(res, "Danh sách tiện ích phải là một mảng", null, 400);
 
     let imageUrls = [];
 
@@ -194,7 +236,7 @@ const createRoom = async (req, res) => {
       image: imageUrls[0] || image || "https://picsum.photos/seed/roomdefault/800/600",
       images: imageUrls.length > 0 ? imageUrls : image ? [image] : [],
       description,
-      amenities: amenities ? (Array.isArray(amenities) ? amenities : JSON.parse(amenities)) : [],
+      amenities: normalizedAmenities,
       area: area !== undefined ? Number(area) : 25,
       roomNumber: roomNumber || "",
       blockId: blockId || null,
@@ -205,7 +247,7 @@ const createRoom = async (req, res) => {
       currentWater: currentWater !== undefined ? Number(currentWater) : 0,
       ownerId: req.user ? req.user._id : undefined,
       ownerName: req.user ? req.user.name : undefined,
-      status: status && ["available", "rented", "maintenance", "hidden"].includes(status) ? status : "available",
+      status: status && ["available", "maintenance", "hidden"].includes(status) ? status : "available",
     });
 
     return sendSuccess(res, "Tạo phòng thành công", { room }, 201);
@@ -248,6 +290,39 @@ const updateRoom = async (req, res) => {
       status,
       image,
     } = req.body;
+
+    if ([title, category, district].some((value) => value !== undefined && (typeof value !== "string" || !value.trim()))) {
+      return sendError(res, "Tên phòng, loại phòng và quận/huyện không được để trống", null, 400);
+    }
+    const numericFields = { price, area, electricityPrice, waterPrice, serviceFee };
+    if (Object.entries(numericFields).some(([key, value]) => value !== undefined && !isNonNegativeNumber(value))) {
+      return sendError(res, "Giá, diện tích, đơn giá và chỉ số phải là số không âm hợp lệ", null, 400);
+    }
+    if (blockId) {
+      if (!mongoose.isValidObjectId(blockId)) return sendError(res, "Mã dãy trọ không hợp lệ", null, 400);
+      const block = await MotelBlock.findOne({ _id: blockId, ownerId: room.ownerId });
+      if (!block) return sendError(res, "Dãy trọ không tồn tại hoặc không thuộc quyền quản lý của bạn", null, 403);
+    }
+    if (status !== undefined && !["available", "rented", "maintenance", "hidden"].includes(status)) {
+      return sendError(res, "Trạng thái phòng không hợp lệ", null, 400);
+    }
+    if (amenities !== undefined) {
+      let normalizedAmenities = amenities;
+      if (typeof amenities === "string") {
+        try { normalizedAmenities = JSON.parse(amenities); } catch { return sendError(res, "Danh sách tiện ích không hợp lệ", null, 400); }
+      }
+      if (!Array.isArray(normalizedAmenities)) return sendError(res, "Danh sách tiện ích phải là một mảng", null, 400);
+    }
+    if (status && status !== room.status) {
+      const { Contract } = require("../models/contract.model");
+      const activeContract = await Contract.findOne({ roomId: room._id, status: "active" });
+      if (activeContract && status !== "rented") {
+        return sendError(res, "Không thể đổi trạng thái phòng khi còn hợp đồng hiệu lực", null, 409);
+      }
+      if (!activeContract && status === "rented") {
+        return sendError(res, "Chỉ tạo trạng thái đang thuê thông qua hợp đồng hiệu lực", null, 409);
+      }
+    }
 
     // Upload new images to Cloudinary if provided
     if (req.files && req.files.length > 0) {
@@ -311,8 +386,7 @@ const updateRoom = async (req, res) => {
     if (electricityPrice !== undefined) room.electricityPrice = Number(electricityPrice);
     if (waterPrice !== undefined) room.waterPrice = Number(waterPrice);
     if (serviceFee !== undefined) room.serviceFee = Number(serviceFee);
-    if (currentElectricity !== undefined) room.currentElectricity = Number(currentElectricity);
-    if (currentWater !== undefined) room.currentWater = Number(currentWater);
+    // Meter counters are updated only by the validated meter-reading workflow.
     if (status && ["available", "rented", "maintenance", "hidden"].includes(status)) {
       room.status = status;
     }
@@ -345,6 +419,10 @@ const deleteRoom = async (req, res) => {
 
     if (!canManageRoom(req.user, room)) {
       return sendError(res, "You do not have permission to delete this room", null, 403);
+    }
+
+    if (room.status === "rented") {
+      return sendError(res, "Không thể xóa phòng đang thuê; hãy kết thúc hợp đồng trước", null, 409);
     }
 
     room.status = "deleted";

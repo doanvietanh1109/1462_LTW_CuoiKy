@@ -52,6 +52,16 @@ test("tenant cannot read an invoice tied to another room", async () => {
   assert.equal(res.statusCode, 403);
 });
 
+test("tenant payment request waits for landlord confirmation instead of marking paid", async () => {
+  const invoice = { _id: idA, status: "unpaid", roomId: { tenant: { userId: idA } }, contractId: null, save: async () => {} };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(invoice.status, "pending_confirmation");
+  assert.ok(invoice.paymentSubmittedAt instanceof Date);
+  assert.equal(invoice.paidAt, undefined);
+});
+
 test("batch rejects decreasing readings, invalid numbers, periods, and repeated room IDs", async () => {
   const cases = [
     { month: 5, year: 2026, rows: [row(idA, { newElectricity: 9 })] },
@@ -59,6 +69,8 @@ test("batch rejects decreasing readings, invalid numbers, periods, and repeated 
     { month: 13, year: 2026, rows: [row()] },
     { month: 5, year: 2101, rows: [row()] },
     { month: 5, year: 2026, rows: [row(idA, { newWater: "NaN" })] },
+    { month: 5, year: 2026, rows: [row(idA, { oldElectricity: true })] },
+    { month: 5, year: 2026, rows: [null] },
     { month: 5, year: 2026, rows: [row(idA), row(idA)] },
   ];
   for (const body of cases) {
@@ -80,7 +92,7 @@ test("historical meter correction does not change current room counters", async 
   replace(Room, "find", async () => [room]);
   replace(Contract, "find", async () => []);
   replace(MeterReading, "findOneAndUpdate", async () => ({ _id: "reading" }));
-  replace(Invoice, "findOne", async () => null);
+  replace(Invoice, "find", async () => []);
   const now = new Date();
   const oldMonth = now.getMonth() === 0 ? 12 : now.getMonth();
   const oldYear = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
@@ -89,6 +101,37 @@ test("historical meter correction does not change current room counters", async 
   assert.equal(room.currentElectricity, 900);
   assert.equal(room.currentWater, 90);
   assert.equal(room.saved, undefined);
+});
+
+test("a reading linked to an issued invoice cannot be changed", async () => {
+  const room = { _id: idA, ownerId: idA, status: "rented", price: 100, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  let readingWritten = false;
+  replace(Room, "find", async () => [room]);
+  replace(Contract, "find", async () => []);
+  replace(Invoice, "find", async () => [{ roomId: { toString: () => idA }, invoiceCode: "INV-1", oldElectricity: 10, newElectricity: 12, oldWater: 2, newWater: 3 }]);
+  replace(MeterReading, "findOneAndUpdate", async () => { readingWritten = true; return {}; });
+  const res = await invoke(meter.saveBatchMeterReadings, { user: { _id: idA, role: "landlord" }, body: { month: 5, year: 2026, rows: [row(idA, { newElectricity: 14 })] } });
+  assert.equal(res.statusCode, 409);
+  assert.equal(readingWritten, false);
+});
+
+test("batch database failure reports partial writes for reconciliation", async () => {
+  const roomA = { _id: idA, ownerId: idA, status: "rented", price: 100, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  const roomBId = "cccccccccccccccccccccccc";
+  const roomB = { ...roomA, _id: roomBId };
+  let writes = 0;
+  replace(Room, "find", async () => [roomA, roomB]);
+  replace(Contract, "find", async () => []);
+  replace(Invoice, "find", async () => []);
+  replace(MeterReading, "findOneAndUpdate", async () => {
+    writes += 1;
+    if (writes === 2) throw new Error("simulated storage failure");
+    return { _id: "saved-reading" };
+  });
+  const res = await invoke(meter.saveBatchMeterReadings, { user: { _id: idA, role: "landlord" }, body: { month: 5, year: 2026, rows: [row(idA), row(roomBId)] } });
+  assert.equal(res.statusCode, 500);
+  assert.equal(res.body.errors.partial, true);
+  assert.equal(res.body.errors.savedReadingCount, 1);
 });
 
 test("explicit zero service fee is preserved when creating an invoice", async () => {

@@ -56,108 +56,9 @@ export const deleteMotelBlockThunk = createAsyncThunk(
   }
 );
 
-const FALLBACK_ROOMS = [
-  {
-    _id: "1",
-    id: 1,
-    title: "Phòng ban công thoáng sáng A107",
-    roomNumber: "107",
-    price: 3400000,
-    area: 32,
-    type: "Phòng trọ",
-    district: "Hà Đông, Hà Nội",
-    status: "available",
-    amenities: ["Wifi", "Điều hòa", "Nóng lạnh", "Ban công", "Chỗ để xe"],
-    desc: "Phòng ban công thoáng sáng, đầy đủ nội thất, giờ giấc tự do.",
-    img: "/images/room1.jpg",
-    images: ["/images/room1.jpg", "/images/room2.jpg", "/images/room3.jpg"],
-    daysPosted: 3,
-  },
-  {
-    _id: "2",
-    id: 2,
-    title: "Phòng đầy đủ tiện nghi A106",
-    roomNumber: "106",
-    price: 3200000,
-    area: 30,
-    type: "Phòng trọ",
-    district: "Hà Đông, Hà Nội",
-    status: "available",
-    amenities: ["Wifi", "Điều hòa", "Nóng lạnh", "Tủ lạnh", "Máy giặt"],
-    desc: "Phòng khép kín hiện đại, an ninh vân tay 24/7.",
-    img: "/images/room2.jpg",
-    images: ["/images/room2.jpg", "/images/room1.jpg"],
-    daysPosted: 4,
-  },
-  {
-    _id: "3",
-    id: 3,
-    title: "Phòng ban công thoáng sáng A105",
-    roomNumber: "105",
-    price: 3000000,
-    area: 28,
-    type: "Phòng trọ",
-    district: "Hà Đông, Hà Nội",
-    status: "available",
-    amenities: ["Wifi", "Điều hòa", "Nóng lạnh", "Chỗ để xe"],
-    desc: "Phòng rộng thoáng, gần trường đại học và trạm xe buýt.",
-    img: "/images/room3.jpg",
-    images: ["/images/room3.jpg"],
-    daysPosted: 4,
-  },
-  {
-    _id: "4",
-    id: 4,
-    title: "Phòng đầy đủ tiện nghi A104",
-    roomNumber: "104",
-    price: 2800000,
-    area: 26,
-    type: "Phòng trọ",
-    district: "Hà Đông, Hà Nội",
-    status: "available",
-    amenities: ["Wifi", "Điều hòa", "Nóng lạnh"],
-    desc: "Phòng sạch đẹp, yên tĩnh, phù hợp sinh viên và người đi làm.",
-    img: "/images/room4.jpg",
-    images: ["/images/room4.jpg"],
-    daysPosted: 3,
-  },
-  {
-    _id: "5",
-    id: 5,
-    title: "Phòng ban công thoáng sáng A103",
-    roomNumber: "103",
-    price: 2600000,
-    area: 24,
-    type: "Phòng trọ",
-    district: "Hà Đông, Hà Nội",
-    status: "available",
-    amenities: ["Wifi", "Điều hòa", "Nóng lạnh"],
-    desc: "Phòng thoáng mát, có cửa sổ lớn và khu phơi đồ riêng.",
-    img: "/images/room5.jpg",
-    images: ["/images/room5.jpg"],
-    daysPosted: 1,
-  },
-  {
-    _id: "6",
-    id: 6,
-    title: "Phòng đầy đủ tiện nghi A102",
-    roomNumber: "102",
-    price: 2400000,
-    area: 22,
-    type: "Phòng trọ",
-    district: "Hà Đông, Hà Nội",
-    status: "available",
-    amenities: ["Wifi", "Nóng lạnh", "Chỗ để xe"],
-    desc: "Phòng tiện nghi giá tiết kiệm cho sinh viên.",
-    img: "/images/room1.jpg",
-    images: ["/images/room1.jpg"],
-    daysPosted: 4,
-  },
-];
-
 export const fetchRooms = createAsyncThunk(
   "rooms/fetchRooms",
-  async (params = {}) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
       const cleanParams = Object.fromEntries(
         Object.entries(params).filter(
@@ -166,10 +67,7 @@ export const fetchRooms = createAsyncThunk(
       );
       const qs = new URLSearchParams(cleanParams).toString();
       const res = await apiRequest(`/rooms${qs ? `?${qs}` : ""}`);
-      const list =
-        res.data?.rooms && res.data.rooms.length > 0
-          ? res.data.rooms
-          : FALLBACK_ROOMS;
+      const list = Array.isArray(res.data?.rooms) ? res.data.rooms : [];
       return {
         rooms: list,
         pagination: res.data?.pagination || {
@@ -179,16 +77,8 @@ export const fetchRooms = createAsyncThunk(
           totalPages: 1,
         },
       };
-    } catch {
-      return {
-        rooms: FALLBACK_ROOMS,
-        pagination: {
-          page: 1,
-          limit: 20,
-          total: FALLBACK_ROOMS.length,
-          totalPages: 1,
-        },
-      };
+    } catch (error) {
+      return rejectWithValue(error.message || "Không thể tải danh sách phòng");
     }
   }
 );
@@ -346,7 +236,10 @@ const roomSlice = createSlice({
       })
       .addCase(fetchRooms.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload || action.error.message;
+        state.rooms = [];
+        state.items = [];
+        state.pagination = { page: 1, limit: 20, total: 0, totalPages: 1 };
       })
       .addCase(createRoomThunk.fulfilled, (state, action) => {
         state.rooms = [action.payload, ...state.rooms];

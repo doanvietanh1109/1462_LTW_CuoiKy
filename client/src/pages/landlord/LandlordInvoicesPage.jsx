@@ -8,12 +8,17 @@ import {
 } from "../../store/slices/invoiceSlice";
 import { formatVND } from "../../api/apiClient";
 import { StatusBadge } from "../../components/common/StatusBadge";
+import { useDebounce } from "../../hooks/useDebounce";
 
 export const LandlordInvoicesPage = () => {
   const dispatch = useDispatch();
-  const { invoices, loading } = useSelector((state) => state.invoices);
+  const { invoices, loading, pagination } = useSelector((state) => state.invoices);
   const [statusFilter, setStatusFilter] = useState("all");
   const [monthFilter, setMonthFilter] = useState("");
+  const [yearFilter, setYearFilter] = useState(String(new Date().getFullYear()));
+  const [searchText, setSearchText] = useState("");
+  const search = useDebounce(searchText, 300);
+  const [page, setPage] = useState(1);
   const [notice, setNotice] = useState("");
 
   const loadInvoices = () => {
@@ -21,13 +26,17 @@ export const LandlordInvoicesPage = () => {
       fetchInvoices({
         status: statusFilter,
         month: monthFilter || undefined,
+        year: yearFilter || undefined,
+        search: search || undefined,
+        page,
+        limit: 20,
       })
     );
   };
 
   useEffect(() => {
     loadInvoices();
-  }, [statusFilter, monthFilter]);
+  }, [statusFilter, monthFilter, yearFilter, search, page]);
 
   const handleMarkPaid = async (id) => {
     await dispatch(markInvoicePaidThunk(id)).unwrap();
@@ -49,10 +58,10 @@ export const LandlordInvoicesPage = () => {
         <div>
           <h4 className="fw-bold mb-1">
             <i className="bi bi-receipt-cutoff me-2 text-primary" />
-            Quản Lý Hóa Đơn Hàng Tháng ({invoices.length})
+            Quản Lý Hóa Đơn Hàng Tháng ({pagination.total})
           </h4>
           <p className="text-muted small mb-0">
-            Mỗi phòng chỉ có 1 hóa đơn mỗi tháng. Hỗ trợ đánh dấu đã thu tiền, gửi email nhắc nợ và xuất PDF.
+            Mỗi phòng chỉ có 1 hóa đơn mỗi tháng. Theo dõi thanh toán và công nợ; email nhắc nợ chưa được cấu hình.
           </p>
         </div>
 
@@ -78,6 +87,7 @@ export const LandlordInvoicesPage = () => {
             {[
               { key: "all", label: "Tất cả" },
               { key: "unpaid", label: "Chưa thu (Nợ tiền)" },
+              { key: "pending_confirmation", label: "Chờ xác nhận" },
               { key: "paid", label: "Đã thu tiền" },
             ].map((st) => (
               <button
@@ -88,7 +98,7 @@ export const LandlordInvoicesPage = () => {
                     ? "btn-primary"
                     : "btn-outline-primary"
                 }`}
-                onClick={() => setStatusFilter(st.key)}
+                onClick={() => { setStatusFilter(st.key); setPage(1); }}
               >
                 {st.label}
               </button>
@@ -99,15 +109,19 @@ export const LandlordInvoicesPage = () => {
             className="form-select form-select-sm"
             style={{ width: "160px" }}
             value={monthFilter}
-            onChange={(e) => setMonthFilter(e.target.value)}
+            onChange={(e) => { setMonthFilter(e.target.value); setPage(1); }}
           >
             <option value="">Tất cả các tháng</option>
             {Array.from({ length: 12 }, (_, idx) => idx + 1).map((m) => (
               <option key={m} value={m}>
-                Tháng {m}/2026
+                Tháng {m}/{yearFilter}
               </option>
             ))}
           </select>
+          <select className="form-select form-select-sm" style={{ width: "120px" }} value={yearFilter} onChange={(e) => { setYearFilter(e.target.value); setPage(1); }} aria-label="Lọc theo năm">
+            {Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - 2 + index).map((year) => <option key={year} value={year}>{year}</option>)}
+          </select>
+          <input className="form-control form-control-sm" style={{ width: "220px" }} type="search" value={searchText} onChange={(e) => { setSearchText(e.target.value); setPage(1); }} placeholder="Tìm mã hóa đơn" aria-label="Tìm mã hóa đơn" />
         </div>
       </div>
 
@@ -180,13 +194,13 @@ export const LandlordInvoicesPage = () => {
                       </td>
                       <td className="text-end">
                         <div className="btn-group btn-group-sm">
-                          {inv.status === "unpaid" && (
+                          {inv.status !== "paid" && (
                             <>
                               <button
                                 type="button"
                                 className="btn btn-success"
                                 onClick={() => handleMarkPaid(inv._id)}
-                                title="Đánh dấu đã thu tiền"
+                                title="Xác nhận đã nhận tiền"
                               >
                                 <i className="bi bi-check2-circle" /> Thu tiền
                               </button>
@@ -214,6 +228,15 @@ export const LandlordInvoicesPage = () => {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+      {!loading && pagination.totalPages > 1 && (
+        <div className="d-flex justify-content-between align-items-center mt-3">
+          <span className="small text-muted">Trang {pagination.page}/{pagination.totalPages} · {pagination.total} hóa đơn</span>
+          <div className="btn-group btn-group-sm">
+            <button type="button" className="btn btn-outline-primary" disabled={page <= 1} onClick={() => setPage((current) => current - 1)}>Trước</button>
+            <button type="button" className="btn btn-outline-primary" disabled={page >= pagination.totalPages} onClick={() => setPage((current) => current + 1)}>Sau</button>
           </div>
         </div>
       )}

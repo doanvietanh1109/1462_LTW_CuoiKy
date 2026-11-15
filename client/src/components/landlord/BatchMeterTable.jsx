@@ -53,8 +53,8 @@ export const BatchMeterTable = ({ month, year }) => {
       } else if (newW < oldW) {
         errorsByRoom[row.roomId] = `Chỉ số nước mới (${newW}) nhỏ hơn chỉ số nước cũ (${oldW})`;
       } else {
-        const elecCost = (newE - oldE) * (row.electricityPrice || 3500);
-        const waterCost = (newW - oldW) * (row.waterPrice || 15000);
+        const elecCost = (newE - oldE) * (row.electricityPrice ?? 3500);
+        const waterCost = (newW - oldW) * (row.waterPrice ?? 15000);
         totalEstimated +=
           (row.roomPrice || 0) + elecCost + waterCost + (row.serviceFee || 0);
       }

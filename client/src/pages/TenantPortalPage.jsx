@@ -10,8 +10,6 @@ import { resolveRoomImageUrl } from "../components/rooms/RoomCard";
 import {
   getLocalTenantContract,
   saveLocalTenantContract,
-  getLocalTenantInvoices,
-  saveLocalTenantInvoices,
   createContractFromBooking,
 } from "../utils/tenantContractHelper";
 
@@ -26,6 +24,7 @@ export const TenantPortalPage = () => {
   const [invoices, setInvoices] = useState([]);
   const [repairs, setRepairs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState("");
   const [securityTestResult, setSecurityTestResult] = useState(null);
   const [toastMsg, setToastMsg] = useState("");
 
@@ -45,14 +44,15 @@ export const TenantPortalPage = () => {
     try {
       const [contractRes, invoicesRes, repairsRes] = await Promise.all([
         apiRequest("/contracts/my-active").catch(() => ({ data: {} })),
-        apiRequest("/invoices").catch(() => ({ data: { invoices: [] } })),
+        apiRequest("/invoices").then((data) => ({ data })).catch((error) => ({ error })),
         apiRequest("/repair-requests").catch(() => ({
           data: { requests: [] },
         })),
       ]);
 
       let activeContract = contractRes?.data?.contract || null;
-      let invoiceList = invoicesRes?.data?.invoices || [];
+      const invoiceList = invoicesRes?.data?.data?.invoices || [];
+      setApiError(invoicesRes.error ? "Không thể tải hóa đơn từ máy chủ. Hãy thử tải lại; dữ liệu hóa đơn mẫu trên thiết bị không được dùng thay thế." : "");
       const repairList = repairsRes?.data?.requests || [];
 
       // Fallback sang dữ liệu Hợp đồng & Hóa đơn đã lưu ở localStorage nếu tài khoản vừa đặt phòng
@@ -60,12 +60,6 @@ export const TenantPortalPage = () => {
         activeContract = getLocalTenantContract(user.email);
       } else if (activeContract && user?.email) {
         saveLocalTenantContract(user.email, activeContract);
-      }
-
-      if (invoiceList.length === 0 && user?.email) {
-        invoiceList = getLocalTenantInvoices(user.email);
-      } else if (invoiceList.length > 0 && user?.email) {
-        saveLocalTenantInvoices(user.email, invoiceList);
       }
 
       setContract(activeContract);
@@ -174,26 +168,20 @@ export const TenantPortalPage = () => {
     const invId = inv._id || inv.id;
 
     try {
-      await apiRequest(`/invoices/${invId}/tenant-pay`, {
+      const response = await apiRequest(`/invoices/${invId}/tenant-pay`, {
         method: "PATCH",
       });
+      const updatedInvoices = invoices.map((item) =>
+        String(item._id || item.id) === String(invId)
+          ? { ...item, status: response.data.invoice.status, paymentSubmittedAt: response.data.invoice.paymentSubmittedAt }
+          : item
+      );
+      setInvoices(updatedInvoices);
+      setPayingInvoice(null);
+      setToastMsg("Đã gửi yêu cầu xác nhận thanh toán. Hóa đơn sẽ được cập nhật sau khi chủ trọ xác nhận.");
     } catch {
-      // Fallback local update
+      setToastMsg("Không gửi được yêu cầu thanh toán. Hãy thử lại hoặc liên hệ chủ trọ.");
     }
-
-    const updatedInvoices = invoices.map((item) =>
-      String(item._id || item.id) === String(invId)
-        ? { ...item, status: "paid", paidAt: new Date().toISOString() }
-        : item
-    );
-    setInvoices(updatedInvoices);
-    if (user?.email) {
-      saveLocalTenantInvoices(user.email, updatedInvoices);
-    }
-    setPayingInvoice(null);
-    setToastMsg(
-      `✅ Thanh toán hóa đơn ${inv.invoiceCode} (Tháng ${inv.month}/${inv.year}) thành công!`
-    );
   };
 
   const handleCreateRepair = async (payload) => {
@@ -237,11 +225,12 @@ export const TenantPortalPage = () => {
 
   const filteredInvoices = useMemo(() => {
     if (invoiceFilter === "all") return invoices;
+    if (invoiceFilter === "unpaid") return invoices.filter((inv) => inv.status !== "paid");
     return invoices.filter((inv) => inv.status === invoiceFilter);
   }, [invoices, invoiceFilter]);
 
   const unpaidInvoices = useMemo(
-    () => invoices.filter((inv) => inv.status === "unpaid"),
+    () => invoices.filter((inv) => inv.status !== "paid"),
     [invoices]
   );
 
@@ -281,6 +270,7 @@ export const TenantPortalPage = () => {
 
   return (
     <main className="main-container">
+      {apiError && <div className="alert alert-danger" role="alert">{apiError}</div>}
       {/* Header Banner */}
       <div
         className="p-4 rounded-4 mb-4 text-white shadow-sm"
@@ -1143,7 +1133,7 @@ export const TenantPortalPage = () => {
                 const invId = inv._id || inv.id;
                 const isExpanded =
                   String(expandedInvoiceId) === String(invId);
-                const isUnpaid = inv.status === "unpaid";
+                const isUnpaid = inv.status !== "paid";
                 const eUsage =
                   inv.electricityUsage ??
                   Math.max(0, (inv.newElectricity || 0) - (inv.oldElectricity || 0));
@@ -1250,7 +1240,7 @@ export const TenantPortalPage = () => {
                             {isExpanded ? "Thu gọn" : "Chi tiết 4 khoản"}
                           </button>
 
-                          {isUnpaid && (
+                          {inv.status === "unpaid" && (
                             <button
                               type="button"
                               className="btn btn-sm btn-success fw-semibold"
@@ -1259,6 +1249,9 @@ export const TenantPortalPage = () => {
                               <i className="bi bi-qr-code-scan me-1"></i>
                               Thanh toán
                             </button>
+                          )}
+                          {inv.status === "pending_confirmation" && (
+                            <span className="badge bg-warning text-dark align-self-center">Chờ chủ trọ xác nhận</span>
                           )}
 
                           <Link
@@ -1622,7 +1615,7 @@ export const TenantPortalPage = () => {
                 }}
               />
               <div className="small text-muted mt-1">
-                Quét mã VietQR hoặc bấm xác nhận thanh toán bên dưới
+                Quét mã VietQR, sau đó gửi yêu cầu để chủ trọ xác nhận khoản tiền đã nhận
               </div>
             </div>
 
@@ -1639,8 +1632,7 @@ export const TenantPortalPage = () => {
                 className="btn btn-success w-50 fw-bold"
                 onClick={() => handleConfirmPayInvoice(payingInvoice)}
               >
-                <i className="bi bi-check2-circle me-1"></i> Xác nhận đã thanh
-                toán
+                <i className="bi bi-send me-1"></i> Gửi yêu cầu xác nhận
               </button>
             </div>
           </div>

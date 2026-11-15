@@ -12,6 +12,7 @@ const STATUS_MAP = {
   invoice: {
     paid: { label: "Đã thu tiền", className: "bg-success text-white", icon: "bi-check2-all" },
     unpaid: { label: "Chưa thu (Nợ)", className: "bg-danger text-white", icon: "bi-exclamation-triangle-fill" },
+    pending_confirmation: { label: "Chờ chủ trọ xác nhận", className: "bg-warning text-dark", icon: "bi-hourglass-split" },
   },
   // Repair statuses (Mới -> Đang xử lý -> Xong)
   repair: {

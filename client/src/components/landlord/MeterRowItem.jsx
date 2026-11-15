@@ -17,8 +17,8 @@ export const MeterRowItem = React.memo(
     const elecDiff = Math.max(0, newE - oldE);
     const waterDiff = Math.max(0, newW - oldW);
 
-    const elecCost = elecDiff * (row.electricityPrice || 3500);
-    const waterCost = waterDiff * (row.waterPrice || 15000);
+    const elecCost = elecDiff * (row.electricityPrice ?? 3500);
+    const waterCost = waterDiff * (row.waterPrice ?? 15000);
     const previewTotal =
       (row.roomPrice || 0) + elecCost + waterCost + (row.serviceFee || 0);
 
