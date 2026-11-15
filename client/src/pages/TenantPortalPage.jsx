@@ -24,13 +24,13 @@ export const TenantPortalPage = () => {
   const [repairs, setRepairs] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationFilter, setNotificationFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
   const [toastMsg, setToastMsg] = useState("");
 
-  // Invoice filter & expanded breakdown state
+  // Invoice list filter state
   const [invoiceFilter, setInvoiceFilter] = useState("all");
-  const [expandedInvoiceId, setExpandedInvoiceId] = useState(null);
   const [payingInvoice, setPayingInvoice] = useState(null);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const TenantPortalPage = () => {
         apiRequest("/contracts/my-active").then((data) => ({ data })).catch((error) => ({ error })),
         apiRequest("/invoices").then((data) => ({ data })).catch((error) => ({ error })),
         apiRequest("/repair-requests").then((data) => ({ data })).catch((error) => ({ error })),
-        apiRequest("/notifications?limit=5").then((data) => ({ data })).catch((error) => ({ error })),
+        apiRequest("/notifications?limit=50").then((data) => ({ data })).catch((error) => ({ error })),
       ]);
 
       const activeContract = contractRes?.data?.data?.contract || null;
@@ -63,9 +63,6 @@ export const TenantPortalPage = () => {
       setRepairs(repairList);
       setNotifications(notificationsRes.data?.data?.notifications || []);
       setUnreadCount(notificationsRes.data?.data?.unreadCount || 0);
-      if (invoiceList.length > 0) {
-        setExpandedInvoiceId(invoiceList[0]._id || invoiceList[0].id);
-      }
     } catch (error) {
       console.error("Load tenant portal error:", error);
     } finally {
@@ -142,7 +139,7 @@ export const TenantPortalPage = () => {
     }
   };
 
-  // Thanh toán hóa đơn trực tuyến (QR / Xác nhận)
+  // Gửi yêu cầu xác nhận sau khi người thuê đã thanh toán theo phương thức đã thống nhất.
   const handleConfirmPayInvoice = async (inv) => {
     if (!inv) return;
     const invId = inv._id || inv.id;
@@ -199,6 +196,11 @@ export const TenantPortalPage = () => {
     return invoices.filter((inv) => inv.status === invoiceFilter);
   }, [invoices, invoiceFilter]);
 
+  const filteredNotifications = useMemo(
+    () => notificationFilter === "all" ? notifications : notifications.filter((item) => item.type === notificationFilter),
+    [notifications, notificationFilter]
+  );
+
   const unpaidInvoices = useMemo(
     () => invoices.filter((inv) => inv.status !== "paid"),
     [invoices]
@@ -233,6 +235,8 @@ export const TenantPortalPage = () => {
 
   const roomInfo = contract?.roomId || {};
   const roomImage = resolveRoomImageUrl(roomInfo.image || roomInfo.img);
+  const electricCounter = roomInfo.currentElectricity ?? contract?.initialElectricity;
+  const waterCounter = roomInfo.currentWater ?? contract?.initialWater;
   const amenitiesList =
     Array.isArray(roomInfo.amenities) && roomInfo.amenities.length > 0
       ? roomInfo.amenities
@@ -483,7 +487,7 @@ export const TenantPortalPage = () => {
           TAB 1: THÔNG TIN PHÒNG & BẢN HỢP ĐỒNG THUÊ NHÀ ĐIỆN TỬ
       ===================================================================== */}
       {activeTab === "contract" && (
-        <div>
+        <div className="tenant-contract-view">
           {!contract ? (
             <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5">
               <div className="text-center mb-4">
@@ -551,7 +555,7 @@ export const TenantPortalPage = () => {
                             />
                             <div className="card-body d-flex flex-column">
                               <span className="badge bg-success-subtle text-success align-self-start mb-2">
-                                Còn trống · {r.area || 25} m²
+                                Còn trống{r.area ? ` · ${r.area} m²` : ""}
                               </span>
                               <h6 className="fw-bold mb-1">{r.title}</h6>
                               <p className="text-muted small mb-2">
@@ -629,11 +633,11 @@ export const TenantPortalPage = () => {
 
                   <div className="p-4">
                     <h4 className="fw-bold mb-1">
-                      {roomInfo.title || "Phòng trọ tiện nghi"}
+                      {roomInfo.title || (roomInfo.roomNumber ? `Phòng ${roomInfo.roomNumber}` : "Phòng đang thuê")}
                     </h4>
                     <p className="text-muted small mb-3">
                       <i className="bi bi-geo-alt-fill text-danger me-1"></i>
-                      {roomInfo.district || "Hà Đông, Hà Nội"} ·{" "}
+                      {roomInfo.district || "Chưa cập nhật địa chỉ"} ·{" "}
                       <strong>
                         {contract.blockId?.name || "—"}
                       </strong>
@@ -654,9 +658,7 @@ export const TenantPortalPage = () => {
                             Chỉ số Điện hiện tại
                           </div>
                           <div className="fw-bold fs-5 text-dark mt-1">
-                            {roomInfo.currentElectricity ??
-                              contract.initialElectricity ??
-                              165}{" "}
+                            {electricCounter ?? "—"}{" "}
                             <small className="fs-6 fw-normal">kWh</small>
                           </div>
                           <div className="small text-muted">
@@ -677,9 +679,7 @@ export const TenantPortalPage = () => {
                             Chỉ số Nước hiện tại
                           </div>
                           <div className="fw-bold fs-5 text-dark mt-1">
-                            {roomInfo.currentWater ??
-                              contract.initialWater ??
-                              18}{" "}
+                            {waterCounter ?? "—"}{" "}
                             <small className="fs-6 fw-normal">m³</small>
                           </div>
                           <div className="small text-muted">
@@ -692,11 +692,10 @@ export const TenantPortalPage = () => {
                     {/* Tiện nghi bàn giao trong phòng */}
                     <div className="mb-3">
                       <div className="small fw-bold text-uppercase text-secondary mb-2">
-                        Nội thất &amp; Tiện nghi bàn giao ({roomInfo.area || 28}{" "}
-                        m²)
+                        Tiện nghi{roomInfo.area ? ` · ${roomInfo.area} m²` : ""}
                       </div>
                       <div className="d-flex flex-wrap gap-2">
-                        {amenitiesList.map((am, idx) => (
+                        {amenitiesList.length ? amenitiesList.map((am, idx) => (
                           <span
                             key={idx}
                             className="badge bg-light text-dark border px-2 py-1"
@@ -704,7 +703,7 @@ export const TenantPortalPage = () => {
                             <i className="bi bi-check2-circle text-success me-1"></i>
                             {am}
                           </span>
-                        ))}
+                        )) : <span className="small text-muted">Chưa có thông tin tiện nghi.</span>}
                       </div>
                     </div>
 
@@ -715,16 +714,15 @@ export const TenantPortalPage = () => {
                           Chủ nhà / Quản lý dãy trọ
                         </div>
                         <div className="fw-bold">
-                          {contract.landlordId?.name || "Chủ trọ Demo (Anh Minh)"}
+                          {contract.landlordId?.name || "Chưa cập nhật"}
                         </div>
                         <div className="small text-primary fw-semibold">
                           <i className="bi bi-telephone-fill me-1"></i>
-                          {contract.landlordId?.phone || "0987.654.321"}
+                          {contract.landlordId?.phone || "Chưa cập nhật số điện thoại"}
                         </div>
                       </div>
                       <div className="d-flex flex-column gap-1">
-                        {roomInfo._id &&
-                          !String(roomInfo._id).startsWith("room-demo") && (
+                        {roomInfo._id && (
                             <Link
                               to={`/rooms/${roomInfo._id}`}
                               className="btn btn-sm btn-outline-primary"
@@ -760,7 +758,7 @@ export const TenantPortalPage = () => {
                       Độc lập - Tự do - Hạnh phúc
                     </div>
                     <h4 className="fw-bold text-primary mb-1">
-                      HỢP ĐỒNG THUÊ PHÒNG TRỌ ĐIỆN TỬ
+                      THÔNG TIN HỢP ĐỒNG THUÊ PHÒNG
                     </h4>
                     <div className="d-flex justify-content-center align-items-center gap-2 small">
                       <span>
@@ -783,14 +781,13 @@ export const TenantPortalPage = () => {
                           <div>
                             Họ tên:{" "}
                             <strong>
-                              {contract.landlordId?.name ||
-                                "Chủ trọ RIPT Rental"}
+                              {contract.landlordId?.name || "Chưa cập nhật"}
                             </strong>
                           </div>
                           <div>
                             Số điện thoại:{" "}
                             <strong>
-                              {contract.landlordId?.phone || "0987.654.321"}
+                              {contract.landlordId?.phone || "Chưa cập nhật"}
                             </strong>
                           </div>
                           <div>
@@ -825,11 +822,11 @@ export const TenantPortalPage = () => {
                           <div>
                             SĐT:{" "}
                             <strong>
-                              {contract.tenantPhone || "0987.654.321"}
+                              {contract.tenantPhone || "Chưa cập nhật"}
                             </strong>{" "}
                             · CCCD:{" "}
                             <strong>
-                              {contract.identityCard || "001202034567"}
+                              {contract.identityCard || "Chưa cập nhật"}
                             </strong>
                           </div>
                         </div>
@@ -837,110 +834,25 @@ export const TenantPortalPage = () => {
                     </div>
                   </div>
 
-                  {/* Điều 2: Thời hạn & Biểu phí hợp đồng */}
-                  <h6 className="fw-bold text-dark mb-2">
-                    <i className="bi bi-journal-check text-primary me-1"></i>
-                    Điều khoản tài chính &amp; Đơn giá cam kết trong hợp đồng
-                  </h6>
-                  <div className="table-responsive mb-3">
-                    <table className="table table-bordered table-sm align-middle mb-0">
-                      <thead className="table-light">
-                        <tr>
-                          <th>Khoản mục hợp đồng</th>
-                          <th>Mức phí / Đơn giá</th>
-                          <th>Quy định áp dụng</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="fw-semibold">Thời hạn hợp đồng</td>
-                          <td className="fw-bold text-primary">
-                            {formatDateVN(contract.startDate)} →{" "}
-                            {formatDateVN(contract.endDate)}
-                          </td>
-                          <td className="small text-muted">
-                            Có thể gia hạn trực tuyến
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="fw-semibold">
-                            1. Giá thuê phòng cố định
-                          </td>
-                          <td className="fw-bold text-danger">
-                            {formatVND(contract.rentPrice)} / tháng
-                          </td>
-                          <td className="small text-muted">
-                            Không tăng giá trong kỳ HĐ
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="fw-semibold">2. Tiền đặt cọc</td>
-                          <td className="fw-bold">
-                            {formatVND(contract.deposit)}
-                          </td>
-                          <td className="small text-muted">
-                            Hoàn lại khi thanh lý HĐ
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="fw-semibold">3. Đơn giá Điện</td>
-                          <td className="fw-bold">
-                            {formatVND(contract.electricityPrice)} / kWh
-                          </td>
-                          <td className="small text-muted">
-                            Chốt chỉ số cuối mỗi tháng
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="fw-semibold">4. Đơn giá Nước</td>
-                          <td className="fw-bold">
-                            {formatVND(contract.waterPrice)} / m³
-                          </td>
-                          <td className="small text-muted">
-                            Chốt chỉ số cuối mỗi tháng
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="fw-semibold">
-                            5. Phí dịch vụ chung (Wifi, rác, VS)
-                          </td>
-                          <td className="fw-bold">
-                            {formatVND(contract.serviceFee)} / tháng
-                          </td>
-                          <td className="small text-muted">
-                            Cố định hàng tháng
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                  {/* Điều khoản và biểu phí theo dữ liệu hợp đồng */}
+                  <section className="tenant-contract-terms" aria-labelledby="contract-terms-heading">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h5 id="contract-terms-heading" className="fw-bold mb-0">Thời hạn và chi phí</h5>
+                    </div>
+                    <div className="tenant-contract-terms-grid">
+                      <div className="tenant-contract-term tenant-contract-term-wide"><span>Thời hạn hợp đồng</span><strong>{formatDateVN(contract.startDate)} – {formatDateVN(contract.endDate)}</strong></div>
+                      <div className="tenant-contract-term"><span>Tiền thuê / tháng</span><strong>{formatVND(contract.rentPrice)}</strong></div>
+                      <div className="tenant-contract-term"><span>Tiền đặt cọc</span><strong>{formatVND(contract.deposit)}</strong></div>
+                      <div className="tenant-contract-term"><span>Điện</span><strong>{formatVND(contract.electricityPrice)} / kWh</strong></div>
+                      <div className="tenant-contract-term"><span>Nước</span><strong>{formatVND(contract.waterPrice)} / m³</strong></div>
+                      <div className="tenant-contract-term tenant-contract-term-wide"><span>Phí dịch vụ / tháng</span><strong>{formatVND(contract.serviceFee)}</strong></div>
+                    </div>
+                    {contract.notes && <div className="tenant-contract-note mt-3"><span>Ghi chú hợp đồng</span><p>{contract.notes}</p></div>}
+                  </section>
 
-                  {/* Chữ ký điện tử xác nhận */}
-                  <div className="row text-center py-2 mb-3 border rounded-3 bg-light mx-0">
-                    <div className="col-6 border-end">
-                      <div className="small fw-bold text-secondary">
-                        ĐẠI DIỆN BÊN CHO THUÊ (BÊN A)
-                      </div>
-                      <div className="text-success small my-1">
-                        <i className="bi bi-patch-check-fill me-1"></i> Đã ký số
-                        xác thực
-                      </div>
-                      <div className="fw-bold small">
-                        {contract.landlordId?.name || "Chủ trọ RIPT Rental"}
-                      </div>
-                    </div>
-                    <div className="col-6">
-                      <div className="small fw-bold text-secondary">
-                        ĐẠI DIỆN BÊN THUÊ (BÊN B)
-                      </div>
-                      <div className="text-success small my-1">
-                        <i className="bi bi-patch-check-fill me-1"></i> Đã xác
-                        nhận trực tuyến
-                      </div>
-                      <div className="fw-bold small">
-                        {contract.tenantName || user?.name}
-                      </div>
-                    </div>
+                  <div className="tenant-contract-record mt-3">
+                    <i className="bi bi-shield-check"/>
+                    <span>Hợp đồng được lưu trên hệ thống. Trạng thái hiện tại được lấy từ hồ sơ hợp đồng.</span>
                   </div>
 
                   {/* Các nút thao tác Hợp đồng */}
@@ -992,376 +904,73 @@ export const TenantPortalPage = () => {
           TAB 2: DANH SÁCH HÓA ĐƠN & BẢNG KÊ CHI TIẾT TỪNG KHOẢN
       ===================================================================== */}
       {activeTab === "invoices" && (
-        <div className="card border-0 shadow-sm rounded-4 p-4">
-          <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3">
+        <section className="tenant-invoice-list" aria-labelledby="tenant-invoices-title">
+          <div className="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
             <div>
-              <h5 className="fw-bold mb-1">
-                <i className="bi bi-receipt-cutoff text-primary me-2"></i>
-                Danh Sách Hóa Đơn &amp; Bảng Kê Chi Tiết Từng Khoản
-              </h5>
-              <p className="text-muted small mb-0">
-                Mỗi hóa đơn hiển thị đầy đủ 4 khoản: Tiền thuê phòng, Tiền điện
-                (chỉ số cũ → mới), Tiền nước (chỉ số cũ → mới) và Phí dịch vụ
-              </p>
+              <span className="tenant-section-kicker">TÀI CHÍNH CỦA BẠN</span>
+              <h2 id="tenant-invoices-title" className="h3 fw-bold mb-1">Hóa đơn</h2>
+              <p className="text-muted mb-0">Theo dõi khoản thu và hạn thanh toán theo từng kỳ.</p>
             </div>
-
-            <div className="d-flex flex-wrap align-items-center gap-2">
-              <div className="btn-group btn-group-sm">
-                <button
-                  type="button"
-                  className={`btn ${
-                    invoiceFilter === "all"
-                      ? "btn-primary"
-                      : "btn-outline-primary"
-                  }`}
-                  onClick={() => setInvoiceFilter("all")}
-                >
-                  Tất cả ({invoices.length})
+            <div className="tenant-invoice-filters" role="group" aria-label="Lọc hóa đơn">
+              {[
+                ["all", "Tất cả", invoices.length],
+                ["unpaid", "Chưa thanh toán", unpaidInvoices.length],
+                ["paid", "Đã thanh toán", invoices.length - unpaidInvoices.length],
+              ].map(([value, label, count]) => (
+                <button key={value} type="button" className={invoiceFilter === value ? "is-active" : ""} aria-pressed={invoiceFilter === value} onClick={() => setInvoiceFilter(value)}>
+                  {label}<span>{count}</span>
                 </button>
-                <button
-                  type="button"
-                  className={`btn ${
-                    invoiceFilter === "unpaid"
-                      ? "btn-danger"
-                      : "btn-outline-danger"
-                  }`}
-                  onClick={() => setInvoiceFilter("unpaid")}
-                >
-                  Chưa thanh toán ({unpaidInvoices.length})
-                </button>
-                <button
-                  type="button"
-                  className={`btn ${
-                    invoiceFilter === "paid"
-                      ? "btn-success"
-                      : "btn-outline-success"
-                  }`}
-                  onClick={() => setInvoiceFilter("paid")}
-                >
-                  Đã thanh toán ({invoices.length - unpaidInvoices.length})
-                </button>
-              </div>
-
+              ))}
             </div>
           </div>
 
           {filteredInvoices.length === 0 ? (
-            <div className="text-center py-5">
-              <i className="bi bi-receipt text-muted display-4 d-block mb-2"></i>
-              <h5 className="fw-bold">Chưa có hóa đơn nào trong mục này</h5>
-              <p className="text-muted small mb-3">
-                Hóa đơn sẽ xuất hiện tại đây sau khi chủ trọ phát hành cho phòng bạn đang thuê.
-              </p>
+            <div className="tenant-empty-state">
+              <span className="tenant-empty-icon"><i className="bi bi-receipt"/></span>
+              <h3>{invoices.length ? "Không có hóa đơn phù hợp" : "Chưa có hóa đơn"}</h3>
+              <p>{invoices.length ? "Thử chọn bộ lọc khác." : "Hóa đơn sẽ xuất hiện tại đây sau khi chủ trọ phát hành cho phòng của bạn."}</p>
+              {invoiceFilter !== "all" && <button type="button" className="btn btn-outline-primary" onClick={() => setInvoiceFilter("all")}>Xem tất cả hóa đơn</button>}
             </div>
           ) : (
-            <div className="d-flex flex-column gap-3">
+            <div className="tenant-invoice-cards">
               {filteredInvoices.map((inv) => {
                 const invId = inv._id || inv.id;
-                const isExpanded =
-                  String(expandedInvoiceId) === String(invId);
-                const isUnpaid = inv.status !== "paid";
-                const eUsage =
-                  inv.electricityUsage ??
-                  Math.max(0, (inv.newElectricity || 0) - (inv.oldElectricity || 0));
-                const wUsage =
-                  inv.waterUsage ??
-                  Math.max(0, (inv.newWater || 0) - (inv.oldWater || 0));
-
+                const isPaid = inv.status === "paid";
+                const balance = isPaid ? 0 : Number(inv.totalAmount) || 0;
                 return (
-                  <div
-                    key={invId}
-                    className="rounded-4 border overflow-hidden shadow-sm"
-                    style={{
-                      borderColor: isUnpaid ? "#fecaca" : "#e2e8f0",
-                      background: "#ffffff",
-                    }}
-                  >
-                    {/* Header của từng Hóa đơn */}
-                    <div
-                      className="p-3 p-md-4 d-flex flex-wrap justify-content-between align-items-center gap-3"
-                      style={{
-                        background: isUnpaid ? "#fff5f5" : "#f8fafc",
-                        cursor: "pointer",
-                      }}
-                      onClick={() =>
-                        setExpandedInvoiceId(isExpanded ? null : invId)
-                      }
-                    >
-                      <div className="d-flex align-items-center gap-3">
-                        <div
-                          className="rounded-3 d-flex flex-column align-items-center justify-content-center fw-bold"
-                          style={{
-                            width: 58,
-                            height: 58,
-                            background: isUnpaid ? "#dc2626" : "#0284c7",
-                            color: "#fff",
-                          }}
-                        >
-                          <span style={{ fontSize: 11, opacity: 0.9 }}>
-                            THÁNG
-                          </span>
-                          <span style={{ fontSize: 18 }}>
-                            {inv.month}/{String(inv.year).slice(-2)}
-                          </span>
-                        </div>
-                        <div>
-                          <div className="d-flex align-items-center gap-2 flex-wrap">
-                            <span className="fw-bold fs-5 text-dark">
-                              Hóa đơn Tháng {inv.month}/{inv.year}
-                            </span>
-                            <span className="badge bg-secondary-subtle text-secondary">
-                              {inv.invoiceCode}
-                            </span>
-                            <StatusBadge type="invoice" status={inv.status} />
-                          </div>
-                          <div className="small text-muted mt-1">
-                            Phòng:{" "}
-                            <strong>
-                              {inv.roomId?.title ||
-                                roomInfo.title ||
-                                "Phòng thuê"}
-                            </strong>{" "}
-                            · Hạn thanh toán:{" "}
-                            <strong>
-                              {formatDateVN(
-                                inv.dueDate ||
-                                  new Date(inv.year, inv.month - 1, 10)
-                              )}
-                            </strong>
-                            {inv.paidAt && (
-                              <span className="text-success ms-2">
-                                (Đã thu ngày {formatDateVN(inv.paidAt)})
-                              </span>
-                            )}
-                          </div>
-                        </div>
+                  <article key={invId} className="tenant-invoice-card">
+                    <div className="tenant-invoice-card-top">
+                      <div className="tenant-invoice-period">
+                        <span>KỲ THANH TOÁN</span>
+                        <strong>{String(inv.month).padStart(2, "0")}/{inv.year}</strong>
                       </div>
-
-                      <div
-                        className="d-flex align-items-center gap-3"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="text-end">
-                          <div className="small text-muted">
-                            Tổng cộng hóa đơn
-                          </div>
-                          <div className="fw-bold fs-4 text-danger">
-                            {formatVND(inv.totalAmount)}
-                          </div>
-                        </div>
-
-                        <div className="d-flex flex-wrap gap-2">
-                          <button
-                            type="button"
-                            className="btn btn-sm btn-outline-secondary"
-                            onClick={() =>
-                              setExpandedInvoiceId(isExpanded ? null : invId)
-                            }
-                          >
-                            <i
-                              className={`bi ${
-                                isExpanded ? "bi-chevron-up" : "bi-chevron-down"
-                              } me-1`}
-                            ></i>
-                            {isExpanded ? "Thu gọn" : "Chi tiết 4 khoản"}
-                          </button>
-
-                          {inv.status === "unpaid" && (
-                            <button
-                              type="button"
-                              className="btn btn-sm btn-success fw-semibold"
-                              onClick={() => setPayingInvoice(inv)}
-                            >
-                              <i className="bi bi-qr-code-scan me-1"></i>
-                              Thanh toán
-                            </button>
-                          )}
-                          {inv.status === "pending_confirmation" && (
-                            <span className="badge bg-warning text-dark align-self-center">Chờ chủ trọ xác nhận</span>
-                          )}
-
-                          <Link
-                            to={`/invoices/${invId}`}
-                            className="btn btn-sm btn-primary"
-                          >
-                            <i className="bi bi-file-earmark-pdf me-1"></i>
-                            Phiếu PDF
-                          </Link>
-                        </div>
+                      <StatusBadge type="invoice" status={inv.status}/>
+                    </div>
+                    <div className="tenant-invoice-card-main">
+                      <div className="tenant-invoice-primary">
+                        <h3>{inv.roomId?.roomNumber ? "Phòng " + inv.roomId.roomNumber : (inv.roomId?.title || "Phòng thuê")}</h3>
+                        <p>Mã hóa đơn <strong>{inv.invoiceCode || "—"}</strong></p>
+                      </div>
+                      <div className="tenant-invoice-amount">
+                        <span>{isPaid ? "Đã thanh toán" : "Còn phải thanh toán"}</span>
+                        <strong className={isPaid ? "is-paid" : ""}>{formatVND(balance)}</strong>
                       </div>
                     </div>
-
-                    {/* BẢNG BÓC TÁCH CHI TIẾT TỪNG KHOẢN (Mở rộng ngay bên dưới hóa đơn) */}
-                    {isExpanded && (
-                      <div className="p-3 p-md-4 border-top bg-white">
-                        <div className="row g-3 mb-3">
-                          <div className="col-sm-6 col-lg-3">
-                            <div className="p-3 rounded-3 border bg-light h-100">
-                              <div className="small text-muted">
-                                1. Tiền phòng cố định
-                              </div>
-                              <div className="fw-bold fs-5 text-dark mt-1">
-                                {formatVND(inv.roomPrice)}
-                              </div>
-                              <small className="text-secondary">
-                                Theo hợp đồng (1 tháng)
-                              </small>
-                            </div>
-                          </div>
-
-                          <div className="col-sm-6 col-lg-3">
-                            <div className="p-3 rounded-3 border bg-light h-100">
-                              <div className="small text-muted">
-                                2. Tiền điện ({eUsage} kWh)
-                              </div>
-                              <div className="fw-bold fs-5 text-warning-emphasis mt-1">
-                                {formatVND(inv.electricityCost)}
-                              </div>
-                              <small className="text-secondary">
-                                Chỉ số: {inv.oldElectricity} →{" "}
-                                {inv.newElectricity} kWh (×
-                                {formatVND(inv.electricityPrice)})
-                              </small>
-                            </div>
-                          </div>
-
-                          <div className="col-sm-6 col-lg-3">
-                            <div className="p-3 rounded-3 border bg-light h-100">
-                              <div className="small text-muted">
-                                3. Tiền nước ({wUsage} m³)
-                              </div>
-                              <div className="fw-bold fs-5 text-primary mt-1">
-                                {formatVND(inv.waterCost)}
-                              </div>
-                              <small className="text-secondary">
-                                Chỉ số: {inv.oldWater} → {inv.newWater} m³ (×
-                                {formatVND(inv.waterPrice)})
-                              </small>
-                            </div>
-                          </div>
-
-                          <div className="col-sm-6 col-lg-3">
-                            <div className="p-3 rounded-3 border bg-light h-100">
-                              <div className="small text-muted">
-                                4. Phí dịch vụ chung
-                              </div>
-                              <div className="fw-bold fs-5 text-success mt-1">
-                                {formatVND(inv.serviceFee)}
-                              </div>
-                              <small className="text-secondary">
-                                Wifi, vệ sinh, rác, an ninh
-                              </small>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="table-responsive">
-                          <table className="table table-bordered table-sm align-middle mb-2">
-                            <thead className="table-light">
-                              <tr>
-                                <th>Khoản mục thanh toán</th>
-                                <th className="text-center">Chỉ số cũ</th>
-                                <th className="text-center">Chỉ số mới</th>
-                                <th className="text-center">Sử dụng</th>
-                                <th className="text-end">Đơn giá</th>
-                                <th className="text-end">Thành tiền</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td className="fw-semibold">
-                                  1. Tiền thuê phòng cố định
-                                </td>
-                                <td className="text-center">—</td>
-                                <td className="text-center">—</td>
-                                <td className="text-center">01 tháng</td>
-                                <td className="text-end">
-                                  {formatVND(inv.roomPrice)}
-                                </td>
-                                <td className="text-end fw-bold">
-                                  {formatVND(inv.roomPrice)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className="fw-semibold">
-                                  2. Tiền điện sinh hoạt
-                                </td>
-                                <td className="text-center">
-                                  {inv.oldElectricity}
-                                </td>
-                                <td className="text-center">
-                                  {inv.newElectricity}
-                                </td>
-                                <td className="text-center">{eUsage} kWh</td>
-                                <td className="text-end">
-                                  {formatVND(inv.electricityPrice)}/kWh
-                                </td>
-                                <td className="text-end fw-bold">
-                                  {formatVND(inv.electricityCost)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className="fw-semibold">
-                                  3. Tiền nước sinh hoạt
-                                </td>
-                                <td className="text-center">{inv.oldWater}</td>
-                                <td className="text-center">{inv.newWater}</td>
-                                <td className="text-center">{wUsage} m³</td>
-                                <td className="text-end">
-                                  {formatVND(inv.waterPrice)}/m³
-                                </td>
-                                <td className="text-end fw-bold">
-                                  {formatVND(inv.waterCost)}
-                                </td>
-                              </tr>
-                              <tr>
-                                <td className="fw-semibold">
-                                  4. Phí dịch vụ (Wifi, rác, vệ sinh chung)
-                                </td>
-                                <td className="text-center">—</td>
-                                <td className="text-center">—</td>
-                                <td className="text-center">Trọn gói</td>
-                                <td className="text-end">
-                                  {formatVND(inv.serviceFee)}
-                                </td>
-                                <td className="text-end fw-bold">
-                                  {formatVND(inv.serviceFee)}
-                                </td>
-                              </tr>
-                            </tbody>
-                            <tfoot className="table-light">
-                              <tr>
-                                <td colSpan="5" className="text-end fw-bold">
-                                  TỔNG CỘNG PHẢI THANH TOÁN:
-                                </td>
-                                <td className="text-end fw-bold fs-5 text-danger">
-                                  {formatVND(inv.totalAmount)}
-                                </td>
-                              </tr>
-                            </tfoot>
-                          </table>
-                        </div>
-
-                        <div className="small text-secondary bg-light p-2 rounded-3">
-                          <i className="bi bi-calculator me-1 text-primary"></i>
-                          <strong>Công thức tính tự động tại Server:</strong>{" "}
-                          {formatVND(inv.roomPrice)} + ({inv.newElectricity} -{" "}
-                          {inv.oldElectricity}) ×{" "}
-                          {formatVND(inv.electricityPrice)} + ({inv.newWater} -{" "}
-                          {inv.oldWater}) × {formatVND(inv.waterPrice)} +{" "}
-                          {formatVND(inv.serviceFee)} ={" "}
-                          <strong className="text-danger">
-                            {formatVND(inv.totalAmount)}
-                          </strong>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    <div className="tenant-invoice-card-meta">
+                      <span><i className="bi bi-calendar-event"/>{isPaid && inv.paidAt ? "Đã thu " + formatDateVN(inv.paidAt) : "Hạn " + formatDateVN(inv.dueDate)}</span>
+                      <span className="tenant-invoice-total">Tổng hóa đơn <strong>{formatVND(inv.totalAmount)}</strong></span>
+                    </div>
+                    <div className="tenant-invoice-actions">
+                      <Link to={"/invoices/" + invId} className="btn btn-outline-primary"><i className="bi bi-eye me-1"/>Xem chi tiết / In</Link>
+                      {inv.status === "unpaid" && <button type="button" className="btn btn-primary" onClick={() => setPayingInvoice(inv)}><i className="bi bi-credit-card me-1"/>Gửi xác nhận thanh toán</button>}
+                      {inv.status === "pending_confirmation" && <span className="tenant-payment-pending"><i className="bi bi-hourglass-split me-1"/>Đang chờ chủ trọ xác nhận</span>}
+                    </div>
+                  </article>
                 );
               })}
             </div>
           )}
-        </div>
+        </section>
       )}
 
       {/* =====================================================================
@@ -1370,10 +979,12 @@ export const TenantPortalPage = () => {
       {activeTab === "repairs" && (
         <div className="row g-4">
           <div className="col-lg-5">
+            <div id="tenant-repair-form">
             <RepairRequestForm
               roomId={contract?.roomId?._id}
               onSubmitted={handleCreateRepair}
             />
+            </div>
           </div>
 
           <div className="col-lg-7">
@@ -1384,19 +995,18 @@ export const TenantPortalPage = () => {
               </h5>
 
               {repairs.length === 0 ? (
-                <div className="text-center py-5 text-muted">
-                  <i className="bi bi-tools display-5 d-block mb-2 opacity-50"></i>
-                  <p className="mb-0">
-                    Bạn chưa gửi yêu cầu sửa chữa nào. Hãy điền form bên trái
-                    nếu thiết bị trong phòng gặp sự cố.
-                  </p>
+                <div className="tenant-empty-state my-3">
+                  <span className="tenant-empty-icon"><i className="bi bi-tools"/></span>
+                  <h3>Chưa có yêu cầu sửa chữa</h3>
+                  <p>Gửi mô tả và ảnh nếu có sự cố cần chủ trọ hỗ trợ.</p>
+                  <button type="button" className="btn btn-primary" onClick={() => document.getElementById("tenant-repair-form")?.scrollIntoView({ behavior: "smooth", block: "start" })}><i className="bi bi-plus-lg me-1"/>Tạo yêu cầu sửa chữa</button>
                 </div>
               ) : (
                 <div className="d-flex flex-column gap-3">
                   {repairs.map((req) => (
                     <div
                       key={req._id}
-                      className="p-3 rounded-4 border bg-light"
+                      className="tenant-repair-card p-3 rounded-4 border bg-light"
                     >
                       <div className="d-flex justify-content-between align-items-start mb-2">
                         <div>
@@ -1433,7 +1043,7 @@ export const TenantPortalPage = () => {
                       )}
 
                       {/* Thanh tiến trình Mới -> Đang xử lý -> Xong */}
-                      <div className="d-flex align-items-center gap-2 mt-2 small">
+                      <div className="tenant-repair-progress d-flex align-items-center gap-2 mt-2 small">
                         <span
                           className={`badge ${
                             ["new", "in_progress", "resolved"].includes(
@@ -1483,16 +1093,19 @@ export const TenantPortalPage = () => {
       )}
 
       {activeTab === "notifications" && (
-        <section className="card border-0 shadow-sm rounded-4 p-3 p-md-4" aria-labelledby="tenant-notifications-title">
-          <div className="d-flex justify-content-between align-items-center gap-3 mb-3">
-            <div><h5 id="tenant-notifications-title" className="fw-bold mb-1">Thông báo</h5><p className="text-muted small mb-0">Cập nhật từ hóa đơn và yêu cầu sửa chữa của bạn.</p></div>
-            {unreadCount > 0 && <button type="button" className="btn btn-sm btn-outline-primary" onClick={async () => { try { await apiRequest("/notifications/read-all", { method: "PATCH" }); setNotifications((list) => list.map((item) => ({ ...item, readAt: item.readAt || new Date().toISOString() }))); setUnreadCount(0); } catch (error) { setToastMsg(error.message || "Không thể cập nhật thông báo."); } }}>Đánh dấu đã đọc</button>}
+        <section className="tenant-notifications card border-0 shadow-sm rounded-4 p-3 p-md-4" aria-labelledby="tenant-notifications-title">
+          <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+            <div><span className="tenant-section-kicker">CẬP NHẬT TÀI KHOẢN</span><h2 id="tenant-notifications-title" className="h3 fw-bold mb-1">Thông báo</h2><p className="text-muted small mb-0">Tin mới về hợp đồng, hóa đơn và yêu cầu sửa chữa.</p></div>
+            {unreadCount > 0 && <button type="button" className="btn btn-outline-primary rounded-pill" onClick={async () => { try { await apiRequest("/notifications/read-all", { method: "PATCH" }); setNotifications((list) => list.map((item) => ({ ...item, readAt: item.readAt || new Date().toISOString() }))); setUnreadCount(0); } catch (error) { setToastMsg(error.message || "Không thể cập nhật thông báo."); } }}><i className="bi bi-check2-all me-1"/>Đánh dấu đã đọc</button>}
           </div>
-          {notifications.length === 0 ? <div className="text-center py-5 text-muted"><i className="bi bi-bell-slash display-5 d-block mb-2"/><p className="mb-0">Bạn chưa có thông báo mới.</p></div> : <div className="d-flex flex-column gap-2">{notifications.map((item) => <button key={item._id} type="button" className="tenant-notice-row text-start border rounded-3 p-3 bg-white" style={{ borderLeft: item.readAt ? undefined : "4px solid #0284c7", opacity: item.readAt ? 0.78 : 1 }} onClick={async () => { await markNotificationRead(item); if (item.resourceType === "invoice" && item.resourceId) navigate(`/invoices/${item.resourceId}`); else if (item.resourceType === "repair") setActiveTab("repairs"); }}><span className="d-flex justify-content-between gap-3"><strong>{item.title}</strong><small className="text-muted text-nowrap">{formatDateVN(item.createdAt)}</small></span><span className="d-block small text-secondary mt-1">{item.message}</span>{!item.readAt && <span className="badge bg-primary-subtle text-primary mt-2">Chưa đọc</span>}</button>)}</div>}
+          <div className="tenant-notification-filters" role="group" aria-label="Lọc loại thông báo">
+            {[['all', 'Tất cả'], ['invoice', 'Hóa đơn'], ['contract', 'Hợp đồng'], ['repair', 'Sửa chữa'], ['system', 'Hệ thống']].map(([type, label]) => <button key={type} type="button" className={notificationFilter === type ? "is-active" : ""} aria-pressed={notificationFilter === type} onClick={() => setNotificationFilter(type)}>{label}</button>)}
+          </div>
+          {filteredNotifications.length === 0 ? <div className="tenant-empty-state mt-3"><span className="tenant-empty-icon"><i className="bi bi-bell-slash"/></span><h3>{notifications.length ? "Không có thông báo trong mục này" : "Bạn chưa có thông báo"}</h3><p>{notifications.length ? "Chọn loại khác để xem thông báo." : "Thông báo sẽ xuất hiện khi có cập nhật thật liên quan đến tài khoản của bạn."}</p></div> : <div className="d-flex flex-column gap-2 mt-3">{filteredNotifications.map((item) => <button key={item._id} type="button" className={`tenant-notice-row ${item.readAt ? "is-read" : "is-unread"}`} onClick={async () => { await markNotificationRead(item); if (item.resourceType === "invoice" && item.resourceId) navigate(`/invoices/${item.resourceId}`); else if (item.resourceType === "repair") setActiveTab("repairs"); else if (item.resourceType === "contract") setActiveTab("contract"); }}><span className="tenant-notice-icon"><i className={`bi ${item.type === "invoice" ? "bi-receipt" : item.type === "contract" ? "bi-file-earmark-text" : item.type === "repair" ? "bi-tools" : "bi-info-circle"}`}/></span><span className="tenant-notice-content"><span className="tenant-notice-heading"><strong>{item.title}</strong><small>{formatDateVN(item.createdAt)}</small></span><span className="tenant-notice-message">{item.message}</span><span className={`tenant-notice-type type-${item.type}`}>{item.type === "invoice" ? "Hóa đơn" : item.type === "contract" ? "Hợp đồng" : item.type === "repair" ? "Sửa chữa" : "Hệ thống"}</span></span>{!item.readAt && <span className="tenant-notice-dot" aria-label="Chưa đọc"/>}</button>)}</div>}
         </section>
       )}
 
-      {/* Modal Thanh Toán Hóa Đơn QR / Chuyển Khoản */}
+      {/* Modal gửi yêu cầu xác nhận sau khi người thuê đã thanh toán */}
       {payingInvoice && (
         <div
           className="modal"
@@ -1507,8 +1120,8 @@ export const TenantPortalPage = () => {
           >
             <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
               <h5 className="fw-bold mb-0 text-primary">
-                <i className="bi bi-qr-code-scan me-2"></i>
-                Thanh Toán Hóa Đơn Tháng {payingInvoice.month}/
+                <i className="bi bi-credit-card me-2"></i>
+                Xác nhận thanh toán tháng {payingInvoice.month}/
                 {payingInvoice.year}
               </h5>
               <button
@@ -1524,7 +1137,7 @@ export const TenantPortalPage = () => {
                 <strong>{payingInvoice.invoiceCode}</strong>
               </div>
               <div className="d-flex justify-content-between mb-1">
-                <span className="text-muted">Nội dung CK:</span>
+                <span className="text-muted">Nội dung chuyển khoản:</span>
                 <strong className="text-primary">
                   TT {payingInvoice.invoiceCode}
                 </strong>
@@ -1537,22 +1150,8 @@ export const TenantPortalPage = () => {
               </div>
             </div>
 
-            <div className="p-3 border rounded-4 mb-3 bg-white d-inline-block mx-auto">
-              <img
-                src={`https://img.vietqr.io/image/MB-0987654321-compact2.png?amount=${
-                  payingInvoice.totalAmount
-                }&addInfo=${encodeURIComponent(
-                  `TT ${payingInvoice.invoiceCode}`
-                )}`}
-                alt="VietQR Thanh toán"
-                style={{ width: 210, height: 210, objectFit: "contain" }}
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-              <div className="small text-muted mt-1">
-                Quét mã VietQR, sau đó gửi yêu cầu để chủ trọ xác nhận khoản tiền đã nhận
-              </div>
+            <div className="alert alert-info text-start small" role="note">
+              Hệ thống chưa lưu thông tin tài khoản nhận tiền cho hóa đơn này. Vui lòng thanh toán theo phương thức đã thống nhất với chủ trọ; sau khi thanh toán, gửi yêu cầu bên dưới. Hóa đơn chỉ chuyển sang “Đã thu tiền” khi chủ trọ xác nhận.
             </div>
 
             <div className="d-flex gap-2">
@@ -1568,7 +1167,7 @@ export const TenantPortalPage = () => {
                 className="btn btn-success w-50 fw-bold"
                 onClick={() => handleConfirmPayInvoice(payingInvoice)}
               >
-                <i className="bi bi-send me-1"></i> Gửi yêu cầu xác nhận
+                <i className="bi bi-send me-1"></i> Tôi đã thanh toán
               </button>
             </div>
           </div>

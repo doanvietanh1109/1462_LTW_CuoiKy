@@ -4,7 +4,15 @@ import { apiRequest, formatVND, formatDateVN } from "../api/apiClient";
 import { StatusBadge } from "../components/common/StatusBadge";
 import "../styles/tenant.css";
 
-// Trang chi tiết hóa đơn (/invoices/:id) dùng useParams + hỗ trợ Xuất/In PDF (Tính năng nâng cao)
+const InvoiceItem = ({ number, title, detail, quantity, unit, amount }) => (
+  <tr>
+    <td className="invoice-item-name"><span className="invoice-item-index">{number}</span><span><strong>{title}</strong>{detail && <small className="d-block text-muted mt-1">{detail}</small>}</span></td>
+    <td className="text-center text-nowrap" data-label="Số lượng">{quantity}</td>
+    <td className="text-end text-nowrap" data-label="Đơn giá">{unit}</td>
+    <td className="text-end text-nowrap fw-semibold" data-label="Thành tiền">{formatVND(amount)}</td>
+  </tr>
+);
+
 export const InvoiceDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,227 +24,72 @@ export const InvoiceDetailPage = () => {
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-
     apiRequest(`/invoices/${id}`)
-      .then((res) => {
-        if (isMounted) {
-          setInvoice(res.data.invoice);
-          setError(null);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) {
-          setError(err.message);
-          setErrorStatus(err.status);
-        }
-      })
-      .finally(() => {
-        if (isMounted) setLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
+      .then((res) => { if (isMounted) { setInvoice(res.data.invoice); setError(null); } })
+      .catch((err) => { if (isMounted) { setError(err.message); setErrorStatus(err.status); } })
+      .finally(() => { if (isMounted) setLoading(false); });
+    return () => { isMounted = false; };
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="container py-5 text-center">
-        <div className="spinner-border text-primary" />
-        <p className="mt-2 text-muted">Đang tải chi tiết hóa đơn...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container py-5">
-        <div className="card border-danger shadow-sm rounded-4 p-4 text-center">
-          <i className="bi bi-shield-lock-fill text-danger display-4 mb-2" />
-          <h4 className="fw-bold text-danger">
-            {errorStatus === 403 ? "403 Forbidden - Từ Chối Truy Cập" : "Lỗi Tải Hóa Đơn"}
-          </h4>
-          <p className="text-secondary">{error}</p>
-          <div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => navigate(-1)}
-            >
-              <i className="bi bi-arrow-left me-1" /> Quay lại
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  if (loading) return <div className="container py-5 text-center"><div className="spinner-border text-primary" role="status" /><p className="mt-2 text-muted">Đang tải hóa đơn…</p></div>;
+  if (error) return <div className="container py-5"><div className="card border-danger shadow-sm rounded-4 p-4 text-center"><i className="bi bi-receipt-cutoff text-danger display-4 mb-2"/><h4 className="fw-bold">{errorStatus === 403 ? "Bạn không có quyền xem hóa đơn này" : "Không thể tải hóa đơn"}</h4><p className="text-secondary">{error}</p><button type="button" className="btn btn-primary align-self-center" onClick={() => navigate(-1)}><i className="bi bi-arrow-left me-1"/>Quay lại</button></div></div>;
   if (!invoice) return null;
 
+  const isPaid = invoice.status === "paid";
+  const paidAmount = isPaid ? Number(invoice.totalAmount) || 0 : 0;
+  const remainingAmount = Math.max(0, (Number(invoice.totalAmount) || 0) - paidAmount);
+  const room = invoice.roomId || {};
+  const tenant = invoice.tenantId || invoice.contractId || {};
+  const landlord = invoice.landlordId || {};
+
   return (
-    <div className="container py-4 invoice-page" style={{ maxWidth: "980px" }}>
-      <div className="d-flex justify-content-between align-items-center mb-3 d-print-none">
-        <button
-          type="button"
-          className="btn btn-outline-secondary btn-sm"
-          onClick={() => navigate(-1)}
-        >
-          <i className="bi bi-arrow-left me-1" /> Quay lại
-        </button>
-
-        <button
-          type="button"
-          className="btn btn-primary fw-semibold"
-          onClick={() => window.print()}
-        >
-          <i className="bi bi-file-earmark-pdf-fill me-1" />
-          Xuất PDF / In Hóa Đơn
-        </button>
+    <main className="container py-4 invoice-page">
+      <div className="d-flex justify-content-between align-items-center gap-2 mb-3 d-print-none">
+        <button type="button" className="btn btn-outline-secondary" onClick={() => navigate(-1)}><i className="bi bi-arrow-left me-1"/>Quay lại</button>
+        <button type="button" className="btn btn-primary fw-semibold" onClick={() => window.print()}><i className="bi bi-printer me-1"/>In / Lưu PDF</button>
       </div>
 
-      <div className="card invoice-receipt border-0 shadow rounded-4 p-4 p-md-5">
-        <div className="d-flex flex-wrap justify-content-between align-items-start border-bottom pb-3 mb-4">
-          <div>
-            <h3 className="fw-bold text-primary mb-1">
-              HÓA ĐƠN TIỀN THUÊ PHÒNG
-            </h3>
-            <div className="text-muted small">
-              Mã hóa đơn: <strong>{invoice.invoiceCode}</strong> | Kỳ thanh toán:{" "}
-              <strong>
-                Tháng {invoice.month}/{invoice.year}
-              </strong>
-            </div>
-          </div>
-          <div className="text-end">
-            <StatusBadge type="invoice" status={invoice.status} />
-            {invoice.paidAt && (
-              <div className="small text-success mt-1">
-                Ngày thu: {formatDateVN(invoice.paidAt)}
-              </div>
-            )}
-          </div>
+      <article className="invoice-receipt card border-0 shadow-sm rounded-4">
+        <div className="invoice-heading">
+          <div><span className="invoice-eyebrow">RIPT RENTAL · CHỨNG TỪ THANH TOÁN</span><h1>Phiếu báo tiền trọ hàng tháng</h1><p>Mã hóa đơn <strong>{invoice.invoiceCode || "—"}</strong></p></div>
+          <div className="invoice-period"><span>Kỳ thanh toán</span><strong>{String(invoice.month).padStart(2, "0")}/{invoice.year}</strong><StatusBadge type="invoice" status={invoice.status}/></div>
         </div>
 
-        <div className="row g-3 mb-4">
-          <div className="col-md-6">
-            <div className="p-3 rounded-3 bg-light h-100">
-              <div className="small text-muted text-uppercase fw-semibold">
-                Thông tin phòng
-              </div>
-              <div className="fw-bold fs-5 mt-1">
-                {invoice.roomId?.roomNumber
-                  ? `[${invoice.roomId.roomNumber}] `
-                  : ""}
-                {invoice.roomId?.title}
-              </div>
-              <div className="small text-secondary">Khu vực: {invoice.roomId?.district || "—"}</div>
-              <div className="small text-secondary">Hạn thanh toán: {formatDateVN(invoice.dueDate)}</div>
-            </div>
+        <section className="invoice-parties" aria-label="Thông tin hóa đơn">
+          <div><span className="invoice-label">NGƯỜI CHO THUÊ</span><strong>{landlord.name || "Chưa cập nhật"}</strong><span>{landlord.phone || landlord.email || ""}</span><span>{room.blockId?.address || room.district || ""}</span></div>
+          <div><span className="invoice-label">NGƯỜI THUÊ</span><strong>{tenant.name || tenant.tenantName || "Chưa cập nhật"}</strong><span>{tenant.email || tenant.tenantEmail || ""}</span><span>{room.roomNumber ? `Phòng ${room.roomNumber}` : room.title || "Phòng thuê"}</span></div>
+          <div className="invoice-dates"><span>Ngày phát hành <strong>{formatDateVN(invoice.createdAt)}</strong></span><span>Hạn thanh toán <strong>{formatDateVN(invoice.dueDate)}</strong></span></div>
+        </section>
+
+        <section className="invoice-total-panel" aria-label="Tình trạng thanh toán">
+          <div><span>Tổng tiền hóa đơn</span><strong>{formatVND(invoice.totalAmount)}</strong></div>
+          <div><span>Đã xác nhận thanh toán</span><strong>{formatVND(paidAmount)}</strong></div>
+          <div><span>Còn phải thanh toán</span><strong className={remainingAmount ? "invoice-balance" : "text-success"}>{formatVND(remainingAmount)}</strong></div>
+        </section>
+
+        <section className="invoice-lines">
+          <h2>Chi tiết khoản thu</h2>
+          <div className="table-responsive">
+            <table className="table align-middle mb-0">
+              <colgroup><col className="invoice-col-item"/><col className="invoice-col-qty"/><col className="invoice-col-unit"/><col className="invoice-col-total"/></colgroup>
+              <thead><tr><th>Khoản thu</th><th className="text-center">Số lượng</th><th className="text-end">Đơn giá</th><th className="text-end">Thành tiền</th></tr></thead>
+              <tbody>
+                <InvoiceItem number="01" title="Tiền thuê phòng" quantity="1 tháng" unit={formatVND(invoice.roomPrice)} amount={invoice.roomPrice}/>
+                <InvoiceItem number="02" title="Điện" detail={`Chỉ số ${invoice.oldElectricity} → ${invoice.newElectricity} kWh`} quantity={`${invoice.electricityUsage ?? Math.max(0, invoice.newElectricity - invoice.oldElectricity)} kWh`} unit={invoice.useTieredElectricity ? "Theo bậc thang" : `${formatVND(invoice.electricityPrice)}/kWh`} amount={invoice.electricityCost}/>
+                <InvoiceItem number="03" title="Nước" detail={`Chỉ số ${invoice.oldWater} → ${invoice.newWater} m³`} quantity={`${invoice.waterUsage ?? Math.max(0, invoice.newWater - invoice.oldWater)} m³`} unit={`${formatVND(invoice.waterPrice)}/m³`} amount={invoice.waterCost}/>
+                <InvoiceItem number="04" title="Phí dịch vụ" quantity="1 kỳ" unit={formatVND(invoice.serviceFee)} amount={invoice.serviceFee}/>
+              </tbody>
+              <tfoot><tr><th colSpan="3" className="text-end">Tổng cộng</th><th className="text-end invoice-grand-total">{formatVND(invoice.totalAmount)}</th></tr></tfoot>
+            </table>
           </div>
+        </section>
 
-          <div className="col-md-6">
-            <div className="p-3 rounded-3 bg-light h-100">
-              <div className="small text-muted text-uppercase fw-semibold">
-                Người thuê đại diện
-              </div>
-              <div className="fw-bold fs-5 mt-1">
-                {invoice.tenantId?.name ||
-                  invoice.contractId?.tenantName ||
-                  "Người thuê"}
-              </div>
-              <div className="small text-secondary">Email: {invoice.tenantId?.email || invoice.contractId?.tenantEmail || "—"}</div>
-              <div className="small text-secondary">Chủ trọ: {invoice.landlordId?.name || "—"}{invoice.landlordId?.phone ? ` · ${invoice.landlordId.phone}` : ""}</div>
-            </div>
-          </div>
-        </div>
-
-        <h6 className="fw-bold text-uppercase text-secondary mb-2">
-          Chi tiết từng khoản thanh toán
-        </h6>
-        <div className="table-responsive mb-4">
-          <table className="table table-bordered align-middle">
-            <thead className="table-light">
-              <tr>
-                <th>Khoản mục</th>
-                <th className="text-center">Chỉ số cũ</th>
-                <th className="text-center">Chỉ số mới</th>
-                <th className="text-center">Sử dụng</th>
-                <th className="text-end">Đơn giá</th>
-                <th className="text-end">Thành tiền</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="fw-semibold">1. Tiền thuê phòng cố định</td>
-                <td className="text-center">-</td>
-                <td className="text-center">-</td>
-                <td className="text-center">1 tháng</td>
-                <td className="text-end">{formatVND(invoice.roomPrice)}</td>
-                <td className="text-end fw-bold">{formatVND(invoice.roomPrice)}</td>
-              </tr>
-              <tr>
-                <td className="fw-semibold">
-                  2. Tiền điện{" "}
-                  {invoice.useTieredElectricity && (
-                    <span className="badge bg-info text-dark ms-1">
-                      Giá bậc thang
-                    </span>
-                  )}
-                </td>
-                <td className="text-center">{invoice.oldElectricity}</td>
-                <td className="text-center">{invoice.newElectricity}</td>
-                <td className="text-center">{invoice.electricityUsage} kWh</td>
-                <td className="text-end">
-                  {invoice.useTieredElectricity
-                    ? "Bậc thang"
-                    : `${formatVND(invoice.electricityPrice)}/kWh`}
-                </td>
-                <td className="text-end fw-bold">
-                  {formatVND(invoice.electricityCost)}
-                </td>
-              </tr>
-              <tr>
-                <td className="fw-semibold">3. Tiền nước sinh hoạt</td>
-                <td className="text-center">{invoice.oldWater}</td>
-                <td className="text-center">{invoice.newWater}</td>
-                <td className="text-center">{invoice.waterUsage} m³</td>
-                <td className="text-end">{formatVND(invoice.waterPrice)}/m³</td>
-                <td className="text-end fw-bold">{formatVND(invoice.waterCost)}</td>
-              </tr>
-              <tr>
-                <td className="fw-semibold">
-                  4. Phí dịch vụ (Rác, Wifi, Vệ sinh chung)
-                </td>
-                <td className="text-center">-</td>
-                <td className="text-center">-</td>
-                <td className="text-center">1 tháng</td>
-                <td className="text-end">{formatVND(invoice.serviceFee)}</td>
-                <td className="text-end fw-bold">{formatVND(invoice.serviceFee)}</td>
-              </tr>
-            </tbody>
-            <tfoot className="table-light">
-              <tr>
-                <td colSpan="5" className="text-end fw-bold fs-5">
-                  TỔNG CỘNG PHẢI THANH TOÁN:
-                </td>
-                <td className="text-end fw-bold fs-5 text-danger">
-                  {formatVND(invoice.totalAmount)}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-
-        <div className="p-3 rounded-3 bg-light small text-secondary">
-          <strong>Đối soát khoản thu:</strong> Tiền phòng (
-          {formatVND(invoice.roomPrice)}) + Điện ({invoice.newElectricity} -{" "}
-          {invoice.oldElectricity}) × {formatVND(invoice.electricityPrice)} + Nước (
-          {invoice.newWater} - {invoice.oldWater}) ×{" "}
-          {formatVND(invoice.waterPrice)} + Phí dịch vụ (
-          {formatVND(invoice.serviceFee)}) ={" "}
-          <strong className="text-danger">{formatVND(invoice.totalAmount)}</strong>
-        </div>
-      </div>
-    </div>
+        <section className="invoice-footer" aria-label="Ghi chú và trạng thái">
+          <div><strong>Trạng thái:</strong> <StatusBadge type="invoice" status={invoice.status}/>{invoice.paidAt && <span className="ms-2 text-muted">Xác nhận ngày {formatDateVN(invoice.paidAt)}</span>}</div>
+          {invoice.note && <p><strong>Ghi chú:</strong> {invoice.note}</p>}
+          <p>Số liệu và khoản thu được lấy từ hóa đơn đã phát hành trên hệ thống.</p>
+        </section>
+      </article>
+    </main>
   );
 };
