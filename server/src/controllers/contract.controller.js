@@ -6,6 +6,7 @@ const { User } = require("../models/user.model");
 const { RentalHistory } = require("../models/rentalHistory.model");
 const { Order } = require("../models/order.model");
 const { sendSuccess, sendError } = require("../utils/response");
+const { createNotification } = require("../utils/createNotification");
 
 const canAccessContract = (user, contract) => {
   if (user.role === "admin") return true;
@@ -274,6 +275,8 @@ const createContract = async (req, res, next) => {
       notes: notes || "",
       status: "active",
     });
+    await createNotification({ userId: tenantUser._id, type: "contract", title: "Hợp đồng mới",
+      message: `Hợp đồng ${contract.contractCode} đã được tạo cho phòng ${room.roomNumber || room.title}.`, resourceType: "contract", resourceId: contract._id });
 
     // Tự động chuyển trạng thái phòng sang "rented" (Đang thuê)
     room.status = "rented";
@@ -407,6 +410,8 @@ const selfBookRoomAndCreateContract = async (req, res, next) => {
         "Hợp đồng điện tử được khởi tạo trực tiếp khi đặt giữ chỗ & ký hợp đồng trực tuyến.",
       status: "active",
     });
+    await createNotification({ userId: room.ownerId, type: "contract", title: "Đăng ký thuê phòng mới",
+      message: `Người thuê ${req.user.name || req.user.email} đã đăng ký phòng ${room.roomNumber || room.title}.`, resourceType: "contract", resourceId: contract._id });
 
     room.status = "rented";
     room.tenant = {
@@ -486,6 +491,9 @@ const extendContract = async (req, res, next) => {
     baseDate.setMonth(baseDate.getMonth() + Number(months));
     contract.endDate = baseDate;
     await contract.save();
+    const renewalRecipient = req.user.role === "landlord" ? contract.tenantId : contract.landlordId;
+    await createNotification({ userId: renewalRecipient, type: "contract", title: "Hợp đồng được gia hạn",
+      message: `Hợp đồng ${contract.contractCode} đã được gia hạn đến ${baseDate.toLocaleDateString("vi-VN")}.`, resourceType: "contract", resourceId: contract._id });
 
     const populated = await Contract.findById(contract._id)
       .populate("roomId")
@@ -517,6 +525,9 @@ const terminateContract = async (req, res, next) => {
     contract.status = "terminated";
     contract.actualEndDate = new Date();
     await contract.save();
+    const endRecipient = req.user.role === "landlord" ? contract.tenantId : contract.landlordId;
+    await createNotification({ userId: endRecipient, type: "contract", title: "Hợp đồng đã kết thúc",
+      message: `Hợp đồng ${contract.contractCode} đã được kết thúc.`, resourceType: "contract", resourceId: contract._id });
 
     // Tự động đổi trạng thái phòng về "available" (Trống)
     const room = await Room.findById(contract.roomId);

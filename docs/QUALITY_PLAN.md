@@ -79,3 +79,15 @@
 - 2026-11-15: bộ kiểm thử tăng lên 19/19, frontend production build đạt; route splitting đã đo được mức giảm bundle như trên.
 - 2026-11-15: lịch sử thuê, meter sheet, contract, contact, repair, room upload/category được nối và siết validation; 34/34 mock tests và production build pass. Không dùng DB thật; browser/Cloudinary/HTTP integration vẫn NOT VERIFIED.
 - 2026-11-15: commit local `c97cac7` tạo sau khi test/build pass; chưa push/PR/merge.
+
+## Bổ sung 2026-11-15 — thông báo, tenant portal, hóa đơn
+
+- Vấn đề: tenant portal còn nút kiểm thử 403 dành cho bài tập và CTA tạo “hóa đơn mẫu”; chưa có nơi xem/đánh dấu thông báo đã đọc. Hóa đơn chi tiết có bảng rộng, chưa có CSS in riêng.
+- Giải pháp: bỏ nút test bảo mật và CTA mẫu; thêm lời chào theo tài khoản, điều hướng đến tìm phòng, tab thông báo đọc dữ liệu API. Tạo model/API thông báo MongoDB, phân trang giới hạn, lọc theo user đăng nhập, cập nhật một/tất cả đã đọc và bảo vệ quyền sở hữu.
+- Sự kiện hiện được lưu cho phát hành hóa đơn, xác nhận thu tiền, tạo/gia hạn/kết thúc hợp đồng, gửi yêu cầu sửa chữa và thay đổi trạng thái sửa chữa. Thông báo mang loại và resource ID; tenant có thể mở hóa đơn hoặc chuyển đến yêu cầu sửa chữa.
+- Hóa đơn chi tiết được trình bày như chứng từ; thêm thông tin hạn thanh toán/chủ trọ và CSS responsive/in A4 để bảng không bị cắt khi in.
+- File thay đổi: `server/src/models/notification.model.js`, `server/src/controllers/notification.controller.js`, `server/src/routes/notification.routes.js`, `server/src/utils/createNotification.js`, `server/src/app.js`, controller invoice/contract/repair, `server/test/notification-access.test.js`, `client/src/pages/TenantPortalPage.jsx`, `client/src/pages/InvoiceDetailPage.jsx`, `client/src/styles/tenant.css`.
+- Test: `npm --prefix server test` 37/37 PASS (mock/unit, không kết nối MongoDB); `npm --prefix client run build` PASS; `node --check` controller và `git diff --check` PASS.
+- NOT VERIFIED: luồng ghi/đọc notification trên MongoDB thật, browser/console/network, PDF qua trình duyệt. Không có DB test hoặc browser E2E được chạy trong phiên này.
+- Hạn chế còn lại: chưa có notification bell/danh sách riêng trong landlord layout; chưa có công việc nền sinh nhắc hóa đơn đến hạn/quá hạn; lưu notification là best-effort để không làm thất bại nghiệp vụ chính khi bảng notification lỗi. Contract event khi người thuê đăng ký tạo thông báo cho chủ trọ, còn tenant events tới portal người thuê.
+- Commit local tương ứng: `feat: add tenant notifications and invoice print layout` (xem `git log`); chưa push.

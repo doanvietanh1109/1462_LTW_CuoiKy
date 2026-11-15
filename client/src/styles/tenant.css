@@ -1,0 +1,21 @@
+.tenant-notice-row { transition: background-color .15s ease, border-color .15s ease; }
+.tenant-notice-row:hover { background: #f8fbff !important; border-color: #9bc9ed !important; }
+.invoice-receipt { border-top: 5px solid #0878b9 !important; }
+.invoice-receipt table { min-width: 760px; }
+.invoice-receipt th, .invoice-receipt td { padding: .75rem .65rem; }
+@media (max-width: 575.98px) {
+  .invoice-page { padding-left: .65rem; padding-right: .65rem; }
+  .invoice-receipt { padding: 1rem !important; border-radius: .8rem !important; }
+  .invoice-receipt h3 { font-size: 1.15rem; }
+}
+@media print {
+  @page { size: A4 portrait; margin: 14mm; }
+  body { background: #fff !important; color: #111 !important; font-size: 10pt; }
+  .invoice-page { max-width: none !important; padding: 0 !important; }
+  .invoice-receipt { box-shadow: none !important; border: 0 !important; border-top: 3px solid #0878b9 !important; border-radius: 0 !important; padding: 0 !important; }
+  .invoice-receipt .table-responsive { overflow: visible !important; }
+  .invoice-receipt table { min-width: 0 !important; width: 100% !important; font-size: 8pt; }
+  .invoice-receipt th, .invoice-receipt td { padding: 5px 4px !important; }
+  .invoice-receipt tr, .invoice-receipt .row > div, .invoice-receipt tfoot { break-inside: avoid; }
+  .invoice-receipt .bg-light, .invoice-receipt .table-light { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

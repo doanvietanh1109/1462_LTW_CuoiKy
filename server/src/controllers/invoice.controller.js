@@ -5,6 +5,7 @@ const { Contract } = require("../models/contract.model");
 const { MeterReading } = require("../models/meterReading.model");
 const { calculateTieredElectricity } = require("./meterReading.controller");
 const { sendSuccess, sendError } = require("../utils/response");
+const { createNotification } = require("../utils/createNotification");
 
 const isNumericInput = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value));
 const validPeriod = (month, year) => isNumericInput(month) && Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && isNumericInput(year) && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
@@ -304,6 +305,9 @@ const createInvoice = async (req, res, next) => {
       .populate("roomId", "title roomNumber price area district")
       .populate("tenantId", "name email phone");
 
+    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Hóa đơn mới",
+      message: `Hóa đơn ${invoice.invoiceCode} kỳ ${numMonth}/${numYear} đã được phát hành.`, resourceType: "invoice", resourceId: invoice._id });
+
     return sendSuccess(res, "Phát hành hóa đơn thành công", { invoice: populated }, 201);
   } catch (error) {
     if (isDuplicateKeyError(error)) return sendError(res, "Hóa đơn phòng/tháng này đã được tạo bởi yêu cầu khác", error.keyValue || null, 409);
@@ -327,6 +331,8 @@ const markInvoicePaid = async (req, res, next) => {
     invoice.status = "paid";
     invoice.paidAt = new Date();
     await invoice.save();
+    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Đã xác nhận thanh toán",
+      message: `Chủ trọ đã xác nhận thanh toán hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")

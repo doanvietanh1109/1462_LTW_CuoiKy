@@ -1,0 +1,10 @@
+const { Router } = require("express");
+const { listNotifications, markRead, markAllRead } = require("../controllers/notification.controller");
+const { requireAuth } = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+const router = Router();
+router.use(requireAuth);
+router.get("/", listNotifications);
+router.patch("/read-all", markAllRead);
+router.patch("/:id/read", validateObjectId("id"), markRead);
+module.exports = router;

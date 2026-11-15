@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiRequest, formatVND, formatDateVN } from "../api/apiClient";
 import { StatusBadge } from "../components/common/StatusBadge";
+import "../styles/tenant.css";
 
 // Trang chi tiết hóa đơn (/invoices/:id) dùng useParams + hỗ trợ Xuất/In PDF (Tính năng nâng cao)
 export const InvoiceDetailPage = () => {
@@ -73,7 +74,7 @@ export const InvoiceDetailPage = () => {
   if (!invoice) return null;
 
   return (
-    <div className="container py-4" style={{ maxWidth: "820px" }}>
+    <div className="container py-4 invoice-page" style={{ maxWidth: "980px" }}>
       <div className="d-flex justify-content-between align-items-center mb-3 d-print-none">
         <button
           type="button"
@@ -93,11 +94,11 @@ export const InvoiceDetailPage = () => {
         </button>
       </div>
 
-      <div className="card border-0 shadow rounded-4 p-4 p-md-5">
+      <div className="card invoice-receipt border-0 shadow rounded-4 p-4 p-md-5">
         <div className="d-flex flex-wrap justify-content-between align-items-start border-bottom pb-3 mb-4">
           <div>
             <h3 className="fw-bold text-primary mb-1">
-              PHIẾU BÁO TIỀN TRỌ HÀNG THÁNG
+              HÓA ĐƠN TIỀN THUÊ PHÒNG
             </h3>
             <div className="text-muted small">
               Mã hóa đơn: <strong>{invoice.invoiceCode}</strong> | Kỳ thanh toán:{" "}
@@ -128,9 +129,8 @@ export const InvoiceDetailPage = () => {
                   : ""}
                 {invoice.roomId?.title}
               </div>
-              <div className="small text-secondary">
-                Khu vực: {invoice.roomId?.district}
-              </div>
+              <div className="small text-secondary">Khu vực: {invoice.roomId?.district || "—"}</div>
+              <div className="small text-secondary">Hạn thanh toán: {formatDateVN(invoice.dueDate)}</div>
             </div>
           </div>
 
@@ -144,10 +144,8 @@ export const InvoiceDetailPage = () => {
                   invoice.contractId?.tenantName ||
                   "Người thuê"}
               </div>
-              <div className="small text-secondary">
-                Email:{" "}
-                {invoice.tenantId?.email || invoice.contractId?.tenantEmail}
-              </div>
+              <div className="small text-secondary">Email: {invoice.tenantId?.email || invoice.contractId?.tenantEmail || "—"}</div>
+              <div className="small text-secondary">Chủ trọ: {invoice.landlordId?.name || "—"}{invoice.landlordId?.phone ? ` · ${invoice.landlordId.phone}` : ""}</div>
             </div>
           </div>
         </div>
@@ -230,7 +228,7 @@ export const InvoiceDetailPage = () => {
         </div>
 
         <div className="p-3 rounded-3 bg-light small text-secondary">
-          <strong>Công thức tính tại Server:</strong> Tiền phòng (
+          <strong>Đối soát khoản thu:</strong> Tiền phòng (
           {formatVND(invoice.roomPrice)}) + Điện ({invoice.newElectricity} -{" "}
           {invoice.oldElectricity}) × {formatVND(invoice.electricityPrice)} + Nước (
           {invoice.newWater} - {invoice.oldWater}) ×{" "}

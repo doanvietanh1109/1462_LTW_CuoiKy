@@ -2,6 +2,7 @@ const { RepairRequest } = require("../models/repairRequest.model");
 const { Room } = require("../models/room.model");
 const { Contract } = require("../models/contract.model");
 const { sendSuccess, sendError } = require("../utils/response");
+const { createNotification } = require("../utils/createNotification");
 const cloudinary = require("../config/cloudinary");
 const mongoose = require("mongoose");
 
@@ -89,6 +90,8 @@ const createRepairRequest = async (req, res, next) => {
         status: "new",
       });
       persisted = true;
+      await createNotification({ userId: activeContract.landlordId, type: "repair", title: "Yêu cầu sửa chữa mới",
+        message: `Người thuê đã gửi yêu cầu: ${repairRequest.title}.`, resourceType: "repair", resourceId: repairRequest._id });
       const populated = await RepairRequest.findById(repairRequest._id)
         .populate("roomId", "title roomNumber district status")
         .populate("tenantId", "name email phone");
@@ -129,6 +132,7 @@ const updateRepairStatus = async (req, res, next) => {
       return sendError(res, "Ghi chú không hợp lệ", null, 400);
     }
 
+    const previousStatus = repairRequest.status;
     repairRequest.status = status;
     if (landlordNote !== undefined) {
       repairRequest.landlordNote = landlordNote;
@@ -138,6 +142,11 @@ const updateRepairStatus = async (req, res, next) => {
     }
 
     await repairRequest.save();
+    if (previousStatus !== status) {
+      const statusLabel = status === "in_progress" ? "đang được xử lý" : status === "resolved" ? "đã hoàn thành" : "được cập nhật";
+      await createNotification({ userId: repairRequest.tenantId, type: "repair", title: "Cập nhật yêu cầu sửa chữa",
+        message: `Yêu cầu “${repairRequest.title}” ${statusLabel}.`, resourceType: "repair", resourceId: repairRequest._id });
+    }
 
     // Tùy chọn đồng bộ trạng thái phòng (Đang sửa)
     if (updateRoomStatus) {

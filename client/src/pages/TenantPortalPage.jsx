@@ -10,6 +10,7 @@ import { resolveRoomImageUrl } from "../components/rooms/RoomCard";
 import {
   createContractFromBooking,
 } from "../utils/tenantContractHelper";
+import "../styles/tenant.css";
 
 export const TenantPortalPage = () => {
   const dispatch = useDispatch();
@@ -21,9 +22,10 @@ export const TenantPortalPage = () => {
   const [contract, setContract] = useState(null);
   const [invoices, setInvoices] = useState([]);
   const [repairs, setRepairs] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState("");
-  const [securityTestResult, setSecurityTestResult] = useState(null);
   const [toastMsg, setToastMsg] = useState("");
 
   // Invoice filter & expanded breakdown state
@@ -40,10 +42,11 @@ export const TenantPortalPage = () => {
   const loadTenantData = async () => {
     setLoading(true);
     try {
-      const [contractRes, invoicesRes, repairsRes] = await Promise.all([
+      const [contractRes, invoicesRes, repairsRes, notificationsRes] = await Promise.all([
         apiRequest("/contracts/my-active").then((data) => ({ data })).catch((error) => ({ error })),
         apiRequest("/invoices").then((data) => ({ data })).catch((error) => ({ error })),
         apiRequest("/repair-requests").then((data) => ({ data })).catch((error) => ({ error })),
+        apiRequest("/notifications?limit=5").then((data) => ({ data })).catch((error) => ({ error })),
       ]);
 
       const activeContract = contractRes?.data?.data?.contract || null;
@@ -58,6 +61,8 @@ export const TenantPortalPage = () => {
       setContract(activeContract);
       setInvoices(invoiceList);
       setRepairs(repairList);
+      setNotifications(notificationsRes.data?.data?.notifications || []);
+      setUnreadCount(notificationsRes.data?.data?.unreadCount || 0);
       if (invoiceList.length > 0) {
         setExpandedInvoiceId(invoiceList[0]._id || invoiceList[0].id);
       }
@@ -179,21 +184,13 @@ export const TenantPortalPage = () => {
     }
   };
 
-  // Kiểm thử yêu cầu kỹ thuật riêng Đề 4:
-  // "Người thuê chỉ xem được hóa đơn của phòng mình: kiểm tra ở API, gọi thẳng API hóa đơn phòng khác phải nhận 403."
-  const handleTestForbiddenInvoiceApi = async () => {
-    setSecurityTestResult(null);
+  const markNotificationRead = async (notification) => {
+    if (!notification || notification.readAt) return;
     try {
-      const fakeOtherRoomId = "000000000000000000000099";
-      await apiRequest(`/invoices?roomId=${fakeOtherRoomId}`);
-    } catch (err) {
-      setSecurityTestResult({
-        status: err.status || 403,
-        message:
-          err.message ||
-          "403 Forbidden: Bạn chỉ được phép xem hóa đơn của phòng mình đang thuê!",
-      });
-    }
+      await apiRequest(`/notifications/${notification._id}/read`, { method: "PATCH" });
+      setNotifications((list) => list.map((item) => item._id === notification._id ? { ...item, readAt: new Date().toISOString() } : item));
+      setUnreadCount((count) => Math.max(0, count - 1));
+    } catch (error) { setToastMsg(error.message || "Không thể cập nhật thông báo."); }
   };
 
   const filteredInvoices = useMemo(() => {
@@ -239,7 +236,7 @@ export const TenantPortalPage = () => {
   const amenitiesList =
     Array.isArray(roomInfo.amenities) && roomInfo.amenities.length > 0
       ? roomInfo.amenities
-      : ["Wifi", "Điều hòa", "Nóng lạnh", "Chỗ để xe", "An ninh"];
+      : [];
 
   return (
     <main className="main-container">
@@ -255,11 +252,11 @@ export const TenantPortalPage = () => {
         <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
           <div>
             <span className="badge bg-warning text-dark fw-bold mb-2">
-              <i className="bi bi-shield-check me-1"></i> Cổng Thông Tin Người Thuê · Đề 4
+              <i className="bi bi-shield-check me-1"></i> Cổng thông tin người thuê
             </span>
             <h2 className="fw-bold mb-1" style={{ fontSize: "26px" }}>
               <i className="bi bi-buildings me-2"></i>
-              Phòng Trọ, Hợp Đồng &amp; Hóa Đơn Của Tôi
+              Xin chào{user?.name ? `, ${user.name}` : ""}
             </h2>
             <p className="mb-0 opacity-75 small">
               Quản lý hợp đồng điện tử, đối soát chi tiết từng khoản hóa đơn
@@ -280,10 +277,9 @@ export const TenantPortalPage = () => {
               <button
                 type="button"
                 className="btn btn-warning btn-sm fw-bold text-dark"
-                onClick={() => handleQuickCreateContract()}
+                onClick={() => navigate("/search")}
               >
-                <i className="bi bi-lightning-charge-fill me-1"></i> Khởi tạo
-                Hợp đồng &amp; Hóa đơn mẫu ngay
+                <i className="bi bi-search me-1"></i> Tìm phòng để thuê
               </button>
             )}
             <Link to="/search" className="btn btn-outline-light btn-sm">
@@ -321,9 +317,7 @@ export const TenantPortalPage = () => {
                 </div>
                 <small className="text-secondary">
                   {contract
-                    ? `${roomInfo.area || 25} m² · ${
-                        contract.blockId?.name || "Dãy A"
-                      }`
+                    ? `${roomInfo.area ? `${roomInfo.area} m²` : ""}${roomInfo.area && contract.blockId?.name ? " · " : ""}${contract.blockId?.name || ""}`
                     : "Hãy chọn phòng bên dưới"}
                 </small>
               </div>
@@ -467,6 +461,9 @@ export const TenantPortalPage = () => {
             <i className="bi bi-wrench-adjustable-circle me-2" />
             3. Yêu Cầu Sửa Chữa ({repairs.length})
           </button>
+          <button type="button" className={`btn rounded-3 px-4 py-2 fw-semibold ${activeTab === "notifications" ? "btn-primary shadow-sm" : "btn-light text-secondary"}`} onClick={() => setActiveTab("notifications")}>
+            <i className="bi bi-bell me-2" />Thông báo {unreadCount > 0 && <span className="badge bg-danger ms-1">{unreadCount}</span>}
+          </button>
         </div>
       </div>
 
@@ -510,23 +507,17 @@ export const TenantPortalPage = () => {
                   className="text-muted mx-auto mb-3"
                   style={{ maxWidth: 640 }}
                 >
-                  Bạn có thể bấm nút{" "}
-                  <strong>
-                    &quot;Tạo Hợp đồng &amp; Hóa đơn mẫu 1-Click&quot;
-                  </strong>{" "}
-                  bên dưới để hệ thống tự động lập Hợp đồng điện tử và phát hành
-                  bảng kê hóa đơn chi tiết cho tài khoản{" "}
-                  <code>{user?.email}</code>, hoặc chọn 1 phòng đang trống bên
-                  dưới để ký hợp đồng thuê ngay.
+                  Chọn một phòng đang trống để gửi đăng ký thuê. Hợp đồng và
+                  hóa đơn chỉ được tạo sau khi nghiệp vụ tương ứng được xác nhận.
                 </p>
                 <div className="d-flex flex-wrap justify-content-center gap-3">
                   <button
                     type="button"
                     className="btn btn-primary px-4 py-2 fw-bold"
-                    onClick={() => handleQuickCreateContract()}
+                    onClick={() => navigate("/search")}
                   >
-                    <i className="bi bi-magic me-2"></i>
-                    Tạo Hợp Đồng &amp; Hóa Đơn Mẫu 1-Click
+                    <i className="bi bi-search me-2"></i>
+                    Tìm phòng đang trống
                   </button>
                   <Link
                     to="/search"
@@ -644,7 +635,7 @@ export const TenantPortalPage = () => {
                       <i className="bi bi-geo-alt-fill text-danger me-1"></i>
                       {roomInfo.district || "Hà Đông, Hà Nội"} ·{" "}
                       <strong>
-                        {contract.blockId?.name || "Dãy A - Cơ sở chính"}
+                        {contract.blockId?.name || "—"}
                       </strong>
                     </p>
 
@@ -805,7 +796,7 @@ export const TenantPortalPage = () => {
                           <div>
                             Cơ sở:{" "}
                             <strong>
-                              {contract.blockId?.name || "Dãy A - Hà Nội"}
+                              {contract.blockId?.name || "—"}
                             </strong>
                           </div>
                         </div>
@@ -1051,54 +1042,16 @@ export const TenantPortalPage = () => {
                 </button>
               </div>
 
-              <button
-                type="button"
-                className="btn btn-sm btn-outline-danger"
-                onClick={handleTestForbiddenInvoiceApi}
-                title="Kiểm tra ràng buộc bảo mật Đề 4: Gọi API hóa đơn phòng khác phải nhận 403"
-              >
-                <i className="bi bi-shield-lock me-1" />
-                Test bảo mật 403
-              </button>
             </div>
           </div>
-
-          {securityTestResult && (
-            <div className="alert alert-warning d-flex align-items-center justify-content-between py-2 mb-3">
-              <div>
-                <strong>Kết quả kiểm tra bảo mật API (Đề 4):</strong> Khi gọi
-                thẳng API hóa đơn của phòng khác, Server trả về{" "}
-                <span className="badge bg-danger">
-                  HTTP {securityTestResult.status}
-                </span>{" "}
-                — <em>{securityTestResult.message}</em>
-              </div>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setSecurityTestResult(null)}
-              />
-            </div>
-          )}
 
           {filteredInvoices.length === 0 ? (
             <div className="text-center py-5">
               <i className="bi bi-receipt text-muted display-4 d-block mb-2"></i>
               <h5 className="fw-bold">Chưa có hóa đơn nào trong mục này</h5>
               <p className="text-muted small mb-3">
-                Nếu bạn vừa tạo tài khoản mới, hãy bấm nút bên dưới để tạo mẫu
-                Hợp đồng &amp; Bảng kê hóa đơn.
+                Hóa đơn sẽ xuất hiện tại đây sau khi chủ trọ phát hành cho phòng bạn đang thuê.
               </p>
-              {!contract && (
-                <button
-                  type="button"
-                  className="btn btn-primary btn-sm fw-semibold"
-                  onClick={() => handleQuickCreateContract()}
-                >
-                  <i className="bi bi-magic me-1"></i> Tạo Hợp đồng &amp; Hóa
-                  đơn mẫu ngay
-                </button>
-              )}
             </div>
           ) : (
             <div className="d-flex flex-column gap-3">
@@ -1527,6 +1480,16 @@ export const TenantPortalPage = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {activeTab === "notifications" && (
+        <section className="card border-0 shadow-sm rounded-4 p-3 p-md-4" aria-labelledby="tenant-notifications-title">
+          <div className="d-flex justify-content-between align-items-center gap-3 mb-3">
+            <div><h5 id="tenant-notifications-title" className="fw-bold mb-1">Thông báo</h5><p className="text-muted small mb-0">Cập nhật từ hóa đơn và yêu cầu sửa chữa của bạn.</p></div>
+            {unreadCount > 0 && <button type="button" className="btn btn-sm btn-outline-primary" onClick={async () => { try { await apiRequest("/notifications/read-all", { method: "PATCH" }); setNotifications((list) => list.map((item) => ({ ...item, readAt: item.readAt || new Date().toISOString() }))); setUnreadCount(0); } catch (error) { setToastMsg(error.message || "Không thể cập nhật thông báo."); } }}>Đánh dấu đã đọc</button>}
+          </div>
+          {notifications.length === 0 ? <div className="text-center py-5 text-muted"><i className="bi bi-bell-slash display-5 d-block mb-2"/><p className="mb-0">Bạn chưa có thông báo mới.</p></div> : <div className="d-flex flex-column gap-2">{notifications.map((item) => <button key={item._id} type="button" className="tenant-notice-row text-start border rounded-3 p-3 bg-white" style={{ borderLeft: item.readAt ? undefined : "4px solid #0284c7", opacity: item.readAt ? 0.78 : 1 }} onClick={async () => { await markNotificationRead(item); if (item.resourceType === "invoice" && item.resourceId) navigate(`/invoices/${item.resourceId}`); else if (item.resourceType === "repair") setActiveTab("repairs"); }}><span className="d-flex justify-content-between gap-3"><strong>{item.title}</strong><small className="text-muted text-nowrap">{formatDateVN(item.createdAt)}</small></span><span className="d-block small text-secondary mt-1">{item.message}</span>{!item.readAt && <span className="badge bg-primary-subtle text-primary mt-2">Chưa đọc</span>}</button>)}</div>}
+        </section>
       )}
 
       {/* Modal Thanh Toán Hóa Đơn QR / Chuyển Khoản */}
