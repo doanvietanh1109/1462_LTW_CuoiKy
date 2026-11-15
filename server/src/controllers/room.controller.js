@@ -165,10 +165,11 @@ const createRoom = async (req, res) => {
       currentWater,
       status,
       image,
+      mainImageIndex,
     } = req.body;
 
-    if (typeof title !== "string" || !title.trim() || typeof category !== "string" || !category.trim() || price === undefined || typeof district !== "string" || !district.trim()) {
-      return sendError(res, "title, category, price, and district are required", null, 400);
+    if (typeof title !== "string" || !title.trim() || price === undefined || typeof district !== "string" || !district.trim()) {
+      return sendError(res, "Tên phòng, giá thuê và khu vực là bắt buộc", null, 400);
     }
     const numericFields = { price, area, electricityPrice, waterPrice, serviceFee, currentElectricity, currentWater };
     if (Object.entries(numericFields).some(([key, value]) => value !== undefined && !isNonNegativeNumber(value))) {
@@ -230,10 +231,10 @@ const createRoom = async (req, res) => {
 
     const room = await Room.create({
       title,
-      category,
+      category: "Phòng trọ",
       price: Number(price),
       district,
-      image: imageUrls[0] || image || "https://picsum.photos/seed/roomdefault/800/600",
+      image: imageUrls[Number(mainImageIndex)] || imageUrls[0] || image || "",
       images: imageUrls.length > 0 ? imageUrls : image ? [image] : [],
       description,
       amenities: normalizedAmenities,
@@ -289,6 +290,9 @@ const updateRoom = async (req, res) => {
       currentWater,
       status,
       image,
+      mainImageIndex,
+      mainImage,
+      removeImages,
     } = req.body;
 
     if ([title, category, district].some((value) => value !== undefined && (typeof value !== "string" || !value.trim()))) {
@@ -324,56 +328,34 @@ const updateRoom = async (req, res) => {
       }
     }
 
-    // Upload new images to Cloudinary if provided
-    if (req.files && req.files.length > 0) {
-      console.log(`Updating room with ${req.files.length} new images...`);
-
+    const existingImages = [...new Set([room.image, ...(room.images || [])].filter(Boolean))];
+    let removeImageList = removeImages || [];
+    if (typeof removeImageList === "string") {
+      try { removeImageList = JSON.parse(removeImageList); } catch { return sendError(res, "Danh sách ảnh cần xóa không hợp lệ", null, 400); }
+    }
+    if (!Array.isArray(removeImageList) || removeImageList.some((url) => !existingImages.includes(url))) {
+      return sendError(res, "Ảnh cần xóa không thuộc phòng này", null, 400);
+    }
+    const retainedImages = existingImages.filter((url) => !removeImageList.includes(url));
+    if (retainedImages.length + (req.files?.length || 0) > 8) {
+      return sendError(res, "Mỗi phòng được lưu tối đa 8 ảnh", null, 400);
+    }
+    let newImageUrls = [];
+    if (req.files?.length) {
       try {
-        // Delete old images from Cloudinary if exists
-        if (room.images && room.images.length > 0) {
-          console.log(`Deleting ${room.images.length} old images from Cloudinary...`);
-          const deletePromises = room.images
-            .filter(img => img && img.includes("cloudinary.com"))
-            .map(img => {
-              const publicId = img.split("/").slice(-2).join("/").split(".")[0];
-              return cloudinary.uploader.destroy(publicId).catch(err => console.error("Delete error:", err));
-            });
-          await Promise.all(deletePromises);
-        }
-
-        // Upload new images
-        const uploadPromises = req.files.map((file, index) => {
-          return new Promise((resolve, reject) => {
-            console.log(`Uploading new image ${index + 1}: ${file.originalname}, size: ${(file.size / 1024).toFixed(2)}KB`);
-
-            const uploadStream = cloudinary.uploader.upload_stream(
-              {
-                folder: "rooms",
-                resource_type: "image",
-              },
-              (error, result) => {
-                if (error) {
-                  console.error(`Upload error for image ${index + 1}:`, error);
-                  reject(error);
-                } else {
-                  console.log(`Successfully uploaded image ${index + 1}: ${result.secure_url}`);
-                  resolve(result.secure_url);
-                }
-              }
-            );
-            uploadStream.end(file.buffer);
-          });
-        });
-
-        const imageUrls = await Promise.all(uploadPromises);
-        console.log(`All ${imageUrls.length} new images uploaded successfully`);
-        room.images = imageUrls;
-        room.image = imageUrls[0] || room.image; // Update main image
-      } catch (uploadError) {
-        console.error("Cloudinary upload error:", uploadError);
-        return sendError(res, "Failed to upload images to Cloudinary", null, 500);
+        newImageUrls = await Promise.all(req.files.map((file) => new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream({ folder: "rooms", resource_type: "image" }, (error, result) => error ? reject(error) : resolve(result.secure_url));
+          stream.end(file.buffer);
+        })));
+      } catch {
+        return sendError(res, "Không tải được ảnh lên bộ lưu trữ", null, 502);
       }
     }
+    const allImages = [...retainedImages, ...newImageUrls];
+    if (mainImage && !allImages.includes(mainImage)) return sendError(res, "Ảnh đại diện không thuộc danh sách ảnh phòng", null, 400);
+    const indexedNewMain = Number.isInteger(Number(mainImageIndex)) ? newImageUrls[Number(mainImageIndex)] : null;
+    room.images = allImages;
+    room.image = mainImage || indexedNewMain || (retainedImages.includes(room.image) ? room.image : allImages[0] || "");
 
     if (title) room.title = title;
     if (category) room.category = category;
@@ -390,8 +372,9 @@ const updateRoom = async (req, res) => {
     if (status && ["available", "rented", "maintenance", "hidden"].includes(status)) {
       room.status = status;
     }
-    if (image && (! req.files || req.files.length === 0)) {
+    if (image && (!req.files || req.files.length === 0)) {
       room.image = image;
+      if (!room.images.includes(image)) room.images = [image, ...room.images];
     }
     if (amenities) {
       room.amenities = Array.isArray(amenities) ? amenities : JSON.parse(amenities);
@@ -531,60 +514,17 @@ const getSearchSuggestions = async (req, res) => {
 };
 
 // Add tenant to room
-const addTenant = async (req, res) => {
-  try {
-    const room = await Room.findById(req.params.id);
-    if (!room || room.status === "deleted") {
-      return sendError(res, "Room not found", null, 404);
-    }
-
-    if (!canManageRoom(req.user, room)) {
-      return sendError(res, "You do not have permission to manage this room", null, 403);
-    }
-
-    const { name, email, phone, startDate, endDate, userId } = req.body;
-
-    if (!name || !email || !phone) {
-      return sendError(res, "Name, email, and phone are required", null, 400);
-    }
-
-    const tenantData = {
-      name,
-      email,
-      phone,
-      startDate: startDate ? new Date(startDate) : new Date(),
-      endDate: endDate ? new Date(endDate) : null,
-    };
-
-    if (userId) {
-      tenantData.userId = userId;
-    }
-
-    room.tenant = tenantData;
-    room.status = "rented";
-
-    await room.save();
-
-    // Create rental history record
-    await RentalHistory.create({
-      roomId: room._id,
-      roomTitle: room.title,
-      landlordId: room.ownerId,
-      tenantId: userId || null,
-      tenantName: name,
-      tenantEmail: email,
-      tenantPhone: phone,
-      startDate: tenantData.startDate,
-      endDate: tenantData.endDate,
-      price: room.price,
-      status: "active",
-    });
-
-    return sendSuccess(res, "Tenant added successfully", { room });
-  } catch (error) {
-    console.error("Add tenant error:", error);
-    return sendError(res, "Server error while adding tenant", null, 500);
-  }
+const addTenant = async (req, res, next) => {
+  // Keep the legacy route compatible while routing the operation through the
+  // canonical contract workflow so Room, Contract and RentalHistory stay aligned.
+  req.body = {
+    ...req.body,
+    roomId: req.params.id,
+    tenantName: req.body.name,
+    tenantId: req.body.userId,
+    identityCard: req.body.identityCard || req.body.idCard,
+  };
+  return require("./contract.controller").createContract(req, res, next);
 };
 
 // Remove tenant from room
@@ -598,6 +538,9 @@ const removeTenant = async (req, res) => {
     if (!canManageRoom(req.user, room)) {
       return sendError(res, "You do not have permission to manage this room", null, 403);
     }
+
+    const activeContract = await require("../models/contract.model").Contract.findOne({ roomId: room._id, status: "active" });
+    if (activeContract) return sendError(res, "Kết thúc hợp đồng qua chức năng quản lý hợp đồng trước khi trả phòng", null, 409);
 
     // Update rental history to completed
     await RentalHistory.findOneAndUpdate(

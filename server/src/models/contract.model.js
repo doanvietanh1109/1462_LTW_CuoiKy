@@ -47,6 +47,13 @@ const contractSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// A database constraint closes the race between concurrent requests that both
+// pass the controller's availability check for the same room.
+contractSchema.index(
+  { roomId: 1 },
+  { unique: true, partialFilterExpression: { status: "active" }, name: "uniq_active_contract_per_room" }
+);
+
 const Contract = mongoose.model("Contract", contractSchema);
 
 module.exports = { Contract };

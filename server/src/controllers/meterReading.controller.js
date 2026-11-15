@@ -38,40 +38,53 @@ const getMeterSheet = async (req, res, next) => {
     const year = req.query.year === undefined ? now.getFullYear() : Number(req.query.year);
     if (!isValidPeriod(month, year)) return sendError(res, "Tháng và năm không hợp lệ", null, 400);
 
-    const roomQuery = { status: "rented" };
-    if (req.user.role === "landlord") {
-      roomQuery.ownerId = req.user._id;
-    }
+    const contractQuery = { status: "active" };
+    if (req.user.role === "landlord") contractQuery.landlordId = req.user._id;
+    const activeContracts = await Contract.find(contractQuery).lean();
+    const activeRoomIds = activeContracts.map((contract) => contract.roomId);
+    const roomQuery = { $or: [{ status: "rented" }, { _id: { $in: activeRoomIds } }] };
+    if (req.user.role === "landlord") roomQuery.ownerId = req.user._id;
 
-    const [rentedRooms, readings, invoices, activeContracts] = await Promise.all([
+    const previousPeriodQuery = {
+      $or: [{ year: { $lt: year } }, { year, month: { $lt: month } }],
+      ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
+    };
+    const [rentedRooms, readings, previousReadings, invoices] = await Promise.all([
       Room.find(roomQuery).populate("blockId", "name").sort({ roomNumber: 1, title: 1 }).lean(),
       MeterReading.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
+      MeterReading.find(previousPeriodQuery).sort({ year: -1, month: -1 }).lean(),
       Invoice.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
-      Contract.find({ status: "active", ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
     ]);
 
     const readingMap = new Map(readings.map((r) => [r.roomId.toString(), r]));
+    const previousReadingMap = new Map();
+    for (const reading of previousReadings) {
+      const key = reading.roomId.toString();
+      if (!previousReadingMap.has(key)) previousReadingMap.set(key, reading);
+    }
     const invoiceMap = new Map(invoices.map((inv) => [inv.roomId.toString(), inv]));
     const contractMap = new Map(activeContracts.map((c) => [c.roomId.toString(), c]));
 
     const rows = rentedRooms.map((room) => {
       const key = room._id.toString();
       const existingReading = readingMap.get(key);
+      const previousReading = previousReadingMap.get(key);
       const existingInvoice = invoiceMap.get(key);
       const activeContract = contractMap.get(key);
-
+      const previousElectricity = previousReading?.newElectricity ?? activeContract?.initialElectricity ?? room.currentElectricity ?? 0;
+      const previousWater = previousReading?.newWater ?? activeContract?.initialWater ?? room.currentWater ?? 0;
       const oldElectricity = existingReading
         ? existingReading.oldElectricity
-        : room.currentElectricity || 0;
+        : previousElectricity;
       const newElectricity = existingReading
         ? existingReading.newElectricity
-        : room.currentElectricity || 0;
+        : previousElectricity;
       const oldWater = existingReading
         ? existingReading.oldWater
-        : room.currentWater || 0;
+        : previousWater;
       const newWater = existingReading
         ? existingReading.newWater
-        : room.currentWater || 0;
+        : previousWater;
 
       return {
         roomId: room._id,
@@ -170,12 +183,23 @@ const saveBatchMeterReadings = async (req, res, next) => {
 
     // Validate every target before the first write. A batch can never touch another landlord's room.
     const roomIds = rows.map((row) => row.roomId);
-    const roomQuery = { _id: { $in: roomIds }, status: "rented" };
+    const roomQuery = { _id: { $in: roomIds } };
     if (req.user.role === "landlord") roomQuery.ownerId = req.user._id;
-    const targetRooms = await Room.find(roomQuery);
+    const [targetRooms, activeContracts] = await Promise.all([
+      Room.find(roomQuery),
+      Contract.find({
+        roomId: { $in: roomIds },
+        status: "active",
+        ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
+      }),
+    ]);
     const targetById = new Map(targetRooms.map((room) => [room._id.toString(), room]));
+    const contractByRoom = new Map(activeContracts.map((contract) => [contract.roomId.toString(), contract]));
     for (const roomId of roomIds) {
-      if (!targetById.has(roomId)) rowErrors[roomId] = "Phòng không tồn tại, không đang thuê hoặc không thuộc quyền quản lý của bạn";
+      const room = targetById.get(roomId);
+      if (!room || (room.status !== "rented" && !contractByRoom.has(roomId))) {
+        rowErrors[roomId] = "Phòng không tồn tại, không có trạng thái thuê hợp lệ hoặc không thuộc quyền quản lý của bạn";
+      }
     }
     if (Object.keys(rowErrors).length) return sendError(res, "Có phòng không hợp lệ trong bảng chỉ số", { rowErrors }, 400);
 
@@ -196,12 +220,6 @@ const saveBatchMeterReadings = async (req, res, next) => {
     if (Object.keys(rowErrors).length) return sendError(res, "Không thể sửa chỉ số của kỳ đã phát hành", { rowErrors }, 409);
 
     // Load and validate contract rates for every row before mutating any record.
-    const activeContracts = await Contract.find({
-      roomId: { $in: roomIds },
-      status: "active",
-      ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
-    });
-    const contractByRoom = new Map(activeContracts.map((contract) => [contract.roomId.toString(), contract]));
     for (const roomId of roomIds) {
       const room = targetById.get(roomId);
       const contract = contractByRoom.get(roomId);

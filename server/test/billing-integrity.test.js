@@ -32,6 +32,7 @@ test.afterEach(restore);
 
 test("landlord A cannot batch-write landlord B's room", async () => {
   replace(Room, "find", async () => []);
+  replace(Contract, "find", async () => []);
   const res = await invoke(meter.saveBatchMeterReadings, {
     user: { _id: idA, role: "landlord" }, body: { month: 5, year: 2026, rows: [row(idB)] },
   });
@@ -101,6 +102,19 @@ test("historical meter correction does not change current room counters", async 
   assert.equal(room.currentElectricity, 900);
   assert.equal(room.currentWater, 90);
   assert.equal(room.saved, undefined);
+});
+
+test("meter sheet includes a rented room linked to an active contract and carries forward prior reading", async () => {
+  const room = { _id: idA, ownerId: idA, status: "available", title: "P.107", currentElectricity: 145, currentWater: 56, price: 100, electricityPrice: 3, waterPrice: 4, serviceFee: 0, blockId: null };
+  replace(Contract, "find", (query) => ({ lean: async () => query.status === "active" ? [{ roomId: idA, landlordId: idA, tenantName: "Tenant A", initialElectricity: 10, initialWater: 2, rentPrice: 100, electricityPrice: 3, waterPrice: 4, serviceFee: 0 }] : [] }));
+  replace(Room, "find", () => ({ populate() { return this; }, sort() { return this; }, lean: async () => [room] }));
+  replace(MeterReading, "find", (query) => ({ sort() { return this; }, lean: async () => query.$or ? [{ roomId: idA, month: 1, year: 2026, newElectricity: 140, newWater: 50 }] : [] }));
+  replace(Invoice, "find", () => ({ lean: async () => [] }));
+  const res = await invoke(meter.getMeterSheet, { user: { _id: idA, role: "landlord" }, query: { month: 2, year: 2026 } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.data.rows.length, 1);
+  assert.equal(res.body.data.rows[0].oldElectricity, 140);
+  assert.equal(res.body.data.rows[0].oldWater, 50);
 });
 
 test("a reading linked to an issued invoice cannot be changed", async () => {

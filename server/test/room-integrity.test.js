@@ -1,11 +1,13 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { Room } = require("../src/models/room.model");
-const { getRooms, getRoomById, createRoom } = require("../src/controllers/room.controller");
+const { Contract } = require("../src/models/contract.model");
+const { getRooms, getRoomById, createRoom, removeTenant } = require("../src/controllers/room.controller");
 
 const originalFind = Room.find;
 const originalFindById = Room.findById;
 const originalCreate = Room.create;
+const originalContractFindOne = Contract.findOne;
 const response = () => ({ statusCode: 200, body: null, status(code) { this.statusCode = code; return this; }, json(body) { this.body = body; return this; } });
 const invoke = async (handler, req) => {
   const res = response();
@@ -14,7 +16,7 @@ const invoke = async (handler, req) => {
   if (forwarded) throw forwarded;
   return res;
 };
-test.afterEach(() => { Room.find = originalFind; Room.findById = originalFindById; Room.create = originalCreate; });
+test.afterEach(() => { Room.find = originalFind; Room.findById = originalFindById; Room.create = originalCreate; Contract.findOne = originalContractFindOne; });
 
 test("public room query cannot use ownerId/status to expose occupied inventory", async () => {
   let capturedQuery;
@@ -53,4 +55,14 @@ test("public room detail hides occupied rooms", async () => {
   Room.findById = async () => ({ _id: "aaaaaaaaaaaaaaaaaaaaaaaa", status: "rented" });
   const res = await invoke(getRoomById, { params: { id: "aaaaaaaaaaaaaaaaaaaaaaaa" } });
   assert.equal(res.statusCode, 404);
+});
+
+test("legacy room release cannot bypass an active contract", async () => {
+  let saved = false;
+  const room = { _id: "aaaaaaaaaaaaaaaaaaaaaaaa", ownerId: "bbbbbbbbbbbbbbbbbbbbbbbb", status: "rented", save: async () => { saved = true; } };
+  Room.findById = async () => room;
+  Contract.findOne = async () => ({ _id: "contract" });
+  const res = await invoke(removeTenant, { params: { id: room._id }, user: { _id: room.ownerId, role: "landlord" } });
+  assert.equal(res.statusCode, 409);
+  assert.equal(saved, false);
 });

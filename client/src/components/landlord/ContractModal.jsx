@@ -35,7 +35,7 @@ export const ContractModal = ({
 
   useEffect(() => {
     const targetRoom =
-      preselectedRoom || rooms.find((r) => r.status === "available") || rooms[0];
+      preselectedRoom || rooms.find((r) => r.status === "available");
 
     if (targetRoom) {
       setForm((prev) => ({
@@ -43,9 +43,9 @@ export const ContractModal = ({
         roomId: targetRoom._id,
         rentPrice: targetRoom.price || 2500000,
         deposit: targetRoom.price || 2500000,
-        electricityPrice: targetRoom.electricityPrice || 3500,
-        waterPrice: targetRoom.waterPrice || 15000,
-        serviceFee: targetRoom.serviceFee || 100000,
+        electricityPrice: targetRoom.electricityPrice ?? 3500,
+        waterPrice: targetRoom.waterPrice ?? 15000,
+        serviceFee: targetRoom.serviceFee ?? 100000,
         initialElectricity: targetRoom.currentElectricity || 0,
         initialWater: targetRoom.currentWater || 0,
       }));
@@ -179,16 +179,10 @@ export const ContractModal = ({
                     onChange={(e) => handleRoomSelect(e.target.value)}
                   >
                     <option value="">-- Chọn phòng --</option>
-                    {rooms.map((r) => (
+                    {rooms.filter((r) => r.status === "available").map((r) => (
                       <option key={r._id} value={r._id}>
                         {r.roomNumber ? `[${r.roomNumber}] ` : ""}
-                        {r.title} - {formatVND(r.price)} (
-                        {r.status === "available"
-                          ? "Trống"
-                          : r.status === "rented"
-                          ? "Đang thuê - Có HĐ hiệu lực"
-                          : "Đang sửa"}
-                        )
+                        {r.title} - {formatVND(r.price)} (Trống)
                       </option>
                     ))}
                   </select>

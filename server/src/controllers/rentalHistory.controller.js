@@ -1,38 +1,39 @@
 const { RentalHistory } = require("../models/rentalHistory.model");
 const { sendSuccess, sendError } = require("../utils/response");
 
-// Get rental history for landlord
-const getRentalHistory = async (req, res) => {
+const getRentalHistory = async (req, res, next) => {
     try {
-        const { landlordId, status } = req.query;
-
-        if (!landlordId) {
-            return sendError(res, "landlordId is required", null, 400);
+        if (!req.user || !["admin", "landlord", "user"].includes(req.user.role)) {
+            return sendError(res, "Bạn không có quyền xem lịch sử thuê", null, 403);
+        }
+        const { status } = req.query;
+        if (status && !["active", "completed"].includes(status)) {
+            return sendError(res, "Trạng thái lịch sử thuê không hợp lệ", null, 400);
         }
 
-        // Check if user has permission
-        if (req.user.role !== "admin" && req.user._id.toString() !== landlordId) {
-            return sendError(res, "You do not have permission to view this history", null, 403);
+        const query = {};
+        if (req.user.role === "landlord") query.landlordId = req.user._id;
+        if (req.user.role === "user") {
+            const tenantClauses = [{ tenantId: req.user._id }];
+            if (req.user.email) tenantClauses.push({ tenantEmail: req.user.email });
+            query.$or = tenantClauses;
         }
-
-        const query = { landlordId };
-        if (status) {
-            query.status = status;
-        }
+        // Only admins may request another landlord's history explicitly.
+        if (req.user.role === "admin" && req.query.landlordId) query.landlordId = req.query.landlordId;
+        if (status) query.status = status;
 
         const history = await RentalHistory.find(query)
             .sort({ createdAt: -1 })
             .lean();
 
-        return sendSuccess(res, "Rental history fetched successfully", { history });
+        return sendSuccess(res, "Lấy lịch sử thuê thành công", { history });
     } catch (error) {
-        console.error("Get rental history error:", error);
-        return sendError(res, "Server error while fetching rental history", null, 500);
+        return next(error);
     }
 };
 
 // Get rental history by ID
-const getRentalHistoryById = async (req, res) => {
+const getRentalHistoryById = async (req, res, next) => {
     try {
         const history = await RentalHistory.findById(req.params.id);
 
@@ -40,15 +41,18 @@ const getRentalHistoryById = async (req, res) => {
             return sendError(res, "Rental history not found", null, 404);
         }
 
-        // Check permission
-        if (req.user.role !== "admin" && req.user._id.toString() !== history.landlordId.toString()) {
+        const isLandlord = req.user.role === "landlord" && req.user._id.toString() === history.landlordId.toString();
+        const isTenant = req.user.role === "user" && (
+            (history.tenantId && req.user._id.toString() === history.tenantId.toString()) ||
+            (history.tenantEmail && req.user.email?.toLowerCase() === history.tenantEmail.toLowerCase())
+        );
+        if (req.user.role !== "admin" && !isLandlord && !isTenant) {
             return sendError(res, "You do not have permission to view this history", null, 403);
         }
 
         return sendSuccess(res, "Rental history fetched successfully", { history });
     } catch (error) {
-        console.error("Get rental history by id error:", error);
-        return sendError(res, "Server error while fetching rental history", null, 500);
+        return next(error);
     }
 };
 

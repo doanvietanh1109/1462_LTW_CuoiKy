@@ -8,8 +8,6 @@ import { StatusBadge } from "../components/common/StatusBadge";
 import { RepairRequestForm } from "../components/tenant/RepairRequestForm";
 import { resolveRoomImageUrl } from "../components/rooms/RoomCard";
 import {
-  getLocalTenantContract,
-  saveLocalTenantContract,
   createContractFromBooking,
 } from "../utils/tenantContractHelper";
 
@@ -43,24 +41,19 @@ export const TenantPortalPage = () => {
     setLoading(true);
     try {
       const [contractRes, invoicesRes, repairsRes] = await Promise.all([
-        apiRequest("/contracts/my-active").catch(() => ({ data: {} })),
+        apiRequest("/contracts/my-active").then((data) => ({ data })).catch((error) => ({ error })),
         apiRequest("/invoices").then((data) => ({ data })).catch((error) => ({ error })),
-        apiRequest("/repair-requests").catch(() => ({
-          data: { requests: [] },
-        })),
+        apiRequest("/repair-requests").then((data) => ({ data })).catch((error) => ({ error })),
       ]);
 
-      let activeContract = contractRes?.data?.contract || null;
+      const activeContract = contractRes?.data?.data?.contract || null;
       const invoiceList = invoicesRes?.data?.data?.invoices || [];
-      setApiError(invoicesRes.error ? "Không thể tải hóa đơn từ máy chủ. Hãy thử tải lại; dữ liệu hóa đơn mẫu trên thiết bị không được dùng thay thế." : "");
+      const errors = [];
+      if (contractRes.error) errors.push("hợp đồng");
+      if (invoicesRes.error) errors.push("hóa đơn");
+      if (repairsRes.error) errors.push("yêu cầu sửa chữa");
+      setApiError(errors.length ? `Không thể tải ${errors.join(" và ")} từ máy chủ. Hãy thử lại; dữ liệu chưa tải không được thay bằng dữ liệu mẫu.` : "");
       const repairList = repairsRes?.data?.requests || [];
-
-      // Fallback sang dữ liệu Hợp đồng & Hóa đơn đã lưu ở localStorage nếu tài khoản vừa đặt phòng
-      if (!activeContract && user?.email) {
-        activeContract = getLocalTenantContract(user.email);
-      } else if (activeContract && user?.email) {
-        saveLocalTenantContract(user.email, activeContract);
-      }
 
       setContract(activeContract);
       setInvoices(invoiceList);
@@ -81,24 +74,18 @@ export const TenantPortalPage = () => {
 
   // Nút 1-Click: Tự động đăng ký thuê phòng & khởi tạo Hợp đồng điện tử + Bảng kê hóa đơn
   const handleQuickCreateContract = async (selectedRoom = null) => {
-    const targetRoom =
-      selectedRoom ||
-      rooms.find((r) => r.status !== "rented" && r.status !== "maintenance") ||
-      rooms[0] ||
-      null;
-
-    const result = await createContractFromBooking({
-      room: targetRoom,
-      user,
-      durationMonths: 6,
-    });
-
-    setToastMsg(
-      "🎉 Đã khởi tạo Hợp đồng thuê phòng điện tử & Bảng kê hóa đơn chi tiết thành công!"
-    );
-    await loadTenantData();
-    if (result?.contract && !contract) {
-      setContract(result.contract);
+    const targetRoom = selectedRoom || rooms.find((r) => r.status === "available") || null;
+    if (!targetRoom) {
+      setToastMsg("Hiện không có phòng còn trống để tạo hợp đồng.");
+      return;
+    }
+    try {
+      const result = await createContractFromBooking({ room: targetRoom, user, durationMonths: 6 });
+      setToastMsg("Đã tạo hợp đồng trên máy chủ thành công.");
+      if (result?.contract && !contract) setContract(result.contract);
+      await loadTenantData();
+    } catch (error) {
+      setToastMsg(error.message || "Không thể tạo hợp đồng. Hãy thử lại.");
     }
   };
 
@@ -114,25 +101,16 @@ export const TenantPortalPage = () => {
       });
       if (res?.data?.contract) {
         setContract(res.data.contract);
-        if (user?.email) saveLocalTenantContract(user.email, res.data.contract);
         setToastMsg(
           res.message || `Đã gia hạn hợp đồng thêm ${months} tháng thành công!`
         );
         return;
       }
-    } catch {
-      // Local fallback update
+    } catch (error) {
+      setToastMsg(error.message || "Không thể gia hạn hợp đồng. Hãy thử lại.");
+      return;
     }
-
-    const baseEnd = contract.endDate ? new Date(contract.endDate) : new Date();
-    baseEnd.setMonth(baseEnd.getMonth() + months);
-    const updated = {
-      ...contract,
-      endDate: baseEnd.toISOString(),
-    };
-    setContract(updated);
-    if (user?.email) saveLocalTenantContract(user.email, updated);
-    setToastMsg(`✅ Đã gia hạn hợp đồng thêm ${months} tháng thành công!`);
+    setToastMsg("Máy chủ không trả về hợp đồng sau khi gia hạn.");
   };
 
   // Kết thúc hợp đồng / Trả phòng
@@ -151,15 +129,12 @@ export const TenantPortalPage = () => {
       await apiRequest(`/contracts/${contractId}/tenant-terminate`, {
         method: "PATCH",
       });
-    } catch {
-      // Local fallback
+      setContract(null);
+      setToastMsg("Đã gửi yêu cầu kết thúc hợp đồng đến máy chủ.");
+      await loadTenantData();
+    } catch (error) {
+      setToastMsg(error.message || "Không thể gửi yêu cầu kết thúc hợp đồng.");
     }
-
-    if (user?.email) {
-      saveLocalTenantContract(user.email, null);
-    }
-    setContract(null);
-    setToastMsg("Đã kết thúc hợp đồng thuê phòng. Phòng đã chuyển về trạng thái Trống.");
   };
 
   // Thanh toán hóa đơn trực tuyến (QR / Xác nhận)
@@ -186,23 +161,21 @@ export const TenantPortalPage = () => {
 
   const handleCreateRepair = async (payload) => {
     try {
+      const body = new FormData();
+      body.append("roomId", payload.roomId);
+      body.append("title", payload.title);
+      body.append("description", payload.description);
+      body.append("priority", payload.priority);
+      payload.images.forEach((image) => body.append("images", image));
       const res = await apiRequest("/repair-requests", {
         method: "POST",
-        body: payload,
+        body,
       });
       setToastMsg(res.message || "Đã gửi yêu cầu sửa chữa!");
       setRepairs((prev) => [res.data.request, ...prev]);
-    } catch {
-      const localReq = {
-        _id: `rep-local-${Date.now()}`,
-        title: "Sự cố thiết bị trong phòng",
-        description: "Đã gửi yêu cầu sửa chữa tới chủ trọ",
-        status: "new",
-        createdAt: new Date().toISOString(),
-        roomId: contract?.roomId || { title: "Phòng đang thuê" },
-      };
-      setRepairs((prev) => [localReq, ...prev]);
-      setToastMsg("Đã gửi yêu cầu sửa chữa thành công!");
+    } catch (error) {
+      setToastMsg(error.message || "Không thể gửi yêu cầu sửa chữa. Hãy thử lại.");
+      throw error;
     }
   };
 

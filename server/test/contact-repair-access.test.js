@@ -1,0 +1,81 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const { ContactInquiry } = require("../src/models/contactInquiry.model");
+const { RepairRequest } = require("../src/models/repairRequest.model");
+const { Contract } = require("../src/models/contract.model");
+const contacts = require("../src/controllers/contact.controller");
+const repairs = require("../src/controllers/repairRequest.controller");
+const { validateImageFiles } = require("../src/middlewares/upload.middleware");
+const { contactRateLimit } = require("../src/middlewares/contactRateLimit");
+
+const originals = new Map();
+const replace = (object, key, value) => {
+  if (!originals.has(`${object.modelName}.${key}`)) originals.set(`${object.modelName}.${key}`, [object, key, object[key]]);
+  object[key] = value;
+};
+const restore = () => { for (const [object, key, value] of originals.values()) object[key] = value; originals.clear(); };
+const response = () => ({ statusCode: 200, body: null, status(code) { this.statusCode = code; return this; }, json(body) { this.body = body; return this; } });
+const invoke = async (handler, req) => {
+  const res = response();
+  let forwarded;
+  await handler(req, res, (error) => { forwarded = error; });
+  if (forwarded) throw forwarded;
+  return res;
+};
+const idA = "aaaaaaaaaaaaaaaaaaaaaaaa";
+const idB = "bbbbbbbbbbbbbbbbbbbbbbbb";
+
+test.afterEach(restore);
+
+test("landlord cannot change another landlord's contact inquiry", async () => {
+  replace(ContactInquiry, "findById", async () => ({ landlordId: idB, status: "new" }));
+  const res = await invoke(contacts.updateContactStatus, { params: { id: idA }, user: { _id: idA, role: "landlord" }, body: { status: "contacted" } });
+  assert.equal(res.statusCode, 403);
+});
+
+test("contact message is validated before database write", async () => {
+  let created = false;
+  replace(ContactInquiry, "create", async () => { created = true; });
+  const res = await invoke(contacts.createContactInquiry, { body: { roomId: idA, name: "A", phone: "1", message: "x" } });
+  assert.equal(res.statusCode, 400);
+  assert.equal(created, false);
+});
+
+test("tenant cannot create repair request for a room without their active contract", async () => {
+  replace(Contract, "findOne", () => ({ sort: async () => null }));
+  const res = await invoke(repairs.createRepairRequest, {
+    params: {},
+    body: { roomId: idB, title: "Rò nước", description: "Vòi nước trong phòng bị rò" },
+    files: [],
+    user: { _id: idA, email: "a@example.test", role: "user" },
+  });
+  assert.equal(res.statusCode, 403);
+});
+
+test("landlord cannot change a repair request owned by another landlord", async () => {
+  replace(RepairRequest, "findById", async () => ({ landlordId: idB, status: "new" }));
+  const res = await invoke(repairs.updateRepairStatus, {
+    params: { id: idA }, body: { status: "resolved" }, user: { _id: idA, role: "landlord" },
+  });
+  assert.equal(res.statusCode, 403);
+});
+
+test("upload validation checks file signatures rather than trusting client MIME", async () => {
+  const res = response();
+  let nextCalled = false;
+  validateImageFiles({ files: [{ mimetype: "image/png", buffer: Buffer.from("not an image") }] }, res, () => { nextCalled = true; });
+  assert.equal(res.statusCode, 400);
+  assert.equal(nextCalled, false);
+});
+
+test("contact submissions have a basic per-address rate limit", () => {
+  const ip = `test-${Date.now()}`;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    let nextCalled = false;
+    contactRateLimit({ ip }, response(), () => { nextCalled = true; });
+    assert.equal(nextCalled, true);
+  }
+  const res = response();
+  contactRateLimit({ ip }, res, () => assert.fail("Expected rate limit"));
+  assert.equal(res.statusCode, 429);
+});

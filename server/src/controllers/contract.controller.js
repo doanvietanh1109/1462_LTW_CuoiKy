@@ -1,133 +1,50 @@
 const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 const { Contract } = require("../models/contract.model");
 const { Room } = require("../models/room.model");
 const { User } = require("../models/user.model");
 const { RentalHistory } = require("../models/rentalHistory.model");
-const { Invoice } = require("../models/invoice.model");
-const { MeterReading } = require("../models/meterReading.model");
 const { Order } = require("../models/order.model");
 const { sendSuccess, sendError } = require("../utils/response");
 
-// Helper: Tự động phát hành hóa đơn mẫu cho hợp đồng mới để người thuê có ngay bảng kê chi tiết từng khoản
-const ensureSampleInvoicesForContract = async (contract, room) => {
-  try {
-    const now = new Date();
-    const curMonth = now.getMonth() + 1;
-    const curYear = now.getFullYear();
-
-    const existingCur = await Invoice.findOne({
-      roomId: room._id,
-      month: curMonth,
-      year: curYear,
-    });
-
-    if (!existingCur) {
-      const oldE = Number(contract.initialElectricity || room.currentElectricity || 120);
-      const newE = oldE + 45;
-      const oldW = Number(contract.initialWater || room.currentWater || 12);
-      const newW = oldW + 6;
-      const ePrice = Number(contract.electricityPrice || 3500);
-      const wPrice = Number(contract.waterPrice || 15000);
-      const sFee = Number(contract.serviceFee || 100000);
-      const rPrice = Number(contract.rentPrice || room.price || 3000000);
-
-      const eUsage = newE - oldE;
-      const wUsage = newW - oldW;
-      const eCost = eUsage * ePrice;
-      const wCost = wUsage * wPrice;
-      const totalAmount = rPrice + eCost + wCost + sFee;
-
-      const reading = await MeterReading.findOneAndUpdate(
-        { roomId: room._id, month: curMonth, year: curYear },
-        {
-          roomId: room._id,
-          contractId: contract._id,
-          landlordId: contract.landlordId,
-          month: curMonth,
-          year: curYear,
-          oldElectricity: oldE,
-          newElectricity: newE,
-          oldWater: oldW,
-          newWater: newW,
-        },
-        { upsert: true, new: true }
-      );
-
-      const invoiceCode = `INV-${curYear}${String(curMonth).padStart(2, "0")}-${String(
-        room._id
-      )
-        .slice(-4)
-        .toUpperCase()}-${Math.floor(10 + Math.random() * 90)}`;
-
-      await Invoice.create({
-        invoiceCode,
-        roomId: room._id,
-        contractId: contract._id,
-        tenantId: contract.tenantId,
-        landlordId: contract.landlordId,
-        meterReadingId: reading._id,
-        month: curMonth,
-        year: curYear,
-        roomPrice: rPrice,
-        oldElectricity: oldE,
-        newElectricity: newE,
-        electricityUsage: eUsage,
-        electricityPrice: ePrice,
-        electricityCost: eCost,
-        useTieredElectricity: false,
-        oldWater: oldW,
-        newWater: newW,
-        waterUsage: wUsage,
-        waterPrice: wPrice,
-        waterCost: wCost,
-        serviceFee: sFee,
-        totalAmount,
-        status: "unpaid",
-        dueDate: new Date(curYear, curMonth - 1, 15),
-        note: "Hóa đơn tiền phòng, điện, nước và dịch vụ hàng tháng",
-      });
-
-      room.currentElectricity = newE;
-      room.currentWater = newW;
-      await room.save();
-    } else if (!existingCur.tenantId || String(existingCur.tenantId) !== String(contract.tenantId)) {
-      existingCur.tenantId = contract.tenantId;
-      existingCur.contractId = contract._id;
-      await existingCur.save();
-    }
-  } catch (err) {
-    console.warn("ensureSampleInvoicesForContract warning:", err.message);
-  }
+const canAccessContract = (user, contract) => {
+  if (user.role === "admin") return true;
+  if (user.role === "landlord") return contract.landlordId?.toString() === user._id.toString();
+  return user.role === "user" && (
+    (contract.tenantId?._id || contract.tenantId)?.toString() === user._id.toString() ||
+    contract.tenantEmail?.toLowerCase() === user.email?.toLowerCase()
+  );
 };
+
+const buildContractQuery = (user, { status, roomId, search }) => {
+  const clauses = [];
+  if (user.role === "user") clauses.push({ $or: [{ tenantId: user._id }, { tenantEmail: user.email }] });
+  if (user.role === "landlord") clauses.push({ landlordId: user._id });
+  if (search) {
+    const escaped = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (escaped) clauses.push({ $or: [
+      { contractCode: { $regex: escaped, $options: "i" } },
+      { tenantName: { $regex: escaped, $options: "i" } },
+      { tenantEmail: { $regex: escaped, $options: "i" } },
+      { tenantPhone: { $regex: escaped, $options: "i" } },
+    ] });
+  }
+  const query = {};
+  if (clauses.length) query.$and = clauses;
+  if (status && status !== "all") query.status = status;
+  if (roomId) query.roomId = roomId;
+  return query;
+};
+
+const validNonNegativeNumber = (value) =>
+  (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) &&
+  Number.isFinite(Number(value)) && Number(value) >= 0;
 
 const getContracts = async (req, res, next) => {
   try {
     const { status, roomId, search, page = 1, limit = 20 } = req.query;
-    const query = {};
-
-    if (req.user.role === "user") {
-      query.$or = [
-        { tenantId: req.user._id },
-        { tenantEmail: req.user.email },
-      ];
-    } else if (req.user.role === "landlord") {
-      query.landlordId = req.user._id;
-    }
-
-    if (status && status !== "all") {
-      query.status = status;
-    }
-    if (roomId) {
-      query.roomId = roomId;
-    }
-    if (search) {
-      query.$or = [
-        { contractCode: { $regex: search, $options: "i" } },
-        { tenantName: { $regex: search, $options: "i" } },
-        { tenantEmail: { $regex: search, $options: "i" } },
-        { tenantPhone: { $regex: search, $options: "i" } },
-      ];
-    }
+    if (search !== undefined && (typeof search !== "string" || search.length > 100)) return sendError(res, "Từ khóa tìm kiếm không hợp lệ", null, 400);
+    const query = buildContractQuery(req.user, { status, roomId, search });
 
     const pageNum = Math.max(1, Number(page) || 1);
     const limitNum = Math.max(1, Number(limit) || 20);
@@ -199,12 +116,7 @@ const getContractById = async (req, res, next) => {
       return sendError(res, "Không tìm thấy hợp đồng", null, 404);
     }
 
-    if (
-      req.user.role === "user" &&
-      contract.tenantId &&
-      contract.tenantId._id.toString() !== req.user._id.toString() &&
-      contract.tenantEmail !== req.user.email
-    ) {
+    if (!canAccessContract(req.user, contract)) {
       return sendError(
         res,
         "Bạn không có quyền xem hợp đồng của phòng khác",
@@ -249,9 +161,27 @@ const createContract = async (req, res, next) => {
       );
     }
 
+    if (!mongoose.isValidObjectId(roomId) || (tenantId && !mongoose.isValidObjectId(tenantId))) {
+      return sendError(res, "Mã phòng hoặc mã người thuê không hợp lệ", null, 400);
+    }
+    const parsedStart = new Date(startDate);
+    const parsedEnd = endDate ? new Date(endDate) : null;
+    if (Number.isNaN(parsedStart.getTime()) || (parsedEnd && (Number.isNaN(parsedEnd.getTime()) || parsedEnd <= parsedStart))) {
+      return sendError(res, "Ngày hợp đồng không hợp lệ", null, 400);
+    }
+    const providedAmounts = { rentPrice, deposit, electricityPrice, waterPrice, serviceFee, initialElectricity, initialWater };
+    for (const [field, value] of Object.entries(providedAmounts)) {
+      if (value !== undefined && !validNonNegativeNumber(value)) {
+        return sendError(res, `Giá trị ${field} phải là số không âm`, null, 400);
+      }
+    }
+
     const room = await Room.findById(roomId);
     if (!room || room.status === "deleted") {
       return sendError(res, "Không tìm thấy phòng trọ", null, 404);
+    }
+    if (req.user.role === "landlord" && room.ownerId?.toString() !== req.user._id.toString()) {
+      return sendError(res, "Bạn không có quyền tạo hợp đồng cho phòng này", null, 403);
     }
 
     // RÀNG BUỘC KỸ THUẬT RIÊNG ĐỀ 4:
@@ -261,12 +191,12 @@ const createContract = async (req, res, next) => {
       status: "active",
     });
 
-    if (existingActiveContract || room.status === "rented") {
+    if (existingActiveContract || room.status !== "available") {
       return sendError(
         res,
         "Phòng này đang có hợp đồng hiệu lực (Đang thuê). Không thể tạo hợp đồng mới!",
         { activeContractCode: existingActiveContract?.contractCode },
-        400
+        409
       );
     }
 
@@ -279,6 +209,13 @@ const createContract = async (req, res, next) => {
       tenantUser = await User.findOne({
         email: tenantEmail.toLowerCase().trim(),
       });
+    }
+    if (tenantId && !tenantUser) return sendError(res, "Không tìm thấy tài khoản người thuê", null, 404);
+    if (tenantId && tenantUser && tenantUser._id.toString() !== tenantId.toString()) {
+      return sendError(res, "Tài khoản người thuê không khớp", null, 400);
+    }
+    if (tenantUser && tenantUser.email?.toLowerCase() !== tenantEmail.toLowerCase().trim()) {
+      return sendError(res, "Email không khớp với tài khoản người thuê đã chọn", null, 400);
     }
     if (!tenantUser) {
       const defaultPassword = await bcrypt.hash("123456", 10);
@@ -301,19 +238,19 @@ const createContract = async (req, res, next) => {
     const finalElecPrice =
       electricityPrice !== undefined
         ? Number(electricityPrice)
-        : room.electricityPrice || 3500;
+        : room.electricityPrice ?? 3500;
     const finalWaterPrice =
-      waterPrice !== undefined ? Number(waterPrice) : room.waterPrice || 15000;
+      waterPrice !== undefined ? Number(waterPrice) : room.waterPrice ?? 15000;
     const finalServiceFee =
-      serviceFee !== undefined ? Number(serviceFee) : room.serviceFee || 100000;
+      serviceFee !== undefined ? Number(serviceFee) : room.serviceFee ?? 100000;
     const initElec =
       initialElectricity !== undefined
         ? Number(initialElectricity)
-        : room.currentElectricity || 120;
+        : room.currentElectricity ?? 0;
     const initWater =
       initialWater !== undefined
         ? Number(initialWater)
-        : room.currentWater || 12;
+        : room.currentWater ?? 0;
 
     const contract = await Contract.create({
       contractCode,
@@ -371,7 +308,6 @@ const createContract = async (req, res, next) => {
       status: "active",
     });
 
-    await ensureSampleInvoicesForContract(contract, room);
 
     const populated = await Contract.findById(contract._id)
       .populate("roomId")
@@ -385,6 +321,7 @@ const createContract = async (req, res, next) => {
       201
     );
   } catch (error) {
+    if (error?.code === 11000) return sendError(res, "Phòng đã được gán một hợp đồng hiệu lực", null, 409);
     return next(error);
   }
 };
@@ -404,31 +341,31 @@ const selfBookRoomAndCreateContract = async (req, res, next) => {
       notes,
     } = req.body;
 
-    let room = null;
-    if (roomId) {
-      room = await Room.findById(roomId);
-    }
-    if (!room) {
-      room =
-        (await Room.findOne({ status: "available" })) ||
-        (await Room.findOne({ status: { $ne: "deleted" } }));
-    }
+    if (req.user.role !== "user") return sendError(res, "Chỉ người thuê mới được đặt phòng", null, 403);
+    if (!roomId || !mongoose.isValidObjectId(roomId)) return sendError(res, "Mã phòng không hợp lệ", null, 400);
+
+    const room = await Room.findById(roomId);
 
     if (!room) {
       return sendError(res, "Không tìm thấy phòng trọ để tạo hợp đồng", null, 404);
     }
+    if (room.status !== "available") return sendError(res, "Phòng không còn trống để đặt", null, 409);
 
-    // Kết thúc hợp đồng active cũ của chính user này (nếu muốn chuyển sang phòng mới) hoặc trên phòng này nếu đang demo
-    await Contract.updateMany(
-      {
-        $or: [{ roomId: room._id, status: "active" }, { tenantId: req.user._id, status: "active" }],
-      },
-      { status: "terminated", actualEndDate: new Date() }
-    );
+    const activeContract = await Contract.findOne({
+      $or: [{ roomId: room._id }, { tenantId: req.user._id }],
+      status: "active",
+    });
+    if (activeContract) return sendError(res, "Bạn hoặc phòng này đã có hợp đồng hiệu lực", null, 409);
 
     const start = startDate ? new Date(startDate) : new Date();
+    if (Number.isNaN(start.getTime()) || !Number.isInteger(Number(durationMonths)) || Number(durationMonths) < 1 || Number(durationMonths) > 24) {
+      return sendError(res, "Ngày bắt đầu hoặc thời hạn hợp đồng không hợp lệ", null, 400);
+    }
+    if (finalPrice !== undefined && (!validNonNegativeNumber(finalPrice) || Number(finalPrice) > Number(room.price))) {
+      return sendError(res, "Giá thuê sau ưu đãi không hợp lệ", null, 400);
+    }
     const end = new Date(start);
-    end.setMonth(end.getMonth() + (Number(durationMonths) || 6));
+    end.setMonth(end.getMonth() + Number(durationMonths));
 
     const contractCode = `HD-${Date.now().toString().slice(-6)}-${Math.floor(
       100 + Math.random() * 900
@@ -438,11 +375,11 @@ const selfBookRoomAndCreateContract = async (req, res, next) => {
       finalPrice !== undefined && Number(finalPrice) > 0
         ? Number(finalPrice)
         : Number(room.price) || 3200000;
-    const elecPriceVal = Number(room.electricityPrice) || 3500;
-    const waterPriceVal = Number(room.waterPrice) || 15000;
-    const serviceFeeVal = Number(room.serviceFee) || 100000;
-    const initElec = Number(room.currentElectricity) || 120;
-    const initWater = Number(room.currentWater) || 12;
+    const elecPriceVal = Number(room.electricityPrice ?? 3500);
+    const waterPriceVal = Number(room.waterPrice ?? 15000);
+    const serviceFeeVal = Number(room.serviceFee ?? 100000);
+    const initElec = Number(room.currentElectricity ?? 0);
+    const initWater = Number(room.currentWater ?? 0);
     const phoneVal = tenantPhone || req.user.phone || "0987654321";
     const cccdVal = identityCard || "001202034567";
 
@@ -513,7 +450,6 @@ const selfBookRoomAndCreateContract = async (req, res, next) => {
       status: "success",
     });
 
-    await ensureSampleInvoicesForContract(contract, room);
 
     const populated = await Contract.findById(contract._id)
       .populate("roomId")
@@ -522,11 +458,12 @@ const selfBookRoomAndCreateContract = async (req, res, next) => {
 
     return sendSuccess(
       res,
-      "Đặt phòng & Ký hợp đồng điện tử thành công! Đã khởi tạo hợp đồng và bảng kê hóa đơn cho phòng của bạn.",
+      "Đặt phòng và tạo hợp đồng thành công. Hóa đơn sẽ được phát hành sau khi nhập chỉ số thực tế.",
       { contract: populated, room },
       201
     );
   } catch (error) {
+    if (error?.code === 11000) return sendError(res, "Phòng đã được gán một hợp đồng hiệu lực", null, 409);
     return next(error);
   }
 };
@@ -535,13 +472,18 @@ const selfBookRoomAndCreateContract = async (req, res, next) => {
 const extendContract = async (req, res, next) => {
   try {
     const { months = 6 } = req.body;
+    if (!Number.isInteger(Number(months)) || Number(months) < 1 || Number(months) > 24) {
+      return sendError(res, "Số tháng gia hạn phải từ 1 đến 24", null, 400);
+    }
     const contract = await Contract.findById(req.params.id);
     if (!contract) {
       return sendError(res, "Không tìm thấy hợp đồng", null, 404);
     }
+    if (!canAccessContract(req.user, contract)) return sendError(res, "Bạn không có quyền gia hạn hợp đồng này", null, 403);
+    if (contract.status !== "active") return sendError(res, "Không thể gia hạn hợp đồng đã kết thúc", null, 409);
 
     const baseDate = contract.endDate ? new Date(contract.endDate) : new Date();
-    baseDate.setMonth(baseDate.getMonth() + (Number(months) || 6));
+    baseDate.setMonth(baseDate.getMonth() + Number(months));
     contract.endDate = baseDate;
     await contract.save();
 
@@ -566,6 +508,7 @@ const terminateContract = async (req, res, next) => {
     if (!contract) {
       return sendError(res, "Không tìm thấy hợp đồng", null, 404);
     }
+    if (!canAccessContract(req.user, contract)) return sendError(res, "Bạn không có quyền kết thúc hợp đồng này", null, 403);
 
     if (contract.status === "terminated") {
       return sendError(res, "Hợp đồng này đã kết thúc trước đó", null, 400);
@@ -607,4 +550,6 @@ module.exports = {
   selfBookRoomAndCreateContract,
   extendContract,
   terminateContract,
+  canAccessContract,
+  buildContractQuery,
 };

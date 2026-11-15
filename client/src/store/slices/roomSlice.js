@@ -1,6 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apiRequest } from "../../api/apiClient";
 
+const prepareRoomBody = (payload) => {
+  if (!payload?.imagesFiles?.length && !payload?.removeImages?.length) return payload;
+  const body = new FormData();
+  Object.entries(payload).forEach(([key, value]) => {
+    if (key === "imagesFiles" || value === undefined || value === null) return;
+    body.append(key, Array.isArray(value) ? JSON.stringify(value) : String(value));
+  });
+  payload.imagesFiles?.forEach((file) => body.append("images", file));
+  return body;
+};
+
 export const fetchMotelBlocks = createAsyncThunk(
   "rooms/fetchMotelBlocks",
   async (params = {}, { rejectWithValue }) => {
@@ -91,7 +102,7 @@ export const createRoomThunk = createAsyncThunk(
     try {
       const res = await apiRequest("/rooms", {
         method: "POST",
-        body: payload,
+        body: prepareRoomBody(payload),
       });
       return res.data.room;
     } catch (error) {
@@ -106,7 +117,7 @@ export const updateRoomThunk = createAsyncThunk(
     try {
       const res = await apiRequest(`/rooms/${id}`, {
         method: "PUT",
-        body: payload || roomData,
+        body: prepareRoomBody(payload || roomData),
       });
       return res.data.room;
     } catch (error) {
@@ -179,6 +190,8 @@ const initialState = {
   rooms: [],
   items: [],
   contracts: [],
+  contractsLoading: false,
+  contractsError: null,
   pagination: { page: 1, limit: 9, total: 0, totalPages: 1 },
   filters: {
     search: "",
@@ -256,7 +269,18 @@ const roomSlice = createSlice({
         state.items = state.rooms;
       })
       .addCase(fetchContracts.fulfilled, (state, action) => {
+        state.contractsLoading = false;
+        state.contractsError = null;
         state.contracts = action.payload;
+      })
+      .addCase(fetchContracts.pending, (state) => {
+        state.contractsLoading = true;
+        state.contractsError = null;
+      })
+      .addCase(fetchContracts.rejected, (state, action) => {
+        state.contractsLoading = false;
+        state.contractsError = action.payload || action.error.message || "Không thể tải hợp đồng";
+        state.contracts = [];
       })
       .addCase(createContractThunk.fulfilled, (state, action) => {
         state.contracts = [action.payload.contract, ...state.contracts];
