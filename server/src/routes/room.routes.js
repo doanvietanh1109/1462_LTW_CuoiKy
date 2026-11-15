@@ -10,19 +10,20 @@ const {
   addTenant,
   removeTenant,
 } = require("../controllers/room.controller");
-const { requireAuth, requireAdmin, requireLandlord } = require("../middlewares/auth.middleware");
-const { upload, handleMulterError } = require("../middlewares/upload.middleware");
+const { requireAuth, requireAdmin, requireLandlord, optionalAuth } = require("../middlewares/auth.middleware");
+const { upload, handleMulterError, validateImageFiles } = require("../middlewares/upload.middleware");
 
 const router = Router();
 
-router.get("/", getRooms);
+router.get("/", optionalAuth, getRooms);
 router.get("/suggestions", getSearchSuggestions);
-router.get("/:id", getRoomById);
+router.get("/:id", optionalAuth, getRoomById);
 router.post("/seed", requireAuth, requireAdmin, seedRooms);
-router.post("/", requireAuth, requireLandlord, upload.array("images", 5), handleMulterError, createRoom);
-router.put("/:id", requireAuth, requireLandlord, upload.array("images", 5), handleMulterError, updateRoom);
+router.post("/", requireAuth, requireLandlord, upload.array("images", 8), handleMulterError, validateImageFiles, createRoom);
+router.put("/:id", requireAuth, requireLandlord, upload.array("images", 8), handleMulterError, validateImageFiles, updateRoom);
 router.delete("/:id", requireAuth, requireLandlord, deleteRoom);
 router.post("/:id/tenant", requireAuth, requireLandlord, addTenant);
 router.delete("/:id/tenant", requireAuth, requireLandlord, removeTenant);
+router.post("/:id/release", requireAuth, requireLandlord, removeTenant);
 
 module.exports = router;

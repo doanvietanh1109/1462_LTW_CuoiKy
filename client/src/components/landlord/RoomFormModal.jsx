@@ -38,9 +38,25 @@ export const RoomFormModal = ({
   });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [removedImages, setRemovedImages] = useState([]);
+  const [mainImage, setMainImage] = useState("");
+  const [mainImageIndex, setMainImageIndex] = useState(0);
+  const [imageError, setImageError] = useState("");
+  const [previews, setPreviews] = useState([]);
+  const [saveError, setSaveError] = useState("");
 
   useEffect(() => {
+    setImageFiles([]);
+    setRemovedImages([]);
+    setImageError("");
+    setSaveError("");
     if (editingRoom) {
+      const currentImages = [...new Set([editingRoom.image, ...(editingRoom.images || [])].filter(Boolean))];
+      setExistingImages(currentImages);
+      setMainImage(currentImages[0] || "");
+      setMainImageIndex(0);
       setForm({
         title: editingRoom.title || "",
         roomNumber: editingRoom.roomNumber || "",
@@ -55,11 +71,14 @@ export const RoomFormModal = ({
         serviceFee: editingRoom.serviceFee ?? 100000,
         currentElectricity: editingRoom.currentElectricity ?? 0,
         currentWater: editingRoom.currentWater ?? 0,
-        image: editingRoom.image || "",
+        image: "",
         description: editingRoom.description || "",
         amenities: editingRoom.amenities || [],
       });
     } else {
+      setExistingImages([]);
+      setMainImage("");
+      setMainImageIndex(0);
       const defaultBlock = blocks[0];
       setForm({
         title: "",
@@ -75,13 +94,19 @@ export const RoomFormModal = ({
         serviceFee: defaultBlock?.defaultServiceFee ?? 100000,
         currentElectricity: 0,
         currentWater: 0,
-        image: "https://picsum.photos/seed/newroom/800/600",
+        image: "",
         description: "",
         amenities: ["Wifi", "Máy lạnh", "Chỗ để xe"],
       });
     }
     setErrors({});
   }, [editingRoom, blocks, show]);
+
+  useEffect(() => {
+    const urls = imageFiles.map((file) => URL.createObjectURL(file));
+    setPreviews(urls);
+    return () => urls.forEach((url) => URL.revokeObjectURL(url));
+  }, [imageFiles]);
 
   if (!show) return null;
 
@@ -103,6 +128,24 @@ export const RoomFormModal = ({
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
+  const handleImageSelection = (event) => {
+    const selected = Array.from(event.target.files || []);
+    const accepted = new Set(["image/jpeg", "image/png", "image/webp"]);
+    if (selected.some((file) => !accepted.has(file.type) || file.size > 5 * 1024 * 1024)) {
+      setImageError("Chỉ nhận ảnh JPG, PNG, WebP tối đa 5 MB mỗi ảnh.");
+      event.target.value = "";
+      return;
+    }
+    if (existingImages.length + imageFiles.length + selected.length > 8) {
+      setImageError("Mỗi phòng được lưu tối đa 8 ảnh.");
+      event.target.value = "";
+      return;
+    }
+    setImageFiles((prev) => [...prev, ...selected]);
+    setImageError("");
+    event.target.value = "";
+  };
+
   const toggleAmenity = (amenity) => {
     setForm((prev) => {
       const exists = prev.amenities.includes(amenity);
@@ -119,6 +162,7 @@ export const RoomFormModal = ({
     e.preventDefault();
     if (!validate()) return;
     setSaving(true);
+    setSaveError("");
     try {
       await onSave({
         ...form,
@@ -129,8 +173,14 @@ export const RoomFormModal = ({
         serviceFee: Number(form.serviceFee),
         currentElectricity: Number(form.currentElectricity),
         currentWater: Number(form.currentWater),
+        imageFiles,
+        removeImages: removedImages,
+        mainImage,
+        mainImageIndex,
       });
       onClose();
+    } catch (error) {
+      setSaveError(error.message || "Không thể lưu phòng. Vui lòng thử lại.");
     } finally {
       setSaving(false);
     }
@@ -153,6 +203,7 @@ export const RoomFormModal = ({
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="modal-body">
+              {saveError && <div className="alert alert-danger py-2 small" role="alert">{saveError}</div>}
               <div className="row g-3">
                 <div className="col-md-4">
                   <label htmlFor="rm-number" className="form-label fw-semibold">
@@ -207,23 +258,7 @@ export const RoomFormModal = ({
                   </select>
                 </div>
 
-                <div className="col-md-4">
-                  <label htmlFor="rm-category" className="form-label fw-semibold">
-                    Loại phòng
-                  </label>
-                  <select
-                    id="rm-category"
-                    name="category"
-                    className="form-select"
-                    value={form.category}
-                    onChange={handleChange}
-                  >
-                    <option value="Phòng trọ">Phòng trọ</option>
-                    <option value="KTX">KTX</option>
-                    <option value="Chung cư mini">Chung cư mini</option>
-                    <option value="Nhà nguyên căn">Nhà nguyên căn</option>
-                  </select>
-                </div>
+                <input type="hidden" name="category" value="Phòng trọ" readOnly />
 
                 <div className="col-md-4">
                   <label htmlFor="rm-status" className="form-label fw-semibold">
@@ -361,18 +396,26 @@ export const RoomFormModal = ({
                 </div>
 
                 <div className="col-12">
-                  <label htmlFor="rm-image" className="form-label fw-semibold">
-                    URL Hình ảnh đại diện
-                  </label>
-                  <input
-                    id="rm-image"
-                    name="image"
-                    type="text"
-                    className="form-control"
-                    value={form.image}
-                    onChange={handleChange}
-                    placeholder="https://..."
-                  />
+                  <label htmlFor="rm-image" className="form-label fw-semibold">Ảnh phòng (tối đa 8 ảnh)</label>
+                  <input id="rm-image" type="file" className="form-control" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple onChange={handleImageSelection} />
+                  <div className="form-text">JPG, PNG hoặc WebP; tối đa 5 MB mỗi ảnh. Ảnh được tải lên khi lưu phòng.</div>
+                  {imageError && <div className="text-danger small mt-1" role="alert">{imageError}</div>}
+                  <div className="d-flex flex-wrap gap-2 mt-2">
+                    {existingImages.map((url, index) => (
+                      <div key={`saved_${url}`} className="position-relative border rounded p-1">
+                        <img src={url} alt={`Ảnh phòng đã lưu ${index + 1}`} style={{ width: 88, height: 66, objectFit: "cover" }} />
+                        <div className="form-check small"><input className="form-check-input" type="radio" name="roomCover" checked={mainImage === url} onChange={() => { setMainImage(url); setMainImageIndex(-1); }} /><label className="form-check-label">Ảnh bìa</label></div>
+                        <button type="button" aria-label="Xóa ảnh đã lưu" className="btn btn-sm btn-danger position-absolute top-0 end-0 py-0 px-1" onClick={() => { setExistingImages((prev) => prev.filter((item) => item !== url)); setRemovedImages((prev) => [...prev, url]); if (mainImage === url) setMainImage(""); }}>×</button>
+                      </div>
+                    ))}
+                    {previews.map((url, index) => (
+                      <div key={`new_${index}`} className="position-relative border rounded p-1">
+                        <img src={url} alt={`Ảnh mới ${index + 1}`} style={{ width: 88, height: 66, objectFit: "cover" }} />
+                        <div className="form-check small"><input className="form-check-input" type="radio" name="roomCover" checked={mainImageIndex === index} onChange={() => { setMainImage(""); setMainImageIndex(index); }} /><label className="form-check-label">Ảnh bìa</label></div>
+                        <button type="button" aria-label="Bỏ ảnh mới" className="btn btn-sm btn-danger position-absolute top-0 end-0 py-0 px-1" onClick={() => { setImageFiles((prev) => prev.filter((_, itemIndex) => itemIndex !== index)); if (mainImageIndex === index) setMainImageIndex(0); }}>×</button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="col-12">

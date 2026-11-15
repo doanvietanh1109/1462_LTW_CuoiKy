@@ -15,7 +15,7 @@ import { ContractModal } from "../../components/landlord/ContractModal";
 // - Kết thúc hợp đồng (trạng thái phòng tự động đổi về Trống)
 export const LandlordContractsPage = () => {
   const dispatch = useDispatch();
-  const { contracts, rooms } = useSelector((state) => state.rooms);
+  const { contracts, rooms, contractsError, contractsLoading } = useSelector((state) => state.rooms);
   const [statusFilter, setStatusFilter] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
   const [feedback, setFeedback] = useState(null);
@@ -89,6 +89,7 @@ export const LandlordContractsPage = () => {
           {feedback.text}
         </div>
       )}
+      {contractsError && <div className="alert alert-danger py-2 small" role="alert">Không thể tải danh sách hợp đồng: {contractsError}</div>}
 
       <div className="mb-3">
         <div className="btn-group btn-group-sm">
@@ -129,7 +130,11 @@ export const LandlordContractsPage = () => {
               </tr>
             </thead>
             <tbody>
-              {contracts.length === 0 ? (
+              {contractsLoading ? (
+                <tr><td colSpan="8" className="text-center py-4 text-muted">Đang tải danh sách hợp đồng…</td></tr>
+              ) : contractsError ? (
+                <tr><td colSpan="8" className="text-center py-4 text-danger">Không tải được dữ liệu hợp đồng.</td></tr>
+              ) : contracts.length === 0 ? (
                 <tr>
                   <td colSpan="8" className="text-center py-4 text-muted">
                     Chưa có hợp đồng nào.

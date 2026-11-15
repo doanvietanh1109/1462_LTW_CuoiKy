@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 // Form controlled gửi yêu cầu sửa chữa kèm ảnh cho Người thuê
 export const RepairRequestForm = ({ roomId, onSubmitted }) => {
@@ -6,12 +6,19 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
     title: "",
     description: "",
     priority: "medium",
-    imageUrl: "",
   });
+  const [imageFiles, setImageFiles] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const urls = imageFiles.map((file) => URL.createObjectURL(file));
+    setPreviewImages(urls);
+    return () => urls.forEach((url) => URL.revokeObjectURL(url));
+  }, [imageFiles]);
 
   const validate = () => {
     const errs = {};
@@ -23,41 +30,41 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
   };
 
   const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files || []);
-    files.slice(0, 3).forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (ev.target?.result) {
-          setPreviewImages((prev) => [...prev.slice(0, 2), ev.target.result]);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleAddImageUrl = () => {
-    if (!form.imageUrl.trim()) return;
-    setPreviewImages((prev) => [...prev, form.imageUrl.trim()]);
-    setForm((prev) => ({ ...prev, imageUrl: "" }));
+    const selected = Array.from(e.target.files || []);
+    const allowed = new Set(["image/jpeg", "image/png", "image/webp"]);
+    const invalid = selected.find((file) => !allowed.has(file.type) || file.size > 5 * 1024 * 1024);
+    if (invalid) {
+      setSubmitError("Chỉ nhận ảnh JPG, PNG, WebP tối đa 5 MB mỗi ảnh.");
+      e.target.value = "";
+      return;
+    }
+    if (imageFiles.length + selected.length > 3) {
+      setSubmitError("Mỗi yêu cầu được đính kèm tối đa 3 ảnh.");
+      e.target.value = "";
+      return;
+    }
+    setSubmitError("");
+    setImageFiles((prev) => [...prev, ...selected]);
+    e.target.value = "";
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
     setSubmitting(true);
+    setSubmitError("");
     try {
       await onSubmitted({
         roomId,
         title: form.title,
         description: form.description,
         priority: form.priority,
-        images:
-          previewImages.length > 0
-            ? previewImages
-            : ["https://picsum.photos/seed/repairnew/600/400"],
+        images: imageFiles,
       });
-      setForm({ title: "", description: "", priority: "medium", imageUrl: "" });
-      setPreviewImages([]);
+      setForm({ title: "", description: "", priority: "medium" });
+      setImageFiles([]);
+    } catch (error) {
+      setSubmitError(error.message || "Không thể gửi yêu cầu sửa chữa.");
     } finally {
       setSubmitting(false);
     }
@@ -138,9 +145,10 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
           </label>
           <div className="d-flex flex-wrap gap-2 mb-2">
             <input
+              id="rep-img"
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
               multiple
               className="d-none"
               onChange={handleFileSelect}
@@ -152,28 +160,9 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
             >
               <i className="bi bi-camera me-1" /> Chọn ảnh từ máy
             </button>
-
-            <div className="input-group input-group-sm" style={{ maxWidth: "360px" }}>
-              <input
-                id="rep-img"
-                type="text"
-                className="form-control"
-                placeholder="Hoặc dán link ảnh URL..."
-                value={form.imageUrl}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, imageUrl: e.target.value }))
-                }
-              />
-              <button
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={handleAddImageUrl}
-              >
-                Thêm ảnh
-              </button>
-            </div>
           </div>
 
+          {submitError && <div className="text-danger small mt-2" role="alert">{submitError}</div>}
           {previewImages.length > 0 && (
             <div className="d-flex gap-2 flex-wrap mt-2">
               {previewImages.map((img, idx) => (
@@ -194,11 +183,7 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
                   <button
                     type="button"
                     className="btn btn-sm btn-danger position-absolute top-0 end-0 p-0 px-1"
-                    onClick={() =>
-                      setPreviewImages((prev) =>
-                        prev.filter((_, i) => i !== idx)
-                      )
-                    }
+                    onClick={() => setImageFiles((prev) => prev.filter((_, i) => i !== idx))}
                   >
                     &times;
                   </button>

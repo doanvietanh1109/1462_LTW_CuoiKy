@@ -5,12 +5,34 @@ const { Contract } = require("../models/contract.model");
 const { MeterReading } = require("../models/meterReading.model");
 const { calculateTieredElectricity } = require("./meterReading.controller");
 const { sendSuccess, sendError } = require("../utils/response");
+const { createNotification } = require("../utils/createNotification");
+
+const isNumericInput = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value));
+const validPeriod = (month, year) => isNumericInput(month) && Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && isNumericInput(year) && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
+const validNonNegativeNumber = (value) => isNumericInput(value) && Number(value) >= 0;
+const isDuplicateKeyError = (error) => error?.code === 11000;
+
+const isTenantInvoiceOwner = (invoice, user) => Boolean(
+  (invoice.tenantId?._id || invoice.tenantId)?.toString() === user._id.toString() ||
+  invoice.roomId?.tenant?.userId?.toString() === user._id.toString() ||
+  invoice.contractId?.tenantEmail?.toLowerCase() === user.email?.toLowerCase()
+);
 
 // Lấy danh sách hóa đơn (có kiểm tra quyền 403 cho người thuê)
 const getInvoices = async (req, res, next) => {
   try {
-    const { month, year, status, roomId, page = 1, limit = 20 } = req.query;
+    const { month, year, status, roomId, search, page = 1, limit = 20 } = req.query;
     const query = {};
+
+    if (month !== undefined && (!Number.isInteger(Number(month)) || Number(month) < 1 || Number(month) > 12)) return sendError(res, "Tháng không hợp lệ", null, 400);
+    if (year !== undefined && (!Number.isInteger(Number(year)) || Number(year) < 2020 || Number(year) > 2100)) return sendError(res, "Năm không hợp lệ", null, 400);
+    if (status && !["all", "unpaid", "pending_confirmation", "paid"].includes(status)) return sendError(res, "Trạng thái hóa đơn không hợp lệ", null, 400);
+    if (roomId && !mongoose.isValidObjectId(roomId)) return sendError(res, "Mã phòng không hợp lệ", null, 400);
+    if (search !== undefined) {
+      if (typeof search !== "string" || search.length > 100) return sendError(res, "Từ khóa tìm kiếm không hợp lệ", null, 400);
+      const escaped = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      if (escaped) query.invoiceCode = { $regex: escaped, $options: "i" };
+    }
 
     // RÀNG BUỘC KỸ THUẬT RIÊNG ĐỀ 4:
     // Người thuê chỉ xem được hóa đơn của phòng mình: kiểm tra ở API, gọi thẳng API hóa đơn phòng khác phải nhận 403
@@ -41,9 +63,11 @@ const getInvoices = async (req, res, next) => {
         }
         query.roomId = roomId;
       } else {
+        // Current and legacy invoices may be linked directly to the tenant even
+        // when the Room.tenant or Contract association is incomplete.
         query.$or = [
-          { tenantId: req.user._id },
           { roomId: { $in: Array.from(allowedRoomIds) } },
+          { tenantId: req.user._id },
         ];
       }
     } else if (req.user.role === "landlord") {
@@ -57,8 +81,9 @@ const getInvoices = async (req, res, next) => {
     if (year) query.year = Number(year);
     if (status && status !== "all") query.status = status;
 
-    const pageNum = Math.max(1, Number(page) || 1);
-    const limitNum = Math.max(1, Number(limit) || 20);
+    if (!Number.isInteger(Number(page)) || !Number.isInteger(Number(limit)) || Number(page) < 1 || Number(limit) < 1) return sendError(res, "Phân trang không hợp lệ", null, 400);
+    const pageNum = Number(page);
+    const limitNum = Math.min(100, Number(limit));
     const skip = (pageNum - 1) * limitNum;
 
     const [invoices, total] = await Promise.all([
@@ -100,16 +125,7 @@ const getInvoiceById = async (req, res, next) => {
     }
 
     if (req.user.role === "user") {
-      const isMyTenantId =
-        invoice.tenantId && invoice.tenantId._id.toString() === req.user._id.toString();
-      const isMyRoomTenant =
-        invoice.roomId?.tenant?.userId &&
-        invoice.roomId.tenant.userId.toString() === req.user._id.toString();
-      const isMyContractEmail =
-        invoice.contractId?.tenantEmail &&
-        invoice.contractId.tenantEmail.toLowerCase() === req.user.email.toLowerCase();
-
-      if (!isMyTenantId && !isMyRoomTenant && !isMyContractEmail) {
+      if (!isTenantInvoiceOwner(invoice, req.user)) {
         return sendError(
           res,
           "403 Forbidden: Người thuê không được phép xem hóa đơn của phòng khác!",
@@ -141,9 +157,18 @@ const createInvoice = async (req, res, next) => {
       note,
     } = req.body;
 
-    if (!roomId || !month || !year) {
+    if (!roomId || !validPeriod(month, year)) {
       return sendError(res, "Phòng, tháng và năm là bắt buộc", null, 400);
     }
+
+    if (!mongoose.isValidObjectId(roomId)) return sendError(res, "Mã phòng không hợp lệ", null, 400);
+    if (![oldElectricity, newElectricity, oldWater, newWater].every(validNonNegativeNumber)) {
+      return sendError(res, "Chỉ số điện/nước phải là số hợp lệ không âm", null, 400);
+    }
+    if (serviceFee !== undefined && !validNonNegativeNumber(serviceFee)) {
+      return sendError(res, "Phí dịch vụ phải là số hợp lệ không âm", null, 400);
+    }
+    if (typeof useTieredElectricity !== "boolean") return sendError(res, "Cấu hình giá điện không hợp lệ", null, 400);
 
     const numMonth = Number(month);
     const numYear = Number(year);
@@ -189,6 +214,10 @@ const createInvoice = async (req, res, next) => {
     if (!room) {
       return sendError(res, "Không tìm thấy phòng", null, 404);
     }
+    if (req.user.role === "landlord" && room.ownerId?.toString() !== req.user._id.toString()) {
+      return sendError(res, "Bạn không có quyền quản lý phòng này", null, 403);
+    }
+    if (room.status !== "rented") return sendError(res, "Chỉ được lập hóa đơn cho phòng đang thuê", null, 400);
 
     const activeContract = await Contract.findOne({
       roomId: room._id,
@@ -203,6 +232,9 @@ const createInvoice = async (req, res, next) => {
       serviceFee !== undefined
         ? Number(serviceFee)
         : activeContract?.serviceFee ?? room.serviceFee ?? 100000;
+    if (![roomPrice, electricityPrice, waterPrice, finalServiceFee].every(validNonNegativeNumber)) {
+      return sendError(res, "Tiền phòng, đơn giá điện/nước hoặc phí dịch vụ của phòng không hợp lệ", null, 400);
+    }
 
     // Công thức tính ở server:
     // Hóa đơn = tiền phòng + (số điện mới - cũ) × đơn giá điện + (số nước mới - cũ) × đơn giá nước + phí dịch vụ
@@ -213,26 +245,6 @@ const createInvoice = async (req, res, next) => {
       : electricityUsage * electricityPrice;
     const waterCost = waterUsage * waterPrice;
     const totalAmount = roomPrice + electricityCost + waterCost + finalServiceFee;
-
-    const reading = await MeterReading.findOneAndUpdate(
-      { roomId: room._id, month: numMonth, year: numYear },
-      {
-        roomId: room._id,
-        contractId: activeContract?._id || null,
-        landlordId: room.ownerId || req.user._id,
-        month: numMonth,
-        year: numYear,
-        oldElectricity: oldE,
-        newElectricity: newE,
-        oldWater: oldW,
-        newWater: newW,
-      },
-      { upsert: true, new: true }
-    );
-
-    room.currentElectricity = newE;
-    room.currentWater = newW;
-    await room.save();
 
     const invoiceCode = `INV-${numYear}${String(numMonth).padStart(2, "0")}-${String(
       room._id
@@ -246,7 +258,9 @@ const createInvoice = async (req, res, next) => {
       contractId: activeContract?._id || null,
       tenantId: activeContract?.tenantId || room.tenant?.userId || null,
       landlordId: room.ownerId || req.user._id,
-      meterReadingId: reading._id,
+      // Claim the unique room-period invoice before mutating meter records. Concurrent losers
+      // must not overwrite the winning request's reading.
+      meterReadingId: null,
       month: numMonth,
       year: numYear,
       roomPrice,
@@ -268,12 +282,41 @@ const createInvoice = async (req, res, next) => {
       note: note || "",
     });
 
+    const reading = await MeterReading.findOneAndUpdate(
+      { roomId: room._id, month: numMonth, year: numYear },
+      {
+        roomId: room._id,
+        contractId: activeContract?._id || null,
+        landlordId: room.ownerId || req.user._id,
+        month: numMonth,
+        year: numYear,
+        oldElectricity: oldE,
+        newElectricity: newE,
+        oldWater: oldW,
+        newWater: newW,
+      },
+      { upsert: true, new: true }
+    );
+    invoice.meterReadingId = reading._id;
+    await invoice.save();
+
+    const currentPeriod = new Date();
+    if (numYear === currentPeriod.getFullYear() && numMonth === currentPeriod.getMonth() + 1) {
+      room.currentElectricity = newE;
+      room.currentWater = newW;
+      await room.save();
+    }
+
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")
       .populate("tenantId", "name email phone");
 
+    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Hóa đơn mới",
+      message: `Hóa đơn ${invoice.invoiceCode} kỳ ${numMonth}/${numYear} đã được phát hành.`, resourceType: "invoice", resourceId: invoice._id });
+
     return sendSuccess(res, "Phát hành hóa đơn thành công", { invoice: populated }, 201);
   } catch (error) {
+    if (isDuplicateKeyError(error)) return sendError(res, "Hóa đơn phòng/tháng này đã được tạo bởi yêu cầu khác", error.keyValue || null, 409);
     return next(error);
   }
 };
@@ -286,9 +329,16 @@ const markInvoicePaid = async (req, res, next) => {
       return sendError(res, "Không tìm thấy hóa đơn", null, 404);
     }
 
+    if (req.user.role === "landlord" && invoice.landlordId.toString() !== req.user._id.toString()) {
+      return sendError(res, "Bạn không có quyền thay đổi hóa đơn này", null, 403);
+    }
+    if (invoice.status === "paid") return sendError(res, "Hóa đơn đã được xác nhận đã thu tiền", null, 409);
+
     invoice.status = "paid";
     invoice.paidAt = new Date();
     await invoice.save();
+    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Đã xác nhận thanh toán",
+      message: `Chủ trọ đã xác nhận thanh toán hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")
@@ -305,6 +355,7 @@ const markInvoicePaid = async (req, res, next) => {
 // Người thuê tự xác nhận thanh toán hóa đơn của phòng mình
 const tenantPayInvoice = async (req, res, next) => {
   try {
+    if (req.user.role !== "user") return sendError(res, "Chỉ người thuê mới được gửi yêu cầu xác nhận thanh toán", null, 403);
     const invoice = await Invoice.findById(req.params.id)
       .populate("roomId", "title roomNumber price area district tenant")
       .populate("contractId", "tenantEmail");
@@ -312,20 +363,12 @@ const tenantPayInvoice = async (req, res, next) => {
     if (!invoice) {
       return sendError(res, "Không tìm thấy hóa đơn", null, 404);
     }
+    if (req.user.role === "landlord" && invoice.landlordId.toString() !== req.user._id.toString()) {
+      return sendError(res, "Bạn không có quyền thanh toán hóa đơn này", null, 403);
+    }
 
     if (req.user.role === "user") {
-      const isMyTenantId =
-        invoice.tenantId &&
-        invoice.tenantId.toString() === req.user._id.toString();
-      const isMyRoomTenant =
-        invoice.roomId?.tenant?.userId &&
-        invoice.roomId.tenant.userId.toString() === req.user._id.toString();
-      const isMyContractEmail =
-        invoice.contractId?.tenantEmail &&
-        invoice.contractId.tenantEmail.toLowerCase() ===
-          req.user.email.toLowerCase();
-
-      if (!isMyTenantId && !isMyRoomTenant && !isMyContractEmail) {
+      if (!isTenantInvoiceOwner(invoice, req.user)) {
         return sendError(
           res,
           "403 Forbidden: Bạn chỉ có thể thanh toán hóa đơn của phòng mình!",
@@ -335,15 +378,16 @@ const tenantPayInvoice = async (req, res, next) => {
       }
     }
 
-    invoice.status = "paid";
-    invoice.paidAt = new Date();
+    if (invoice.status !== "unpaid") return sendError(res, "Hóa đơn không ở trạng thái có thể gửi xác nhận thanh toán", null, 409);
+    invoice.status = "pending_confirmation";
+    invoice.paymentSubmittedAt = new Date();
     await invoice.save();
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")
       .populate("tenantId", "name email phone");
 
-    return sendSuccess(res, "Thanh toán hóa đơn thành công!", {
+    return sendSuccess(res, "Đã gửi yêu cầu xác nhận thanh toán tới chủ trọ", {
       invoice: populated,
     });
   } catch (error) {
@@ -354,41 +398,19 @@ const tenantPayInvoice = async (req, res, next) => {
 // Gửi thông báo / email nhắc nợ (Tính năng nâng cao cộng điểm)
 const sendDebtReminder = async (req, res, next) => {
   try {
-    const invoice = await Invoice.findById(req.params.id)
-      .populate("roomId", "title roomNumber")
-      .populate("tenantId", "name email phone")
-      .populate("contractId", "tenantName tenantEmail tenantPhone");
+    const invoice = await Invoice.findById(req.params.id);
 
     if (!invoice) {
       return sendError(res, "Không tìm thấy hóa đơn", null, 404);
+    }
+    if (req.user.role === "landlord" && invoice.landlordId.toString() !== req.user._id.toString()) {
+      return sendError(res, "Bạn không có quyền nhắc nợ hóa đơn này", null, 403);
     }
 
     if (invoice.status === "paid") {
       return sendError(res, "Hóa đơn này đã được thanh toán", null, 400);
     }
-
-    invoice.reminderSentAt = new Date();
-    invoice.reminderCount = (invoice.reminderCount || 0) + 1;
-    await invoice.save();
-
-    const recipientEmail =
-      invoice.tenantId?.email ||
-      invoice.contractId?.tenantEmail ||
-      "tenant@example.com";
-    const recipientName =
-      invoice.tenantId?.name || invoice.contractId?.tenantName || "Người thuê";
-
-    return sendSuccess(
-      res,
-      `Đã gửi email nhắc nợ lần #${invoice.reminderCount} tới ${recipientName} (${recipientEmail})`,
-      {
-        invoiceId: invoice._id,
-        recipientEmail,
-        recipientName,
-        reminderSentAt: invoice.reminderSentAt,
-        reminderCount: invoice.reminderCount,
-      }
-    );
+    return sendError(res, "Email nhắc nợ chưa được cấu hình; hệ thống chưa gửi thông báo", null, 501);
   } catch (error) {
     return next(error);
   }
@@ -458,7 +480,7 @@ const getDashboardAggregations = async (req, res, next) => {
       {
         $match: {
           ...matchStage,
-          status: "unpaid",
+          status: { $in: ["unpaid", "pending_confirmation"] },
         },
       },
       {
@@ -582,4 +604,8 @@ module.exports = {
   tenantPayInvoice,
   sendDebtReminder,
   getDashboardAggregations,
+  validPeriod,
+  validNonNegativeNumber,
+  isTenantInvoiceOwner,
+  isDuplicateKeyError,
 };

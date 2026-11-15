@@ -4,6 +4,10 @@ const { Contract } = require("../models/contract.model");
 const { Invoice } = require("../models/invoice.model");
 const { sendSuccess, sendError } = require("../utils/response");
 
+const isNumericInput = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value));
+const isValidMeterValue = (value) => isNumericInput(value) && Number(value) >= 0;
+const isValidPeriod = (month, year) => isNumericInput(month) && Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && isNumericInput(year) && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
+
 // Tính giá điện bậc thang (Tính năng nâng cao cộng điểm)
 const calculateTieredElectricity = (usage) => {
   if (usage <= 0) return 0;
@@ -30,43 +34,57 @@ const calculateTieredElectricity = (usage) => {
 const getMeterSheet = async (req, res, next) => {
   try {
     const now = new Date();
-    const month = Number(req.query.month) || now.getMonth() + 1;
-    const year = Number(req.query.year) || now.getFullYear();
+    const month = req.query.month === undefined ? now.getMonth() + 1 : Number(req.query.month);
+    const year = req.query.year === undefined ? now.getFullYear() : Number(req.query.year);
+    if (!isValidPeriod(month, year)) return sendError(res, "Tháng và năm không hợp lệ", null, 400);
 
-    const roomQuery = { status: "rented" };
-    if (req.user.role === "landlord") {
-      roomQuery.ownerId = req.user._id;
-    }
+    const contractQuery = { status: "active" };
+    if (req.user.role === "landlord") contractQuery.landlordId = req.user._id;
+    const activeContracts = await Contract.find(contractQuery).lean();
+    const activeRoomIds = activeContracts.map((contract) => contract.roomId);
+    const roomQuery = { $or: [{ status: "rented" }, { _id: { $in: activeRoomIds } }] };
+    if (req.user.role === "landlord") roomQuery.ownerId = req.user._id;
 
-    const [rentedRooms, readings, invoices, activeContracts] = await Promise.all([
+    const previousPeriodQuery = {
+      $or: [{ year: { $lt: year } }, { year, month: { $lt: month } }],
+      ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
+    };
+    const [rentedRooms, readings, previousReadings, invoices] = await Promise.all([
       Room.find(roomQuery).populate("blockId", "name").sort({ roomNumber: 1, title: 1 }).lean(),
-      MeterReading.find({ month, year }).lean(),
-      Invoice.find({ month, year }).lean(),
-      Contract.find({ status: "active" }).lean(),
+      MeterReading.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
+      MeterReading.find(previousPeriodQuery).sort({ year: -1, month: -1 }).lean(),
+      Invoice.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
     ]);
 
     const readingMap = new Map(readings.map((r) => [r.roomId.toString(), r]));
+    const previousReadingMap = new Map();
+    for (const reading of previousReadings) {
+      const key = reading.roomId.toString();
+      if (!previousReadingMap.has(key)) previousReadingMap.set(key, reading);
+    }
     const invoiceMap = new Map(invoices.map((inv) => [inv.roomId.toString(), inv]));
     const contractMap = new Map(activeContracts.map((c) => [c.roomId.toString(), c]));
 
     const rows = rentedRooms.map((room) => {
       const key = room._id.toString();
       const existingReading = readingMap.get(key);
+      const previousReading = previousReadingMap.get(key);
       const existingInvoice = invoiceMap.get(key);
       const activeContract = contractMap.get(key);
-
+      const previousElectricity = previousReading?.newElectricity ?? activeContract?.initialElectricity ?? room.currentElectricity ?? 0;
+      const previousWater = previousReading?.newWater ?? activeContract?.initialWater ?? room.currentWater ?? 0;
       const oldElectricity = existingReading
         ? existingReading.oldElectricity
-        : room.currentElectricity || 0;
+        : previousElectricity;
       const newElectricity = existingReading
         ? existingReading.newElectricity
-        : room.currentElectricity || 0;
+        : previousElectricity;
       const oldWater = existingReading
         ? existingReading.oldWater
-        : room.currentWater || 0;
+        : previousWater;
       const newWater = existingReading
         ? existingReading.newWater
-        : room.currentWater || 0;
+        : previousWater;
 
       return {
         roomId: room._id,
@@ -75,10 +93,10 @@ const getMeterSheet = async (req, res, next) => {
         blockName: room.blockId?.name || "Chưa phân dãy",
         tenantName: activeContract?.tenantName || room.tenant?.name || "Người thuê",
         tenantEmail: activeContract?.tenantEmail || room.tenant?.email || "",
-        roomPrice: activeContract?.rentPrice || room.price || 0,
-        electricityPrice: activeContract?.electricityPrice || room.electricityPrice || 3500,
-        waterPrice: activeContract?.waterPrice || room.waterPrice || 15000,
-        serviceFee: activeContract?.serviceFee || room.serviceFee || 100000,
+        roomPrice: activeContract?.rentPrice ?? room.price ?? 0,
+        electricityPrice: activeContract?.electricityPrice ?? room.electricityPrice ?? 3500,
+        waterPrice: activeContract?.waterPrice ?? room.waterPrice ?? 15000,
+        serviceFee: activeContract?.serviceFee ?? room.serviceFee ?? 100000,
         oldElectricity,
         newElectricity,
         oldWater,
@@ -103,33 +121,50 @@ const getMeterSheet = async (req, res, next) => {
 
 // Lưu bảng chỉ số điện nước hàng loạt & tùy chọn phát hành hóa đơn ngay
 const saveBatchMeterReadings = async (req, res, next) => {
+  const savedReadings = [];
+  const createdInvoices = [];
+  const skippedInvoices = [];
   try {
     const { month, year, rows, issueInvoices = false, useTieredElectricity = false } = req.body;
 
     const numMonth = Number(month);
     const numYear = Number(year);
 
-    if (!numMonth || numMonth < 1 || numMonth > 12 || !numYear) {
+    if (!isValidPeriod(numMonth, numYear)) {
       return sendError(res, "Tháng và năm không hợp lệ", null, 400);
     }
 
     if (!Array.isArray(rows) || rows.length === 0) {
       return sendError(res, "Danh sách chỉ số điện nước trống", null, 400);
     }
+    if (typeof issueInvoices !== "boolean" || typeof useTieredElectricity !== "boolean") {
+      return sendError(res, "Tùy chọn phát hành hoặc cách tính điện không hợp lệ", null, 400);
+    }
 
     // Kiểm tra từng dòng ở server: từ chối chỉ số mới nhỏ hơn chỉ số cũ
     const rowErrors = {};
+    const seenRoomIds = new Set();
     rows.forEach((row, idx) => {
+      if (!row || typeof row !== "object" || Array.isArray(row)) {
+        rowErrors[`row_${idx}`] = "Dòng chỉ số không hợp lệ";
+        return;
+      }
       const oldE = Number(row.oldElectricity);
       const newE = Number(row.newElectricity);
       const oldW = Number(row.oldWater);
       const newW = Number(row.newWater);
       const key = row.roomId || `row_${idx}`;
 
-      if (Number.isNaN(oldE) || Number.isNaN(newE) || Number.isNaN(oldW) || Number.isNaN(newW)) {
+      if (typeof row.roomId !== "string" || !/^[a-f\d]{24}$/i.test(row.roomId)) {
+        rowErrors[key] = "Mã phòng không hợp lệ";
+      } else if (seenRoomIds.has(row.roomId)) {
+        rowErrors[key] = "Phòng bị lặp trong cùng bảng chỉ số";
+      } else {
+        seenRoomIds.add(row.roomId);
+      }
+
+      if (![row.oldElectricity, row.newElectricity, row.oldWater, row.newWater].every(isValidMeterValue)) {
         rowErrors[key] = "Chỉ số điện/nước phải là số hợp lệ";
-      } else if (oldE < 0 || newE < 0 || oldW < 0 || newW < 0) {
-        rowErrors[key] = "Chỉ số điện/nước không được là số âm";
       } else if (newE < oldE) {
         rowErrors[key] = `Số điện mới (${newE}) không được nhỏ hơn số điện cũ (${oldE})`;
       } else if (newW < oldW) {
@@ -146,67 +181,79 @@ const saveBatchMeterReadings = async (req, res, next) => {
       );
     }
 
-    const savedReadings = [];
-    const createdInvoices = [];
-    const skippedInvoices = [];
+    // Validate every target before the first write. A batch can never touch another landlord's room.
+    const roomIds = rows.map((row) => row.roomId);
+    const roomQuery = { _id: { $in: roomIds } };
+    if (req.user.role === "landlord") roomQuery.ownerId = req.user._id;
+    const [targetRooms, activeContracts] = await Promise.all([
+      Room.find(roomQuery),
+      Contract.find({
+        roomId: { $in: roomIds },
+        status: "active",
+        ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
+      }),
+    ]);
+    const targetById = new Map(targetRooms.map((room) => [room._id.toString(), room]));
+    const contractByRoom = new Map(activeContracts.map((contract) => [contract.roomId.toString(), contract]));
+    for (const roomId of roomIds) {
+      const room = targetById.get(roomId);
+      if (!room || (room.status !== "rented" && !contractByRoom.has(roomId))) {
+        rowErrors[roomId] = "Phòng không tồn tại, không có trạng thái thuê hợp lệ hoặc không thuộc quyền quản lý của bạn";
+      }
+    }
+    if (Object.keys(rowErrors).length) return sendError(res, "Có phòng không hợp lệ trong bảng chỉ số", { rowErrors }, 400);
+
+    const existingInvoices = await Invoice.find({
+      roomId: { $in: roomIds }, month: numMonth, year: numYear,
+      ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
+    });
+    const invoiceByRoom = new Map(existingInvoices.map((invoice) => [invoice.roomId.toString(), invoice]));
+    for (const row of rows) {
+      const issued = invoiceByRoom.get(row.roomId);
+      if (issued && (
+        Number(row.oldElectricity) !== issued.oldElectricity || Number(row.newElectricity) !== issued.newElectricity ||
+        Number(row.oldWater) !== issued.oldWater || Number(row.newWater) !== issued.newWater
+      )) {
+        rowErrors[row.roomId] = "Kỳ này đã phát hành hóa đơn; không thể sửa chỉ số đã chốt";
+      }
+    }
+    if (Object.keys(rowErrors).length) return sendError(res, "Không thể sửa chỉ số của kỳ đã phát hành", { rowErrors }, 409);
+
+    // Load and validate contract rates for every row before mutating any record.
+    for (const roomId of roomIds) {
+      const room = targetById.get(roomId);
+      const contract = contractByRoom.get(roomId);
+      const rates = [contract?.rentPrice ?? room.price, contract?.electricityPrice ?? room.electricityPrice, contract?.waterPrice ?? room.waterPrice, contract?.serviceFee ?? room.serviceFee];
+      if (!rates.every((value) => Number.isFinite(Number(value)) && Number(value) >= 0)) {
+        rowErrors[roomId] = "Tiền phòng, đơn giá điện/nước hoặc phí dịch vụ của phòng không hợp lệ";
+      }
+    }
+    if (Object.keys(rowErrors).length) return sendError(res, "Có đơn giá không hợp lệ trong bảng chỉ số", { rowErrors }, 400);
 
     for (const row of rows) {
-      const room = await Room.findById(row.roomId);
-      if (!room) continue;
+      const room = targetById.get(row.roomId);
 
-      const activeContract = await Contract.findOne({
-        roomId: room._id,
-        status: "active",
-      });
+      const issuedInvoice = invoiceByRoom.get(row.roomId);
+      if (issuedInvoice) {
+        skippedInvoices.push({
+          roomId: room._id,
+          roomTitle: room.title,
+          reason: `Giữ nguyên chỉ số đã chốt trong hóa đơn ${issuedInvoice.invoiceCode}`,
+        });
+        continue;
+      }
+
+      const activeContract = contractByRoom.get(row.roomId);
 
       const oldElectricity = Number(row.oldElectricity);
       const newElectricity = Number(row.newElectricity);
       const oldWater = Number(row.oldWater);
       const newWater = Number(row.newWater);
 
-      const reading = await MeterReading.findOneAndUpdate(
-        { roomId: room._id, month: numMonth, year: numYear },
-        {
-          roomId: room._id,
-          contractId: activeContract?._id || null,
-          landlordId: room.ownerId || req.user._id,
-          month: numMonth,
-          year: numYear,
-          oldElectricity,
-          newElectricity,
-          oldWater,
-          newWater,
-        },
-        { upsert: true, new: true }
-      );
-
-      savedReadings.push(reading);
-
-      // Cập nhật chỉ số hiện tại trên phòng
-      room.currentElectricity = newElectricity;
-      room.currentWater = newWater;
-      await room.save();
-
-      // Nếu chọn phát hành hóa đơn luôn
+      let createdInvoice = null;
       if (issueInvoices) {
-        const existingInvoice = await Invoice.findOne({
-          roomId: room._id,
-          month: numMonth,
-          year: numYear,
-        });
-
-        if (existingInvoice) {
-          skippedInvoices.push({
-            roomId: room._id,
-            roomTitle: room.title,
-            reason: `Phòng đã có hóa đơn tháng ${numMonth}/${numYear}`,
-          });
-          continue;
-        }
-
         const roomPrice = activeContract?.rentPrice ?? room.price ?? 0;
-        const electricityPrice =
-          activeContract?.electricityPrice ?? room.electricityPrice ?? 3500;
+        const electricityPrice = activeContract?.electricityPrice ?? room.electricityPrice ?? 3500;
         const waterPrice = activeContract?.waterPrice ?? room.waterPrice ?? 15000;
         const serviceFee = activeContract?.serviceFee ?? room.serviceFee ?? 100000;
 
@@ -225,13 +272,14 @@ const saveBatchMeterReadings = async (req, res, next) => {
           .slice(-4)
           .toUpperCase()}-${Math.floor(10 + Math.random() * 90)}`;
 
-        const invoice = await Invoice.create({
+        createdInvoice = await Invoice.create({
           invoiceCode,
           roomId: room._id,
           contractId: activeContract?._id || null,
           tenantId: activeContract?.tenantId || room.tenant?.userId || null,
           landlordId: room.ownerId || req.user._id,
-          meterReadingId: reading._id,
+          // Reserve the unique room-period invoice before changing the meter reading.
+          meterReadingId: null,
           month: numMonth,
           year: numYear,
           roomPrice,
@@ -251,8 +299,38 @@ const saveBatchMeterReadings = async (req, res, next) => {
           status: "unpaid",
           dueDate: new Date(numYear, numMonth - 1, 10),
         });
+        // Track the invoice reservation immediately so a later failure can report partial progress.
+        createdInvoices.push(createdInvoice);
 
-        createdInvoices.push(invoice);
+      }
+
+      const reading = await MeterReading.findOneAndUpdate(
+        { roomId: room._id, month: numMonth, year: numYear },
+        {
+          roomId: room._id,
+          contractId: activeContract?._id || null,
+          landlordId: room.ownerId || req.user._id,
+          month: numMonth,
+          year: numYear,
+          oldElectricity,
+          newElectricity,
+          oldWater,
+          newWater,
+        },
+        { upsert: true, new: true }
+      );
+      savedReadings.push(reading);
+      if (createdInvoice) {
+        createdInvoice.meterReadingId = reading._id;
+        await createdInvoice.save();
+      }
+
+      // Only the current period updates the room counters; historical edits stay in history.
+      const now = new Date();
+      if (numYear === now.getFullYear() && numMonth === now.getMonth() + 1) {
+        room.currentElectricity = newElectricity;
+        room.currentWater = newWater;
+        await room.save();
       }
     }
 
@@ -269,6 +347,15 @@ const saveBatchMeterReadings = async (req, res, next) => {
       201
     );
   } catch (error) {
+    if (savedReadings.length || createdInvoices.length) {
+      return sendError(
+        res,
+        `Batch bị dừng sau khi đã ghi một phần (${savedReadings.length} chỉ số, ${createdInvoices.length} hóa đơn). Tải lại bảng để đối soát trước khi thử tiếp.`,
+        { partial: true, savedReadingCount: savedReadings.length, createdInvoiceCount: createdInvoices.length },
+        500
+      );
+    }
+    if (error.code === 11000) return sendError(res, "Dữ liệu tháng này đã được tạo bởi một yêu cầu khác; hãy tải lại bảng và thử lại", error.keyValue || null, 409);
     return next(error);
   }
 };
@@ -277,4 +364,6 @@ module.exports = {
   getMeterSheet,
   saveBatchMeterReadings,
   calculateTieredElectricity,
+  isValidMeterValue,
+  isValidPeriod,
 };

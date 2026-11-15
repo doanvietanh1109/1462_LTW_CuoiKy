@@ -1,0 +1,161 @@
+.tenant-notice-row { transition: background-color .15s ease, border-color .15s ease; }
+.tenant-notice-row:hover { background: #f8fbff !important; border-color: #9bc9ed !important; }
+.tenant-notification-filters { display: flex; gap: .5rem; overflow-x: auto; padding: .2rem 0 .6rem; }
+.tenant-notification-filters button { flex: 0 0 auto; border: 1px solid #d7e0e7; border-radius: 999px; background: #fff; color: #536575; padding: .5rem .9rem; font-weight: 620; }
+.tenant-notification-filters button.is-active { border-color: #0878b9; background: #0878b9; color: #fff; }
+.tenant-notice-row { display: flex; width: 100%; align-items: flex-start; gap: .85rem; border: 1px solid #e1e8ed; border-radius: .9rem; padding: 1rem; background: #fff; color: inherit; text-align: left; }
+.tenant-notice-row.is-unread { border-color: #b9d9eb; background: #fafdff; }
+.tenant-notice-icon { display: grid; width: 2.8rem; height: 2.8rem; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #edf5fa; color: #0878b9; font-size: 1.1rem; }
+.tenant-notice-content { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: .35rem; }
+.tenant-notice-heading { display: flex; justify-content: space-between; gap: .75rem; }
+.tenant-notice-heading strong { overflow-wrap: anywhere; }
+.tenant-notice-heading small { flex: 0 0 auto; color: #718291; }
+.tenant-notice-message { color: #5e7180; font-size: .9rem; overflow-wrap: anywhere; }
+.tenant-notice-type { align-self: flex-start; border: 1px solid #dce7ee; border-radius: 999px; padding: .15rem .55rem; color: #476275; font-size: .75rem; font-weight: 650; }
+.tenant-notice-type.type-invoice { border-color: #d6e8f4; background: #eff7fc; color: #17628b; }
+.tenant-notice-type.type-repair { border-color: #d3eade; background: #f0f8f3; color: #247345; }
+.tenant-notice-type.type-contract { border-color: #e0dcf5; background: #f6f4fc; color: #6254a2; }
+.tenant-notice-dot { width: .55rem; height: .55rem; flex: 0 0 auto; margin-top: .45rem; border-radius: 50%; background: #0878b9; }
+.tenant-section-kicker, .invoice-eyebrow { color: #537084; font-size: .72rem; font-weight: 750; letter-spacing: .09em; }
+.tenant-invoice-filters { display: flex; flex-wrap: wrap; gap: .45rem; }
+.tenant-invoice-filters button { display: inline-flex; align-items: center; gap: .55rem; border: 1px solid #d7e0e7; border-radius: 999px; background: #fff; color: #425466; padding: .55rem .9rem; font-size: .875rem; font-weight: 650; }
+.tenant-invoice-filters button.is-active { background: #0878b9; border-color: #0878b9; color: #fff; }
+.tenant-invoice-filters button span { min-width: 1.35rem; border-radius: 1rem; background: rgba(20, 44, 62, .08); text-align: center; font-size: .75rem; }
+.tenant-invoice-filters button.is-active span { background: rgba(255,255,255,.2); }
+.tenant-invoice-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.tenant-invoice-card { min-width: 0; padding: 1.15rem; border: 1px solid #e0e7ed; border-radius: 1rem; background: #fff; box-shadow: 0 5px 18px rgba(22, 48, 67, .045); }
+.tenant-invoice-card-top, .tenant-invoice-card-main, .tenant-invoice-card-meta, .tenant-invoice-actions { display: flex; align-items: center; justify-content: space-between; gap: .85rem; }
+.tenant-invoice-card-top { padding-bottom: .85rem; border-bottom: 1px solid #edf1f4; }
+.tenant-invoice-period { display: flex; align-items: baseline; gap: .55rem; color: #536575; }
+.tenant-invoice-period span { font-size: .7rem; font-weight: 700; letter-spacing: .07em; }
+.tenant-invoice-period strong { color: #1e3547; font-size: 1rem; }
+.tenant-invoice-card-main { padding: .95rem 0; align-items: flex-start; }
+.tenant-invoice-primary { min-width: 0; }
+.tenant-invoice-primary h3 { margin: 0 0 .25rem; font-size: 1rem; font-weight: 720; overflow-wrap: anywhere; }
+.tenant-invoice-primary p { margin: 0; color: #667788; font-size: .82rem; }
+.tenant-invoice-primary p strong { color: #354b5c; }
+.tenant-invoice-amount { flex: 0 0 auto; text-align: right; }
+.tenant-invoice-amount span, .tenant-invoice-card-meta { color: #617484; font-size: .8rem; }
+.tenant-invoice-amount strong { display: block; color: #b42318; font-size: 1.22rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tenant-invoice-amount strong.is-paid { color: #147a45; }
+.tenant-invoice-card-meta { flex-wrap: wrap; padding-top: .75rem; border-top: 1px solid #edf1f4; }
+.tenant-invoice-card-meta i { margin-right: .4rem; }
+.tenant-invoice-total strong { color: #30495a; font-variant-numeric: tabular-nums; }
+.tenant-invoice-actions { justify-content: flex-start; flex-wrap: wrap; padding-top: .85rem; }
+.tenant-invoice-actions .btn { min-height: 40px; }
+.tenant-payment-pending { color: #735c00; font-size: .85rem; font-weight: 650; }
+.tenant-empty-state { padding: 3rem 1.25rem; border: 1px dashed #cad7e0; border-radius: 1rem; background: #fbfdfe; text-align: center; }
+.tenant-empty-state h3 { margin: .9rem 0 .35rem; font-size: 1.15rem; font-weight: 700; }
+.tenant-empty-state p { max-width: 34rem; margin: 0 auto 1rem; color: #647789; }
+.tenant-empty-icon { display: inline-grid; width: 3.25rem; height: 3.25rem; place-items: center; border-radius: 1rem; background: #eaf4fa; color: #0878b9; font-size: 1.35rem; }
+.tenant-contract-terms-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+.tenant-contract-term { display: flex; flex-direction: column; gap: .3rem; min-width: 0; padding: .85rem; border: 1px solid #e3eaf0; border-radius: .75rem; background: #fff; }
+.tenant-contract-term span, .tenant-contract-note > span { color: #637789; font-size: .78rem; }
+.tenant-contract-term strong { color: #183b53; overflow-wrap: anywhere; }
+.tenant-contract-term-wide { grid-column: 1 / -1; }
+.tenant-contract-code { color: #0878b9; font-size: .85rem; font-weight: 700; }
+.tenant-contract-note { padding: .85rem; border-radius: .75rem; background: #f5f8fa; }
+.tenant-contract-note p { margin: .25rem 0 0; white-space: pre-wrap; }
+.tenant-contract-record { display: flex; align-items: flex-start; gap: .6rem; padding: .85rem; border: 1px solid #dce9f1; border-radius: .75rem; background: #f5fafc; color: #476275; font-size: .84rem; }
+.tenant-contract-record i { color: #0878b9; }
+.invoice-page { max-width: 960px; }
+.invoice-receipt { overflow: hidden; border-top: 5px solid #0878b9 !important; padding: clamp(1.15rem, 3vw, 2.5rem); }
+.invoice-heading { display: flex; justify-content: space-between; gap: 1.5rem; padding-bottom: 1.2rem; border-bottom: 1px solid #dce5eb; }
+.invoice-heading h1 { margin: .45rem 0 .25rem; color: #183b53; font-size: clamp(1.35rem, 2vw, 1.8rem); font-weight: 760; text-transform: uppercase; }
+.invoice-heading p { margin: 0; color: #617484; }
+.invoice-heading p strong { color: #243f53; }
+.invoice-period { display: flex; min-width: 140px; flex-direction: column; align-items: flex-end; gap: .35rem; }
+.invoice-period > span { color: #617484; font-size: .78rem; }
+.invoice-period > strong { color: #0878b9; font-size: 1.45rem; font-variant-numeric: tabular-nums; }
+.invoice-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.25rem 0; }
+.invoice-parties > div { display: flex; min-width: 0; flex-direction: column; gap: .25rem; }
+.invoice-parties strong { color: #1e3b50; overflow-wrap: anywhere; }
+.invoice-parties span:not(.invoice-label) { color: #5e7180; font-size: .86rem; overflow-wrap: anywhere; }
+.invoice-label { margin-bottom: .25rem; color: #637789; font-size: .68rem; font-weight: 750; letter-spacing: .08em; }
+.invoice-dates { grid-column: 1 / -1; display: flex !important; flex-direction: row !important; justify-content: space-between; gap: 1rem; padding-top: .75rem; border-top: 1px solid #edf1f4; }
+.invoice-dates span { display: flex; flex-wrap: wrap; gap: .4rem; }
+.invoice-total-panel { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; padding: 1rem; border: 1px solid #d8e6ef; border-radius: .9rem; background: #f4f9fc; }
+.invoice-total-panel > div { display: flex; min-width: 0; flex-direction: column; gap: .3rem; }
+.invoice-total-panel span { color: #617484; font-size: .78rem; }
+.invoice-total-panel strong { color: #183b53; font-size: clamp(1rem, 2vw, 1.3rem); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.invoice-total-panel > div:first-child strong { color: #0878b9; }
+.invoice-total-panel .invoice-balance { color: #b42318; }
+.invoice-lines { margin-top: 1.5rem; }
+.invoice-lines h2 { margin-bottom: .65rem; color: #243f53; font-size: 1.05rem; font-weight: 720; }
+.invoice-lines table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.invoice-col-item { width: 48%; }
+.invoice-col-qty { width: 17%; }
+.invoice-col-unit { width: 17%; }
+.invoice-col-total { width: 18%; }
+.invoice-lines thead th { padding: .65rem .5rem; border-block: 1px solid #cad7e0; background: #f2f6f8; color: #445d6e; font-size: .78rem; }
+.invoice-lines tbody td, .invoice-lines tfoot th { padding: .8rem .5rem; border-bottom: 1px solid #e5ebef; vertical-align: top; }
+.invoice-item-name { display: flex; gap: .55rem; overflow-wrap: anywhere; }
+.invoice-item-index { flex: 0 0 auto; color: #0878b9; font-size: .75rem; font-weight: 750; }
+.invoice-item-name small { overflow-wrap: anywhere; }
+.invoice-lines td, .invoice-lines th { font-size: .88rem; }
+.invoice-grand-total { color: #0878b9; font-size: 1.1rem !important; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.invoice-footer { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid #dce5eb; }
+.invoice-footer p { margin: 0; color: #718291; font-size: .8rem; }
+.tenant-repair-progress { flex-wrap: wrap; }
+.tenant-repair-card { min-width: 0; }
+.tenant-repair-card > p { overflow-wrap: anywhere; }
+@media (max-width: 575.98px) {
+  .tenant-invoice-cards { grid-template-columns: minmax(0, 1fr); }
+  .tenant-invoice-card { padding: .9rem; }
+  .tenant-invoice-card-main { flex-direction: column; }
+  .tenant-invoice-amount { text-align: left; }
+  .tenant-invoice-actions { align-items: stretch; }
+  .tenant-invoice-actions .btn { flex: 1 1 100%; }
+  .tenant-contract-terms-grid { gap: .5rem; }
+  .tenant-contract-term { padding: .7rem; }
+  .invoice-heading { flex-direction: column; gap: .8rem; }
+  .invoice-period { align-items: flex-start; }
+  .invoice-parties { gap: .8rem; }
+  .invoice-total-panel { grid-template-columns: 1fr; gap: .65rem; }
+  .invoice-total-panel > div { flex-direction: row; justify-content: space-between; align-items: baseline; gap: .5rem; }
+  .invoice-lines thead { display: none; }
+  .invoice-lines table, .invoice-lines tbody { display: block; width: 100%; }
+  .invoice-lines tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .6rem; padding: .8rem 0; border-bottom: 1px solid #e5ebef; }
+  .invoice-lines tbody td { min-width: 0; padding: 0 !important; border: 0 !important; text-align: left !important; white-space: normal !important; overflow-wrap: anywhere; font-size: .78rem; }
+  .invoice-lines tbody td:first-child { grid-column: 1 / -1; }
+  .invoice-lines tbody td:not(:first-child)::before { display: block; margin-bottom: .15rem; color: #758594; content: attr(data-label); font-size: .67rem; font-weight: 650; }
+  .invoice-lines tbody td:nth-child(4) { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; padding-top: .35rem !important; border-top: 1px dashed #e1e8ed !important; text-align: right !important; }
+  .invoice-lines tbody td:nth-child(4)::before { flex: 1; }
+  .invoice-lines tfoot { display: block; }
+  .invoice-lines tfoot tr { display: flex; justify-content: space-between; gap: .5rem; padding-top: .7rem; }
+  .invoice-lines tfoot th { padding: .3rem 0 !important; border: 0 !important; font-size: .83rem; }
+  .invoice-grand-total { font-size: .9rem !important; white-space: nowrap; }
+  .invoice-dates { flex-direction: column !important; gap: .35rem; }
+  .tenant-notice-row { gap: .6rem; padding: .8rem; }
+  .tenant-notice-icon { width: 2.4rem; height: 2.4rem; }
+  .tenant-notice-heading { flex-direction: column; gap: .15rem; }
+  .tenant-repair-progress { gap: .35rem !important; }
+  .invoice-page { padding-left: .65rem; padding-right: .65rem; }
+  .invoice-receipt { border-radius: .8rem !important; }
+  .invoice-receipt h3 { font-size: 1.15rem; }
+}
+@media print {
+  @page { size: A4 portrait; margin: 12mm; }
+  body { background: #fff !important; color: #111 !important; font-size: 9pt; }
+  body:has(.invoice-page) #root > :not(.invoice-page) { display: none !important; }
+  .invoice-page, .invoice-page * { visibility: visible !important; }
+  .invoice-page { position: absolute; inset: 0; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }
+  .invoice-receipt { overflow: visible !important; box-shadow: none !important; border: 0 !important; border-top: 2px solid #0878b9 !important; border-radius: 0 !important; padding: 0 !important; }
+  .invoice-receipt .table-responsive { overflow: visible !important; }
+  .invoice-lines table { min-width: 0 !important; width: 100% !important; }
+  .invoice-lines th, .invoice-lines td { padding: 5px 4px !important; font-size: 8pt !important; }
+  .invoice-heading h1 { font-size: 17pt; }
+  .invoice-parties { padding: 8px 0; }
+  .invoice-total-panel { padding: 8px; }
+  .invoice-total-panel strong { font-size: 11pt; }
+  .invoice-receipt tr, .invoice-parties, .invoice-total-panel, .invoice-footer { break-inside: avoid; }
+  .invoice-receipt th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+@media print {
+  body:has(.tenant-contract-view) #root > :not(main) { display: none !important; }
+  body:has(.tenant-contract-view) .main-container > :not(.tenant-contract-view) { display: none !important; }
+  body:has(.tenant-contract-view) .tenant-contract-view { position: absolute; inset: 0; width: 100%; padding: 0 !important; }
+  body:has(.tenant-contract-view) .tenant-contract-view .row { display: block; }
+  body:has(.tenant-contract-view) .tenant-contract-view [class*="col-"] { width: 100%; }
+  body:has(.tenant-contract-view) .tenant-contract-view .d-print-none { display: none !important; }
+}

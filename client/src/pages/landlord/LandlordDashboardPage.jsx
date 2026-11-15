@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -39,6 +39,8 @@ export const LandlordDashboardPage = () => {
   const [notice, setNotice] = useState("");
   const [historyFilter, setHistoryFilter] = useState("all");
   const [rentalHistory, setRentalHistory] = useState([]);
+  const [roomImageFiles, setRoomImageFiles] = useState([]);
+  const [roomImagePreviews, setRoomImagePreviews] = useState([]);
 
   // Modal Đăng phòng mới / Sửa phòng (#roomModal - .rm-modal)
   const [isRoomModalOpen, setIsRoomModalOpen] = useState(false);
@@ -53,8 +55,14 @@ export const LandlordDashboardPage = () => {
     district: "Hà Đông, Hà Nội",
     description: "",
     amenities: ["Wifi", "Điều hòa", "Nóng lạnh"],
-    image: "/images/room1.jpg",
+    image: "",
   });
+
+  useEffect(() => {
+    const urls = roomImageFiles.map((file) => URL.createObjectURL(file));
+    setRoomImagePreviews(urls);
+    return () => urls.forEach((url) => URL.revokeObjectURL(url));
+  }, [roomImageFiles]);
 
   // Modal Cho thuê phòng (#assignTenantModal - .tm-modal)
   const [isTenantModalOpen, setIsTenantModalOpen] = useState(false);
@@ -71,37 +79,16 @@ export const LandlordDashboardPage = () => {
     notes: "",
   });
 
-  const loadRentalHistory = async (status = historyFilter) => {
+  const loadRentalHistory = useCallback(async (status = "all") => {
     try {
       const query = status && status !== "all" ? `?status=${status}` : "";
-      const res = await apiRequest(`/rooms/rental-history/my${query}`);
-      if (res?.data?.history) {
-        setRentalHistory(res.data.history);
-        return;
-      }
-    } catch {
-      // Fallback from rented rooms
+      const res = await apiRequest(`/rental-history${query}`);
+      setRentalHistory(res?.data?.history || []);
+    } catch (error) {
+      setRentalHistory([]);
+      setNotice(`Không thể tải lịch sử thuê: ${error.message}`);
     }
-    const fallbackHistory = rooms
-      .filter((r) => r.isRented || r.status === "rented" || r.currentTenant)
-      .map((r) => ({
-        _id: r._id || r.id,
-        roomTitle: r.title,
-        roomDistrict: r.district,
-        roomPrice: r.price,
-        tenantName:
-          r.currentTenant?.name || r.tenant?.name || "Người thuê hiện tại",
-        tenantEmail: r.currentTenant?.email || r.tenant?.email || "",
-        tenantPhone: r.currentTenant?.phone || r.tenant?.phone || "",
-        startDate:
-          r.currentTenant?.startDate ||
-          r.tenant?.startDate ||
-          new Date().toISOString(),
-        endDate: r.currentTenant?.endDate || r.tenant?.endDate || null,
-        status: "active",
-      }));
-    setRentalHistory(fallbackHistory);
-  };
+  }, []);
 
   useEffect(() => {
     dispatch(fetchDashboardAggregations());
@@ -110,7 +97,7 @@ export const LandlordDashboardPage = () => {
 
   useEffect(() => {
     loadRentalHistory(historyFilter);
-  }, [rooms, historyFilter]);
+  }, [historyFilter, loadRentalHistory]);
 
   const {
     roomStatusCounts = {},
@@ -126,6 +113,7 @@ export const LandlordDashboardPage = () => {
 
   const openAddRoomModal = () => {
     setEditingRoom(null);
+    setRoomImageFiles([]);
     setRoomForm({
       title: "",
       price: "",
@@ -136,13 +124,14 @@ export const LandlordDashboardPage = () => {
       district: "Hà Đông, Hà Nội",
       description: "",
       amenities: ["Wifi", "Điều hòa", "Nóng lạnh"],
-      image: "/images/room1.jpg",
+      image: "",
     });
     setIsRoomModalOpen(true);
   };
 
   const openEditRoomModal = (room) => {
     setEditingRoom(room);
+    setRoomImageFiles([]);
     setRoomForm({
       title: room.title || "",
       price: room.price || "",
@@ -153,7 +142,7 @@ export const LandlordDashboardPage = () => {
       district: room.district || "Hà Đông, Hà Nội",
       description: room.description || room.desc || "",
       amenities: Array.isArray(room.amenities) ? room.amenities : [],
-      image: room.image || room.img || "/images/room1.jpg",
+      image: room.image || room.img || "",
     });
     setIsRoomModalOpen(true);
   };
@@ -166,6 +155,7 @@ export const LandlordDashboardPage = () => {
         type: roomForm.category,
         desc: roomForm.description,
         img: roomForm.image,
+        imagesFiles: roomImageFiles,
         price: Number(roomForm.price) || 0,
         area: Number(roomForm.area) || 25,
       };
@@ -182,6 +172,7 @@ export const LandlordDashboardPage = () => {
         setNotice("Đã đăng phòng mới thành công!");
       }
       setIsRoomModalOpen(false);
+      setRoomImageFiles([]);
       dispatch(fetchRoomsThunk({ page: 1, limit: 50 }));
       dispatch(fetchDashboardAggregations());
     } catch (err) {
@@ -221,7 +212,7 @@ export const LandlordDashboardPage = () => {
     if (!email) return;
     try {
       const res = await apiRequest(
-        `/users/search?email=${encodeURIComponent(email)}`
+        `/users/search/email?email=${encodeURIComponent(email)}`
       );
       const found = res?.data?.user;
       if (found) {
@@ -248,11 +239,27 @@ export const LandlordDashboardPage = () => {
     if (!tenantRoom) return;
     const roomId = tenantRoom._id || tenantRoom.id;
     try {
-      await apiRequest(`/rooms/${roomId}/rent`, {
+      await apiRequest("/contracts", {
         method: "POST",
-        body: JSON.stringify(tenantForm),
+        body: {
+          roomId,
+          tenantName: tenantForm.name,
+          tenantEmail: tenantForm.email,
+          tenantPhone: tenantForm.phone,
+          identityCard: tenantForm.idCard,
+          startDate: tenantForm.startDate,
+          endDate: tenantForm.endDate || undefined,
+          rentPrice: tenantRoom.price,
+          deposit: tenantRoom.price,
+          electricityPrice: tenantRoom.electricityPrice,
+          waterPrice: tenantRoom.waterPrice,
+          serviceFee: tenantRoom.serviceFee,
+          initialElectricity: tenantRoom.currentElectricity,
+          initialWater: tenantRoom.currentWater,
+          notes: tenantForm.notes,
+        },
       });
-      setNotice(`Đã cho thuê phòng "${tenantRoom.title}" thành công!`);
+      setNotice(`Đã tạo hợp đồng cho phòng "${tenantRoom.title}" thành công!`);
       setIsTenantModalOpen(false);
       dispatch(fetchRoomsThunk({ page: 1, limit: 50 }));
       dispatch(fetchDashboardAggregations());
@@ -776,24 +783,6 @@ export const LandlordDashboardPage = () => {
                           </div>
                         </div>
 
-                        <div className="rm-field">
-                          <label className="rm-label">
-                            Loại phòng <span className="rm-req">*</span>
-                          </label>
-                          <select
-                            className="rm-input rm-select"
-                            value={roomForm.category}
-                            onChange={(e) =>
-                              setRoomForm((p) => ({
-                                ...p,
-                                category: e.target.value,
-                              }))
-                            }
-                          >
-                            <option value="Trọ">Phòng trọ</option>
-                            <option value="Căn hộ">Căn hộ dịch vụ</option>
-                          </select>
-                        </div>
                       </div>
 
                       <div className="rm-row">
@@ -910,18 +899,35 @@ export const LandlordDashboardPage = () => {
                         <i className="bi bi-images"></i> Hình ảnh đại diện
                       </div>
                       <div className="rm-field">
-                        <label className="rm-label">Đường dẫn hình ảnh</label>
+                        <label className="rm-label" htmlFor="dashboard-room-images">Tải ảnh lên (tối đa 8 ảnh, 5 MB mỗi ảnh)</label>
                         <input
-                          type="text"
+                          id="dashboard-room-images"
+                          type="file"
+                          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                          multiple
                           className="rm-input"
-                          value={roomForm.image}
-                          onChange={(e) =>
-                            setRoomForm((p) => ({
-                              ...p,
-                              image: e.target.value,
-                            }))
-                          }
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            if (files.some((file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024)) {
+                              setNotice("Chỉ nhận ảnh JPG, PNG, WebP tối đa 5 MB mỗi ảnh.");
+                              e.target.value = "";
+                              return;
+                            }
+                            const oldCount = editingRoom?.images?.length || (editingRoom?.image ? 1 : 0);
+                            if (oldCount + files.length > 8) {
+                              setNotice("Mỗi phòng được lưu tối đa 8 ảnh.");
+                              e.target.value = "";
+                              return;
+                            }
+                            setNotice("");
+                            setRoomImageFiles(files);
+                            e.target.value = "";
+                          }}
                         />
+                        <div className="d-flex flex-wrap gap-2 mt-2">
+                          {(editingRoom?.images?.length ? editingRoom.images : editingRoom?.image ? [editingRoom.image] : []).map((src, index) => <img key={`saved-${index}`} src={src} alt={`Ảnh phòng đã lưu ${index + 1}`} style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 6 }} />)}
+                          {roomImagePreviews.map((src, index) => <img key={`preview-${index}`} src={src} alt={`Ảnh mới ${index + 1}`} style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 6 }} />)}
+                        </div>
                       </div>
                     </div>
                   </div>

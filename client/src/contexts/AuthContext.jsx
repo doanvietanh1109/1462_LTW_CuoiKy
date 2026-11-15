@@ -10,29 +10,34 @@ export const AuthProvider = ({ children }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
 
-  // Đồng bộ thông tin user từ token khi khởi chạy
+  // A cached user object is display cache only; always verify the stored JWT with the API.
   useEffect(() => {
     let isMounted = true;
     const storedToken = localStorage.getItem("authToken");
-    if (storedToken && !user) {
-      apiRequest("/auth/me")
-        .then((res) => {
-          if (isMounted && res.data?.user) {
-            setUser(res.data.user);
-          }
-        })
-        .catch(() => {
-          if (isMounted) {
-            localStorage.removeItem("authToken");
-            setToken("");
-            setUser(null);
-          }
-        });
-    }
+    const verifyToken = async () => {
+      if (!storedToken) {
+        setUser(null);
+        return;
+      }
+      setAuthLoading(true);
+      try {
+        const res = await apiRequest("/auth/me");
+        if (isMounted && res.data?.user) setUser(res.data.user);
+      } catch {
+        if (isMounted) {
+          localStorage.removeItem("authToken");
+          setToken("");
+          setUser(null);
+        }
+      } finally {
+        if (isMounted) setAuthLoading(false);
+      }
+    };
+    verifyToken();
     return () => {
       isMounted = false;
     };
-  }, [user, setUser]);
+  }, [setUser]);
 
   const login = useCallback(
     async (email, password) => {
@@ -49,45 +54,6 @@ export const AuthProvider = ({ children }) => {
         setIsAuthModalOpen(false);
         return loggedInUser;
       } catch (err) {
-        // Fallback offline với tài khoản demo giống hệt auth.js của frontend gốc
-        const demoUsers = {
-          "Vu69@gmail.com": {
-            _id: "demo-admin",
-            name: "Vũ Admin",
-            email: "Vu69@gmail.com",
-            pass: "admin123",
-            role: "admin",
-          },
-          "landlord@example.com": {
-            _id: "demo-landlord",
-            name: "Minh Landlord",
-            email: "landlord@example.com",
-            pass: "landlord123",
-            role: "landlord",
-          },
-          "user@example.com": {
-            _id: "demo-user1",
-            name: "Nguyễn Văn An",
-            email: "user@example.com",
-            pass: "user123",
-            role: "user",
-          },
-          "sinhvien2@example.com": {
-            _id: "demo-user2",
-            name: "Trần Thị Bình",
-            email: "sinhvien2@example.com",
-            pass: "user123",
-            role: "user",
-          },
-        };
-        const demo = demoUsers[email];
-        if (demo && demo.pass === password) {
-          localStorage.setItem("authToken", "demo-offline-token");
-          setToken("demo-offline-token");
-          setUser(demo);
-          setIsAuthModalOpen(false);
-          return demo;
-        }
         throw err;
       } finally {
         setAuthLoading(false);

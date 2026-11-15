@@ -244,40 +244,19 @@ export const RoomDetailPage = () => {
     const finalPrice =
       discountedPrice !== null ? discountedPrice : Number(room.price) || 0;
 
-    try {
-      await apiRequest("/bookings", {
-        method: "POST",
-        body: JSON.stringify({
-          room: roomId,
-          roomTitle: room.title,
-          price: finalPrice,
-        }),
-      });
-    } catch {
-      const bookings = JSON.parse(
-        localStorage.getItem("BOOKINGS_DATA") || "[]"
-      );
-      bookings.push({
-        id: Date.now(),
-        roomId,
-        roomTitle: room.title,
-        userEmail: user.email,
-        userName: user.name,
-        price: finalPrice,
-        date: new Date().toLocaleDateString("vi-VN"),
-        status: "Chờ duyệt",
-      });
-      localStorage.setItem("BOOKINGS_DATA", JSON.stringify(bookings));
-    }
-
     // Tự động tạo Hợp đồng điện tử & Bảng kê hóa đơn cho người thuê
-    await createContractFromBooking({
-      room,
-      user,
-      durationMonths: contractDuration,
-      finalPrice,
-      couponCode: couponInput.trim().toUpperCase(),
-    });
+    try {
+      await createContractFromBooking({
+        room,
+        user,
+        durationMonths: contractDuration,
+        finalPrice,
+        couponCode: couponInput.trim().toUpperCase(),
+      });
+    } catch (error) {
+      alert(error.message || "Không thể tạo yêu cầu thuê phòng. Vui lòng thử lại.");
+      return;
+    }
 
     closeModal();
     setIsContractPreviewOpen(false);
