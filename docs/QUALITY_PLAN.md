@@ -118,7 +118,7 @@
 - `npm --prefix client run build`: PASS (frontend không đổi trong phần P0).
 - `node --check server/src/controllers/invoice.controller.js`, `git diff --check`: PASS.
 - Không thêm retry, không tắt StrictMode.
-- Branch/commit cuối ghi nhận sau commit local; working tree cần sạch. Chưa push/merge/main.
+- Git cuối: branch `quality/project-review`; P0 code/tests commit `3fdcba1` (`fix: honor direct tenant invoice ownership`) và commit cập nhật tài liệu local trên cùng nhánh. Working tree sạch; chưa push/merge, `main` không đổi.
 
 ### Chưa hoàn thành và cách tiếp tục ở phiên sau
 
