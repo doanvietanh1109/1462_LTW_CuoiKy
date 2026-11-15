@@ -4,6 +4,7 @@
 
 - Nhánh hiện tại: `quality/project-review`, tách từ commit sạch trên `fix/billing-integrity`.
 - Commit billing ban đầu: `d946c20`; race fix: `6c70761`.
+- Commit đồng bộ workflow hiện tại: `c97cac7` trên local branch; chưa push.
 - Không dùng MongoDB thật, không chạy seed; không push/merge. Hợp đồng, sửa chữa và liên hệ được sửa theo phạm vi master task, với tests mock cho quyền và validation.
 - Không đổi stylesheet/theme/layout chính.
 
@@ -77,3 +78,4 @@
 - 2026-11-15: tạo hóa đơn trước khi ghi chỉ số để giảm rủi ro race; commit `6c70761`.
 - 2026-11-15: bộ kiểm thử tăng lên 19/19, frontend production build đạt; route splitting đã đo được mức giảm bundle như trên.
 - 2026-11-15: lịch sử thuê, meter sheet, contract, contact, repair, room upload/category được nối và siết validation; 34/34 mock tests và production build pass. Không dùng DB thật; browser/Cloudinary/HTTP integration vẫn NOT VERIFIED.
+- 2026-11-15: commit local `c97cac7` tạo sau khi test/build pass; chưa push/PR/merge.
