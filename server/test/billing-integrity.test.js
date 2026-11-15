@@ -95,7 +95,7 @@ test("explicit zero service fee is preserved when creating an invoice", async ()
   const room = { _id: idA, ownerId: idA, status: "rented", price: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 77, currentElectricity: 20, currentWater: 20, save: async () => {} };
   let created;
   replace(Invoice, "findOne", async () => null);
-  replace(Invoice, "create", async (data) => { created = data; return { ...data, _id: "new-invoice" }; });
+  replace(Invoice, "create", async (data) => { created = data; return { ...data, _id: "new-invoice", save: async () => {} }; });
   replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve({ ...created, _id: "new-invoice" }); } }));
   replace(Room, "findById", async () => room);
   replace(Contract, "findOne", async () => ({ rentPrice: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 77 }));
@@ -114,13 +114,15 @@ test("duplicate-key race is translated to HTTP 409", () => {
 
 test("invoice creation converts a unique-index race into HTTP 409", async () => {
   const room = { _id: idA, ownerId: idA, status: "rented", price: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0, currentElectricity: 1, currentWater: 1, save: async () => {} };
+  let readingWritten = false;
   replace(Invoice, "findOne", async () => null);
   replace(Invoice, "create", async () => { throw { code: 11000, keyValue: { roomId: idA, month: 11, year: new Date().getFullYear() } }; });
   replace(Room, "findById", async () => room);
   replace(Contract, "findOne", async () => null);
-  replace(MeterReading, "findOneAndUpdate", async () => ({ _id: "reading" }));
+  replace(MeterReading, "findOneAndUpdate", async () => { readingWritten = true; return { _id: "reading" }; });
   const now = new Date();
   const res = await invoke(billing.createInvoice, { user: { _id: idA, role: "landlord" }, body: { roomId: idA, month: now.getMonth() + 1, year: now.getFullYear(), oldElectricity: 1, newElectricity: 1, oldWater: 1, newWater: 1 } });
   assert.equal(res.statusCode, 409);
   assert.match(res.body.message, /đã được tạo bởi yêu cầu khác/);
+  assert.equal(readingWritten, false);
 });

@@ -227,29 +227,6 @@ const createInvoice = async (req, res, next) => {
     const waterCost = waterUsage * waterPrice;
     const totalAmount = roomPrice + electricityCost + waterCost + finalServiceFee;
 
-    const reading = await MeterReading.findOneAndUpdate(
-      { roomId: room._id, month: numMonth, year: numYear },
-      {
-        roomId: room._id,
-        contractId: activeContract?._id || null,
-        landlordId: room.ownerId || req.user._id,
-        month: numMonth,
-        year: numYear,
-        oldElectricity: oldE,
-        newElectricity: newE,
-        oldWater: oldW,
-        newWater: newW,
-      },
-      { upsert: true, new: true }
-    );
-
-    const currentPeriod = new Date();
-    if (numYear === currentPeriod.getFullYear() && numMonth === currentPeriod.getMonth() + 1) {
-      room.currentElectricity = newE;
-      room.currentWater = newW;
-      await room.save();
-    }
-
     const invoiceCode = `INV-${numYear}${String(numMonth).padStart(2, "0")}-${String(
       room._id
     )
@@ -262,7 +239,9 @@ const createInvoice = async (req, res, next) => {
       contractId: activeContract?._id || null,
       tenantId: activeContract?.tenantId || room.tenant?.userId || null,
       landlordId: room.ownerId || req.user._id,
-      meterReadingId: reading._id,
+      // Claim the unique room-period invoice before mutating meter records. Concurrent losers
+      // must not overwrite the winning request's reading.
+      meterReadingId: null,
       month: numMonth,
       year: numYear,
       roomPrice,
@@ -283,6 +262,31 @@ const createInvoice = async (req, res, next) => {
       dueDate: new Date(numYear, numMonth - 1, 10),
       note: note || "",
     });
+
+    const reading = await MeterReading.findOneAndUpdate(
+      { roomId: room._id, month: numMonth, year: numYear },
+      {
+        roomId: room._id,
+        contractId: activeContract?._id || null,
+        landlordId: room.ownerId || req.user._id,
+        month: numMonth,
+        year: numYear,
+        oldElectricity: oldE,
+        newElectricity: newE,
+        oldWater: oldW,
+        newWater: newW,
+      },
+      { upsert: true, new: true }
+    );
+    invoice.meterReadingId = reading._id;
+    await invoice.save();
+
+    const currentPeriod = new Date();
+    if (numYear === currentPeriod.getFullYear() && numMonth === currentPeriod.getMonth() + 1) {
+      room.currentElectricity = newE;
+      room.currentWater = newW;
+      await room.save();
+    }
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")

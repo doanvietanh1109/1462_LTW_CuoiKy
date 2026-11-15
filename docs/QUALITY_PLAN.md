@@ -15,6 +15,7 @@
 - Bảo vệ hóa đơn theo chủ trọ; giới hạn hóa đơn người thuê theo quan hệ phòng/hợp đồng.
 - Không cập nhật bộ đếm hiện tại khi ghi kỳ khác kỳ hiện tại.
 - Chuyển lỗi unique index lúc tạo hóa đơn thành HTTP 409.
+- Tạo hóa đơn đơn lẻ trước khi ghi chỉ số, để request thua unique-index race không ghi đè dữ liệu của request thắng.
 - Thêm test Node.js độc lập với database.
 
 ### Bằng chứng
@@ -43,4 +44,4 @@
 
 ## Lịch sử xác minh
 
-- 2026-11-15: billing unit tests 9/9 đạt; cú pháp backend và `git diff --check` đạt.
+- 2026-11-15: billing unit tests 9/9 đạt; cú pháp backend và `git diff --check` đạt. Race test xác nhận request duplicate không ghi chỉ số.
