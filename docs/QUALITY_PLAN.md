@@ -91,3 +91,39 @@
 - NOT VERIFIED: luồng ghi/đọc notification trên MongoDB thật, browser/console/network, PDF qua trình duyệt. Không có DB test hoặc browser E2E được chạy trong phiên này.
 - Hạn chế còn lại: chưa có notification bell/danh sách riêng trong landlord layout; chưa có công việc nền sinh nhắc hóa đơn đến hạn/quá hạn; lưu notification là best-effort để không làm thất bại nghiệp vụ chính khi bảng notification lỗi. Contract event khi người thuê đăng ký tạo thông báo cho chủ trọ, còn tenant events tới portal người thuê.
 - Commit local tương ứng: `feat: add tenant notifications and invoice print layout` (xem `git log`); chưa push.
+
+## P0 final pass — API 404/403 và request lặp (2026-11-15)
+
+### Công việc hoàn thành
+
+- Git trước khi sửa: `quality/project-review`, HEAD `3e819cd`, working tree sạch. Không checkout/reset/xóa dữ liệu.
+- Truy vết các URL trong frontend và router/controller hiện tại. Không tìm thấy caller `/rooms/rental-history/my`, `/bookings` hoặc `POST /api/bookings` trong `client/src`/`server/src`.
+- Lịch sử thuê hiện được mount tại `GET /api/rental-history` và landlord dashboard gọi `apiRequest('/rental-history…')`. Controller giới hạn query theo landlord/tenant và trả 200 với `history: []` khi không có bản ghi. URL cũ `/api/rooms/rental-history/my` không được mount; nếu một client cũ còn gọi thì 404 là route không tồn tại, khác với danh sách hợp lệ rỗng.
+- Không có route `/api/bookings` hay caller hiện hành. Luồng thuê phòng hiện gọi `POST /api/contracts/self-book`; liên hệ khách dùng module contacts. Do đó 404 từ `/api/bookings` chỉ xảy ra với client cũ/bên ngoài đang gọi endpoint không còn được hỗ trợ; không dựng booking giả hoặc thêm route alias không có contract nghiệp vụ.
+- Sửa quyền xem hóa đơn để chấp nhận liên kết trực tiếp `invoice.tenantId` khi danh sách/chi tiết invoice hợp lệ nhưng liên kết legacy `Room.tenant`/`Contract.tenantEmail` không đầy đủ. List query người thuê cũng lấy hóa đơn theo `tenantId` hoặc các phòng/hợp đồng đã liên kết. Quyền 403 với invoice thuộc người khác vẫn giữ nguyên.
+- Bổ sung regression tests: người thuê đọc invoice theo `tenantId` trực tiếp; danh sách lấy được invoice link trực tiếp; invoice của tenant khác vẫn bị 403.
+- Rà `setInterval`, retry và các effect liên quan: không thấy polling/retry liên tục. Tenant data load theo thay đổi email đăng nhập; rental history theo bộ lọc; dashboard rooms/stats theo mount. `React.StrictMode` vẫn bật, nên môi trường development có thể chạy effect hai lần khi mount, nhưng không có vòng lặp state phụ thuộc khiến gọi vô hạn.
+
+### Bằng chứng, lỗi còn tồn tại và giới hạn
+
+- Không có browser DevTools/Network log trong phiên này, nên không thể xác nhận những request cũ có còn phát sinh tại runtime hay không. Client hiện tại không gọi hai endpoint cũ nêu trên; nếu Console vẫn báo thì cần xác nhận server/client đang chạy đúng workspace/build hiện tại, không chỉ thêm route để che lệch phiên bản.
+- Trước sửa, kiểm tra chi tiết invoice bỏ qua `invoice.tenantId`, trong khi list đã coi `Contract.tenantId` là liên kết hợp lệ. Regression mock trước tiên lộ fixture cũ tự mâu thuẫn (fixture gán tenantId của chính user nhưng mong 403); sửa fixture thành tenant khác/null. Kết quả sau cùng: 39/39 tests PASS, bao gồm 403 của tenant khác và 200 của direct tenant link.
+- `POST /api/bookings` và `/api/rooms/rental-history/my` vẫn trả 404 nếu gọi trực tiếp vì không phải endpoint được ứng dụng hiện tại hỗ trợ. Đây là route cũ/không tồn tại, không phải phản hồi “không có dữ liệu”.
+- API hóa đơn đọc danh sách bình thường không trả 403 chỉ vì người thuê chưa có invoice; query giới hạn về phòng/tài khoản của họ và có thể trả danh sách rỗng. 403 còn đúng với truy cập invoice/phòng của tài khoản khác. Không chạy browser để xác minh request thực tế.
+- Chưa chạy integration/E2E, không kết nối MongoDB, không kiểm tra dữ liệu P.107 hoặc các bản ghi legacy thật. Các unit test controller dùng mock.
+
+### Test và Git sau sửa
+
+- `npm --prefix server test`: 39/39 PASS.
+- `npm --prefix client run build`: PASS (frontend không đổi trong phần P0).
+- `node --check server/src/controllers/invoice.controller.js`, `git diff --check`: PASS.
+- Không thêm retry, không tắt StrictMode.
+- Branch/commit cuối ghi nhận sau commit local; working tree cần sạch. Chưa push/merge/main.
+
+### Chưa hoàn thành và cách tiếp tục ở phiên sau
+
+- Chạy app trong browser với backend và DB test riêng; kiểm tra Network cho lịch sử thuê, invoices, old bookings URL và console. Không dùng MongoDB production.
+- Thêm integration test thực cho các route hợp lệ, 404 route không tồn tại, invoice empty-vs-forbidden và authorization trên MongoDB test.
+- Các luồng còn thiếu integration/E2E: hợp đồng → meter → invoice → payment; tenant xem invoice/repair/notification; guest contact; upload Cloudinary; responsive và print/PDF.
+- UI còn cần nâng theo ảnh tham khảo: tenant dashboard/quick access đầy đủ và responsive; danh sách/chi tiết hóa đơn nâng cấp; notification center cho landlord và tenant; sửa chữa, empty/loading/error states. Không redesign trong P0 pass này.
+- Phiên kế tiếp bắt đầu bằng `git status --short --branch` và `git log -3 --oneline`, đọc mục này, giữ nguyên các commit local; ưu tiên browser/DB-test verification trước khi thêm tính năng.

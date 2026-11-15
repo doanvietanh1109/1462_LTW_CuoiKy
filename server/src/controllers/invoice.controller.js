@@ -13,6 +13,7 @@ const validNonNegativeNumber = (value) => isNumericInput(value) && Number(value)
 const isDuplicateKeyError = (error) => error?.code === 11000;
 
 const isTenantInvoiceOwner = (invoice, user) => Boolean(
+  (invoice.tenantId?._id || invoice.tenantId)?.toString() === user._id.toString() ||
   invoice.roomId?.tenant?.userId?.toString() === user._id.toString() ||
   invoice.contractId?.tenantEmail?.toLowerCase() === user.email?.toLowerCase()
 );
@@ -62,7 +63,12 @@ const getInvoices = async (req, res, next) => {
         }
         query.roomId = roomId;
       } else {
-        query.roomId = { $in: Array.from(allowedRoomIds) };
+        // Current and legacy invoices may be linked directly to the tenant even
+        // when the Room.tenant or Contract association is incomplete.
+        query.$or = [
+          { roomId: { $in: Array.from(allowedRoomIds) } },
+          { tenantId: req.user._id },
+        ];
       }
     } else if (req.user.role === "landlord") {
       query.landlordId = req.user._id;

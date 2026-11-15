@@ -47,10 +47,32 @@ test("landlord A cannot mark landlord B's invoice paid", async () => {
 });
 
 test("tenant cannot read an invoice tied to another room", async () => {
-  const query = { populate() { return this; }, then(resolve) { resolve({ _id: idB, tenantId: { _id: idA }, roomId: { tenant: { userId: idB } }, contractId: null }); } };
+  const query = { populate() { return this; }, then(resolve) { resolve({ _id: idB, tenantId: null, roomId: { tenant: { userId: idB } }, contractId: null }); } };
   replace(Invoice, "findById", () => query);
   const res = await invoke(billing.getInvoiceById, { params: { id: idB }, user: { _id: idA, email: "a@example.test", role: "user" } });
   assert.equal(res.statusCode, 403);
+});
+
+test("tenant may read their invoice through its direct tenantId link", async () => {
+  const invoice = { _id: idB, tenantId: { _id: idA }, roomId: { tenant: null }, contractId: null };
+  const query = { populate() { return this; }, then(resolve) { resolve(invoice); } };
+  replace(Invoice, "findById", () => query);
+  const res = await invoke(billing.getInvoiceById, { params: { id: idB }, user: { _id: idA, email: "a@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.data.invoice, invoice);
+});
+
+test("tenant invoice list includes records linked directly by tenantId", async () => {
+  replace(Contract, "find", () => ({ select: async () => [] }));
+  replace(Room, "find", () => ({ select: async () => [] }));
+  let capturedQuery;
+  const invoiceQuery = { populate() { return this; }, sort() { return this; }, skip() { return this; }, limit: async () => [{ _id: idB }] };
+  replace(Invoice, "find", (query) => { capturedQuery = query; return invoiceQuery; });
+  replace(Invoice, "countDocuments", async () => 1);
+  const res = await invoke(billing.getInvoices, { query: {}, user: { _id: idA, email: "a@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.deepEqual(capturedQuery.$or, [{ roomId: { $in: [] } }, { tenantId: idA }]);
+  assert.deepEqual(res.body.data.invoices, [{ _id: idB }]);
 });
 
 test("tenant payment request waits for landlord confirmation instead of marking paid", async () => {
