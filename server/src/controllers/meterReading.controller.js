@@ -7,6 +7,38 @@ const { sendSuccess, sendError } = require("../utils/response");
 const isNumericInput = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value));
 const isValidMeterValue = (value) => isNumericInput(value) && Number(value) >= 0;
 const isValidPeriod = (month, year) => isNumericInput(month) && Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && isNumericInput(year) && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
+const describeDuplicateKey = (error) => {
+  const keyPattern = error?.keyPattern || {};
+  const keyValue = error?.keyValue || {};
+  const keys = new Set([...Object.keys(keyPattern), ...Object.keys(keyValue)]);
+  const legacyRoomPeriodIndex = keys.has("roomId") && keys.has("month") && keys.has("year") && !keys.has("contractId");
+  if (legacyRoomPeriodIndex) {
+    return {
+      code: "legacy_room_period_index",
+      requiresIndexMigration: true,
+      message: "MongoDB đang từ chối dữ liệu theo index cũ roomId + tháng + năm. Cần quản trị viên kiểm tra và áp dụng migration index theo hợp đồng; không thử lưu lại liên tục.",
+    };
+  }
+  if (keys.has("contractId")) {
+    return {
+      code: "contract_period_conflict",
+      requiresIndexMigration: false,
+      message: "Chỉ số hoặc hóa đơn của hợp đồng này trong kỳ đã được một yêu cầu khác tạo. Hãy tải lại bảng để đối soát trước khi thao tác tiếp.",
+    };
+  }
+  if (keys.has("invoiceCode")) {
+    return {
+      code: "invoice_code_conflict",
+      requiresIndexMigration: false,
+      message: "Mã hóa đơn bị trùng khi phát hành đồng thời. Tải lại bảng và thử lại một lần sau khi đối soát.",
+    };
+  }
+  return {
+    code: "unknown_duplicate_key",
+    requiresIndexMigration: null,
+    message: "MongoDB phát hiện khóa trùng nhưng không xác định được index. Tải lại bảng và gửi mã lỗi cho quản trị viên; không retry liên tục.",
+  };
+};
 
 // Tính giá điện bậc thang (Tính năng nâng cao cộng điểm)
 const calculateTieredElectricity = (usage) => {
@@ -126,6 +158,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
   const savedReadings = [];
   const createdInvoices = [];
   const skippedInvoices = [];
+  let currentWrite = null;
   try {
     const { month, year, rows, issueInvoices = false, useTieredElectricity = false } = req.body;
 
@@ -237,6 +270,12 @@ const saveBatchMeterReadings = async (req, res, next) => {
     for (const row of rows) {
       const room = targetById.get(row.roomId);
       const activeContract = contractByRoom.get(row.roomId);
+      currentWrite = {
+        roomId: room._id.toString(),
+        roomLabel: room.roomNumber || room.title || room._id.toString(),
+        contractId: activeContract?._id?.toString() || null,
+        phase: issueInvoices ? "invoice_insert" : "meter_reading_upsert",
+      };
       const issuedInvoice = invoiceByRoom.get(`${row.roomId}:${activeContract?._id || "legacy"}`);
       if (issuedInvoice) {
         skippedInvoices.push({
@@ -306,6 +345,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
 
       }
 
+      currentWrite.phase = "meter_reading_upsert";
       const reading = await MeterReading.findOneAndUpdate(
         { roomId: room._id, month: numMonth, year: numYear, contractId: activeContract?._id || null },
         {
@@ -323,6 +363,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
       );
       savedReadings.push(reading);
       if (createdInvoice) {
+        currentWrite.phase = "invoice_link_save";
         createdInvoice.meterReadingId = reading._id;
         await createdInvoice.save();
       }
@@ -349,15 +390,18 @@ const saveBatchMeterReadings = async (req, res, next) => {
       201
     );
   } catch (error) {
+    const duplicate = error.code === 11000 ? describeDuplicateKey(error) : null;
     if (savedReadings.length || createdInvoices.length) {
       return sendError(
         res,
-        `Batch bị dừng sau khi đã ghi một phần (${savedReadings.length} chỉ số, ${createdInvoices.length} hóa đơn). Tải lại bảng để đối soát trước khi thử tiếp.`,
-        { partial: true, savedReadingCount: savedReadings.length, createdInvoiceCount: createdInvoices.length },
-        500
+        duplicate
+          ? `Batch bị dừng tại ${currentWrite?.roomLabel || "một phòng"}: ${duplicate.message} Đã ghi ${savedReadings.length} chỉ số và tạo ${createdInvoices.length} hóa đơn; cần tải lại để đối soát, không gửi lại batch ngay.`
+          : `Batch bị dừng sau khi đã ghi một phần (${savedReadings.length} chỉ số, ${createdInvoices.length} hóa đơn). Tải lại bảng để đối soát trước khi thử tiếp.`,
+        { partial: true, ...(duplicate || {}), ...currentWrite, keyPattern: error.keyPattern || null, keyValue: error.keyValue || null, savedReadingCount: savedReadings.length, createdInvoiceCount: createdInvoices.length },
+        duplicate ? 409 : 500
       );
     }
-    if (error.code === 11000) return sendError(res, "Dữ liệu tháng này đã được tạo bởi một yêu cầu khác; hãy tải lại bảng và thử lại", error.keyValue || null, 409);
+    if (duplicate) return sendError(res, `${currentWrite?.roomLabel ? `${currentWrite.roomLabel}: ` : ""}${duplicate.message}`, { ...duplicate, ...currentWrite, keyPattern: error.keyPattern || null, keyValue: error.keyValue || null }, 409);
     return next(error);
   }
 };
@@ -368,4 +412,5 @@ module.exports = {
   calculateTieredElectricity,
   isValidMeterValue,
   isValidPeriod,
+  describeDuplicateKey,
 };

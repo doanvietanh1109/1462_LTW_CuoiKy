@@ -37,6 +37,8 @@ export const saveBatchMetersThunk = createAsyncThunk(
     } catch (error) {
       return rejectWithValue({
         message: error.message,
+        status: error.status,
+        details: error.details,
         rowErrors: error.details?.rowErrors || {},
       });
     }

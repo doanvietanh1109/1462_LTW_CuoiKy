@@ -4,14 +4,15 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const COLLECTIONS = [
-  { name: "invoices", old: "roomId_1_month_1_year", next: "uniq_invoice_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
-  { name: "meterreadings", old: "roomId_1_month_1_year", next: "uniq_meter_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
+  { name: "invoices", oldKeys: { roomId: 1, month: 1, year: 1 }, next: "uniq_invoice_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
+  { name: "meterreadings", oldKeys: { roomId: 1, month: 1, year: 1 }, next: "uniq_meter_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
 ];
 
 async function migrate() {
   if (!process.env.MONGO_URI) throw new Error("MONGO_URI is required; no database was selected.");
   await mongoose.connect(process.env.MONGO_URI, { autoIndex: false });
   try {
+    const plans = [];
     for (const definition of COLLECTIONS) {
       const collection = mongoose.connection.collection(definition.name);
       const duplicates = await collection.aggregate([
@@ -21,10 +22,31 @@ async function migrate() {
       ]).toArray();
       if (duplicates.length) throw new Error(`Duplicate contract-period records exist in ${definition.name}; migration stopped before index changes.`);
       const existing = await collection.indexes();
-      if (!existing.some((index) => index.name === definition.next)) {
-        await collection.createIndex(definition.keys, { unique: true, name: definition.next });
+      const replacement = existing.find((index) => index.name === definition.next);
+      if (replacement && (!replacement.unique || JSON.stringify(replacement.key) !== JSON.stringify(definition.keys))) {
+        throw new Error(`An index named ${definition.next} exists with unexpected keys; migration stopped before changes.`);
       }
-      if (existing.some((index) => index.name === definition.old)) await collection.dropIndex(definition.old);
+      const legacyIndexes = existing.filter((index) => index.unique && JSON.stringify(index.key) === JSON.stringify(definition.oldKeys));
+      plans.push({ ...definition, collection, existing, legacyIndexes });
+    }
+
+    // Preflight both collections and create both new keys before removing either old key.
+    for (const plan of plans) {
+      if (!plan.existing.some((index) => index.name === plan.next)) {
+        await plan.collection.createIndex(plan.keys, { unique: true, name: plan.next });
+      }
+    }
+    for (const plan of plans) {
+      for (const legacy of plan.legacyIndexes) await plan.collection.dropIndex(legacy.name);
+    }
+    for (const plan of plans) {
+      const indexes = await plan.collection.indexes();
+      if (!indexes.some((index) => index.name === plan.next && index.unique && JSON.stringify(index.key) === JSON.stringify(plan.keys))) {
+        throw new Error(`Replacement unique index was not confirmed for ${plan.name}.`);
+      }
+      if (indexes.some((index) => index.unique && JSON.stringify(index.key) === JSON.stringify(plan.oldKeys))) {
+        throw new Error(`Legacy index remains on ${plan.name}; inspect the index state and rerun after resolving it.`);
+      }
     }
   } finally {
     await mongoose.disconnect();

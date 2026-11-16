@@ -41,6 +41,37 @@ test("invoice and meter uniqueness scope a monthly record to its contract", () =
   }
 });
 
+test("batch duplicate-key classifier distinguishes legacy indexes from contract-period races", () => {
+  const legacy = meter.describeDuplicateKey({ keyPattern: { roomId: 1, month: 1, year: 1 } });
+  assert.equal(legacy.code, "legacy_room_period_index");
+  assert.equal(legacy.requiresIndexMigration, true);
+  const contractScoped = meter.describeDuplicateKey({ keyPattern: { roomId: 1, month: 1, year: 1, contractId: 1 } });
+  assert.equal(contractScoped.code, "contract_period_conflict");
+  assert.equal(contractScoped.requiresIndexMigration, false);
+  const invoiceCode = meter.describeDuplicateKey({ keyPattern: { invoiceCode: 1 } });
+  assert.equal(invoiceCode.code, "invoice_code_conflict");
+});
+
+test("batch issue reports the legacy room-period index instead of a generic race", async () => {
+  const room = { _id: idA, ownerId: idA, status: "rented", price: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  const contract = { _id: idB, roomId: idA, tenantId: idB, rentPrice: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  replace(Room, "find", async () => [room]);
+  replace(Contract, "find", async () => [contract]);
+  replace(Invoice, "find", async () => []);
+  replace(Invoice, "create", async () => { throw { code: 11000, keyPattern: { roomId: 1, month: 1, year: 1 }, keyValue: { roomId: idA, month: 11, year: 2026 } }; });
+  let readingWrite = false;
+  replace(MeterReading, "findOneAndUpdate", async () => { readingWrite = true; });
+  const res = await invoke(meter.saveBatchMeterReadings, {
+    user: { _id: idA, role: "landlord" },
+    body: { month: 11, year: 2026, issueInvoices: true, useTieredElectricity: false, rows: [row(idA)] },
+  });
+  assert.equal(res.statusCode, 409);
+  assert.equal(res.body.errors.code, "legacy_room_period_index");
+  assert.equal(res.body.errors.requiresIndexMigration, true);
+  assert.equal(res.body.errors.contractId, idB);
+  assert.equal(readingWrite, false);
+});
+
 test("landlord A cannot batch-write landlord B's room", async () => {
   replace(Room, "find", async () => []);
   replace(Contract, "find", async () => []);
@@ -299,4 +330,33 @@ test("invoice creation converts a unique-index race into HTTP 409", async () => 
   assert.equal(res.statusCode, 409);
   assert.match(res.body.message, /đã được tạo bởi yêu cầu khác/);
   assert.equal(readingWritten, false);
+});
+
+test("new contract receives a new unpaid invoice in a room-period already billed to an old contract", async () => {
+  const oldContractId = "cccccccccccccccccccccccc";
+  const newTenantId = "dddddddddddddddddddddddd";
+  const room = { _id: idA, ownerId: idA, status: "rented", price: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0, currentElectricity: 12, currentWater: 3, save: async () => {} };
+  const activeContract = { _id: idB, roomId: idA, tenantId: newTenantId, rentPrice: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  const oldInvoice = { _id: "eeeeeeeeeeeeeeeeeeeeeeee", roomId: idA, contractId: oldContractId, tenantId: oldContractId, status: "paid", invoiceCode: "OLD-PAID" };
+  const created = { _id: "ffffffffffffffffffffffff", tenantId: newTenantId, contractId: idB, status: "unpaid", serviceFee: 0, totalAmount: 1006, save: async () => {} };
+  let duplicateQuery;
+  replace(Invoice, "findOne", async (query) => { duplicateQuery = query; return query.contractId === oldContractId ? oldInvoice : null; });
+  replace(Invoice, "create", async (data) => { Object.assign(created, data); return created; });
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(created); } }));
+  replace(Room, "findById", async () => room);
+  replace(Contract, "findOne", async () => activeContract);
+  replace(MeterReading, "findOneAndUpdate", async () => ({ _id: "reading-id" }));
+  replace(Notification, "create", async () => ({}));
+  const now = new Date();
+  const res = await invoke(billing.createInvoice, {
+    user: { _id: idA, role: "landlord" },
+    body: { roomId: idA, month: now.getMonth() + 1, year: now.getFullYear(), oldElectricity: 10, newElectricity: 12, oldWater: 2, newWater: 3, serviceFee: 0 },
+  });
+  assert.equal(res.statusCode, 201);
+  assert.equal(duplicateQuery.contractId, idB);
+  assert.equal(created.contractId, idB);
+  assert.equal(created.tenantId, newTenantId);
+  assert.equal(created.status, "unpaid");
+  assert.equal(oldInvoice.status, "paid");
+  assert.equal(oldInvoice.tenantId, oldContractId);
 });
