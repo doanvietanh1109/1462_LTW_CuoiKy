@@ -295,4 +295,4 @@
 ### Git state
 
 - Branch: `feat/invoice-vietqr` (continued without switching branches); no push or merge.
-- Commit status: pending final local verification and review.
+- Local commit: `243afd4` (`fix: isolate turnover billing and improve payment entry`). Working tree clean after commit; no push or merge.
