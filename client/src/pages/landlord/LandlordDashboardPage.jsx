@@ -11,6 +11,7 @@ import {
   createRoomThunk,
   updateRoomThunk,
   deleteRoomThunk,
+  fetchMotelBlocks,
 } from "../../store/slices/roomSlice";
 import { apiRequest, formatVND } from "../../api/apiClient";
 import { RevenueChart } from "../../components/landlord/RevenueChart";
@@ -35,8 +36,9 @@ const AMENITIES_OPTIONS = [
 export const LandlordDashboardPage = () => {
   const dispatch = useDispatch();
   const { dashboardStats } = useSelector((state) => state.invoices);
-  const { items: rooms } = useSelector((state) => state.rooms);
+  const { items: rooms, blocks } = useSelector((state) => state.rooms);
   const [notice, setNotice] = useState("");
+  const [roomSaving, setRoomSaving] = useState(false);
   const [historyFilter, setHistoryFilter] = useState("all");
   const [rentalHistory, setRentalHistory] = useState([]);
   const [roomImageFiles, setRoomImageFiles] = useState([]);
@@ -50,12 +52,16 @@ export const LandlordDashboardPage = () => {
     price: "",
     area: "25",
     roomNumber: "",
+    blockId: "",
     category: "Trọ",
     status: "available",
     district: "Hà Đông, Hà Nội",
     description: "",
     amenities: ["Wifi", "Điều hòa", "Nóng lạnh"],
     image: "",
+    electricityPrice: "3500",
+    waterPrice: "15000",
+    serviceFee: "100000",
   });
 
   useEffect(() => {
@@ -93,6 +99,7 @@ export const LandlordDashboardPage = () => {
   useEffect(() => {
     dispatch(fetchDashboardAggregations());
     dispatch(fetchRoomsThunk({ page: 1, limit: 50 }));
+    dispatch(fetchMotelBlocks());
   }, [dispatch]);
 
   useEffect(() => {
@@ -119,12 +126,16 @@ export const LandlordDashboardPage = () => {
       price: "",
       area: "25",
       roomNumber: `P.${100 + rooms.length + 1}`,
+      blockId: "",
       category: "Trọ",
       status: "available",
       district: "Hà Đông, Hà Nội",
       description: "",
       amenities: ["Wifi", "Điều hòa", "Nóng lạnh"],
       image: "",
+      electricityPrice: "3500",
+      waterPrice: "15000",
+      serviceFee: "100000",
     });
     setIsRoomModalOpen(true);
   };
@@ -137,18 +148,23 @@ export const LandlordDashboardPage = () => {
       price: room.price || "",
       area: room.area || "25",
       roomNumber: room.roomNumber || "",
+      blockId: room.blockId?._id || room.blockId || "",
       category: room.category || room.type || "Trọ",
       status: room.status || "available",
       district: room.district || "Hà Đông, Hà Nội",
       description: room.description || room.desc || "",
       amenities: Array.isArray(room.amenities) ? room.amenities : [],
       image: room.image || room.img || "",
+      electricityPrice: room.electricityPrice ?? 3500,
+      waterPrice: room.waterPrice ?? 15000,
+      serviceFee: room.serviceFee ?? 100000,
     });
     setIsRoomModalOpen(true);
   };
 
   const handleSaveRoom = async (e) => {
     e.preventDefault();
+    setRoomSaving(true);
     try {
       const payload = {
         ...roomForm,
@@ -158,6 +174,10 @@ export const LandlordDashboardPage = () => {
         imagesFiles: roomImageFiles,
         price: Number(roomForm.price) || 0,
         area: Number(roomForm.area) || 25,
+        electricityPrice: Number(roomForm.electricityPrice),
+        waterPrice: Number(roomForm.waterPrice),
+        serviceFee: Number(roomForm.serviceFee),
+        blockId: roomForm.blockId || null,
       };
       if (editingRoom) {
         await dispatch(
@@ -177,6 +197,8 @@ export const LandlordDashboardPage = () => {
       dispatch(fetchDashboardAggregations());
     } catch (err) {
       setNotice(`Lỗi lưu phòng: ${err}`);
+    } finally {
+      setRoomSaving(false);
     }
   };
 
@@ -723,6 +745,7 @@ export const LandlordDashboardPage = () => {
                   type="button"
                   className="rm-close"
                   onClick={() => setIsRoomModalOpen(false)}
+                  disabled={roomSaving}
                 >
                   <i className="bi bi-x-lg"></i>
                 </button>
@@ -755,6 +778,20 @@ export const LandlordDashboardPage = () => {
                           }
                           required
                         />
+                      </div>
+
+                      <div className="rm-row">
+                        <div className="rm-field">
+                          <label className="rm-label">Mã / Số phòng</label>
+                          <input className="rm-input" value={roomForm.roomNumber} onChange={(e) => setRoomForm((p) => ({ ...p, roomNumber: e.target.value }))} />
+                        </div>
+                        <div className="rm-field">
+                          <label className="rm-label">Dãy trọ</label>
+                          <select className="rm-input rm-select" value={roomForm.blockId} onChange={(e) => setRoomForm((p) => ({ ...p, blockId: e.target.value }))}>
+                            <option value="">Chưa phân dãy</option>
+                            {blocks.map((block) => <option key={block._id} value={block._id}>{block.name}</option>)}
+                          </select>
+                        </div>
                       </div>
 
                       <div className="rm-row">
@@ -805,6 +842,7 @@ export const LandlordDashboardPage = () => {
                           <select
                             className="rm-input rm-select"
                             value={roomForm.status}
+                            disabled={editingRoom?.status === "rented"}
                             onChange={(e) =>
                               setRoomForm((p) => ({
                                 ...p,
@@ -817,6 +855,16 @@ export const LandlordDashboardPage = () => {
                             <option value="maintenance">Đang sửa chữa</option>
                           </select>
                         </div>
+                      </div>
+
+                      <div className="rm-section-label mt-3"><i className="bi bi-cash-coin"></i> Chi phí dịch vụ</div>
+                      <div className="rm-cost-grid">
+                        {[["electricityPrice", "Điện (đ/kWh)"], ["waterPrice", "Nước (đ/m³)"], ["serviceFee", "Phí dịch vụ (đ)" ]].map(([field, label]) => (
+                          <div className="rm-field" key={field}>
+                            <label className="rm-label" htmlFor={`room-${field}`}>{label}</label>
+                            <input id={`room-${field}`} type="number" min="0" step="1" className="rm-input" value={roomForm[field]} onChange={(e) => setRoomForm((p) => ({ ...p, [field]: e.target.value }))} />
+                          </div>
+                        ))}
                       </div>
                     </div>
 
@@ -938,11 +986,12 @@ export const LandlordDashboardPage = () => {
                     type="button"
                     className="rm-btn rm-btn-cancel"
                     onClick={() => setIsRoomModalOpen(false)}
+                    disabled={roomSaving}
                   >
                     <i className="bi bi-x-lg"></i> Hủy bỏ
                   </button>
-                  <button type="submit" className="rm-btn rm-btn-save">
-                    <i className="bi bi-check-lg"></i> Lưu phòng
+                  <button type="submit" className="rm-btn rm-btn-save" disabled={roomSaving}>
+                    {roomSaving ? <><span className="spinner-border spinner-border-sm"/> Đang lưu…</> : <><i className="bi bi-check-lg"></i> Lưu phòng</>}
                   </button>
                 </div>
               </form>

@@ -8,6 +8,19 @@ const { Order } = require("../models/order.model");
 const { sendSuccess, sendError } = require("../utils/response");
 const { createNotification } = require("../utils/createNotification");
 
+const updateRoomAfterContractTermination = async (contract) => {
+  const successor = await Contract.findOne({ roomId: contract.roomId, status: "active" });
+  let room = successor
+    ? await Room.findById(contract.roomId)
+    : await Room.findOneAndUpdate(
+        { _id: contract.roomId, status: "rented", "tenant.userId": contract.tenantId },
+        { $set: { status: "available" }, $unset: { tenant: "" } },
+        { new: true }
+      );
+  if (!room) room = await Room.findById(contract.roomId);
+  return { successor, room };
+};
+
 const canAccessContract = (user, contract) => {
   if (user.role === "admin") return true;
   if (user.role === "landlord") return contract.landlordId?.toString() === user._id.toString();
@@ -529,13 +542,8 @@ const terminateContract = async (req, res, next) => {
     await createNotification({ userId: endRecipient, type: "contract", title: "Hợp đồng đã kết thúc",
       message: `Hợp đồng ${contract.contractCode} đã được kết thúc.`, resourceType: "contract", resourceId: contract._id });
 
-    // Tự động đổi trạng thái phòng về "available" (Trống)
-    const room = await Room.findById(contract.roomId);
-    if (room) {
-      room.status = "available";
-      room.tenant = undefined;
-      await room.save();
-    }
+    // Không để kết thúc hợp đồng cũ ghi đè phòng đã được gán cho hợp đồng kế tiếp.
+    const { successor, room } = await updateRoomAfterContractTermination(contract);
 
     // Đồng bộ RentalHistory
     await RentalHistory.findOneAndUpdate(
@@ -545,7 +553,9 @@ const terminateContract = async (req, res, next) => {
 
     return sendSuccess(
       res,
-      "Kết thúc hợp đồng thành công! Phòng đã tự động chuyển về trạng thái Trống.",
+      successor
+        ? "Kết thúc hợp đồng thành công. Phòng hiện vẫn được sử dụng theo hợp đồng đang hiệu lực."
+        : "Kết thúc hợp đồng thành công! Phòng đã tự động chuyển về trạng thái Trống.",
       { contract, room }
     );
   } catch (error) {
@@ -563,4 +573,5 @@ module.exports = {
   terminateContract,
   canAccessContract,
   buildContractQuery,
+  updateRoomAfterContractTermination,
 };

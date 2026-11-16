@@ -15,7 +15,7 @@ const isDuplicateKeyError = (error) => error?.code === 11000;
 
 const isTenantInvoiceOwner = (invoice, user) => Boolean(
   (invoice.tenantId?._id || invoice.tenantId)?.toString() === user._id.toString() ||
-  invoice.roomId?.tenant?.userId?.toString() === user._id.toString() ||
+  invoice.contractId?.tenantId?.toString() === user._id.toString() ||
   invoice.contractId?.tenantEmail?.toLowerCase() === user.email?.toLowerCase()
 );
 const hasPendingPaymentRequest = (invoice) => invoice.paymentConfirmationStatus === "pending" || invoice.status === "pending_confirmation";
@@ -41,7 +41,8 @@ const getInvoices = async (req, res, next) => {
     if (req.user.role === "user") {
       const myContracts = await Contract.find({
         $or: [{ tenantId: req.user._id }, { tenantEmail: req.user.email }],
-      }).select("roomId");
+      }).select("_id roomId");
+      const myContractIds = myContracts.map((contract) => contract._id);
       const myRooms = await Room.find({
         $or: [
           { "tenant.userId": req.user._id },
@@ -64,12 +65,12 @@ const getInvoices = async (req, res, next) => {
           );
         }
         query.roomId = roomId;
+        query.$and = [{ $or: [{ tenantId: req.user._id }, { contractId: { $in: myContractIds } }] }];
       } else {
-        // Current and legacy invoices may be linked directly to the tenant even
-        // when the Room.tenant or Contract association is incomplete.
+        // Room.tenant is mutable current state and cannot authorize historical invoices.
         query.$or = [
-          { roomId: { $in: Array.from(allowedRoomIds) } },
           { tenantId: req.user._id },
+          { contractId: { $in: myContractIds } },
         ];
       }
     } else if (req.user.role === "landlord") {
@@ -222,21 +223,6 @@ const createInvoice = async (req, res, next) => {
       );
     }
 
-    // Kiểm tra mỗi phòng chỉ có 1 hóa đơn cho mỗi tháng
-    const duplicate = await Invoice.findOne({
-      roomId,
-      month: numMonth,
-      year: numYear,
-    });
-    if (duplicate) {
-      return sendError(
-        res,
-        `Mỗi phòng chỉ có 1 hóa đơn cho mỗi tháng! Phòng này đã có hóa đơn tháng ${numMonth}/${numYear} (${duplicate.invoiceCode}).`,
-        { existingInvoiceId: duplicate._id },
-        400
-      );
-    }
-
     const room = await Room.findById(roomId);
     if (!room) {
       return sendError(res, "Không tìm thấy phòng", null, 404);
@@ -250,6 +236,16 @@ const createInvoice = async (req, res, next) => {
       roomId: room._id,
       status: "active",
     });
+
+    const duplicate = await Invoice.findOne({ roomId, month: numMonth, year: numYear, contractId: activeContract?._id || null });
+    if (duplicate) {
+      return sendError(
+        res,
+        `Hợp đồng này đã có hóa đơn tháng ${numMonth}/${numYear} (${duplicate.invoiceCode}).`,
+        { existingInvoiceId: duplicate._id },
+        400
+      );
+    }
 
     const roomPrice = activeContract?.rentPrice ?? room.price ?? 0;
     const electricityPrice =
@@ -310,7 +306,7 @@ const createInvoice = async (req, res, next) => {
     });
 
     const reading = await MeterReading.findOneAndUpdate(
-      { roomId: room._id, month: numMonth, year: numYear },
+      { roomId: room._id, month: numMonth, year: numYear, contractId: activeContract?._id || null },
       {
         roomId: room._id,
         contractId: activeContract?._id || null,

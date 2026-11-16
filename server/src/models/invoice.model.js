@@ -64,8 +64,11 @@ const invoiceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Mỗi phòng chỉ có 1 hóa đơn cho mỗi tháng
-invoiceSchema.index({ roomId: 1, month: 1, year: 1 }, { unique: true });
+// Một hợp đồng có tối đa một hóa đơn cho mỗi kỳ; phòng có thể đổi người thuê giữa tháng.
+invoiceSchema.index(
+  { roomId: 1, month: 1, year: 1, contractId: 1 },
+  { unique: true, name: "uniq_invoice_room_period_contract" }
+);
 
 const Invoice = mongoose.model("Invoice", invoiceSchema);
 

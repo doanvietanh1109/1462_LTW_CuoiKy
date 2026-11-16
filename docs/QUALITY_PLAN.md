@@ -253,3 +253,46 @@
 
 - Work continues on `feat/invoice-vietqr`, based at `1987476`; previous local commits `fd31e34` and `dce4eca` remain preserved.
 - Follow-up code/docs are committed locally after the verification above; no push/merge; `main` unchanged. See `git log -3 --oneline` for the exact commit.
+
+## Tenant turnover, payment entry point, and room editor — 2026-11-16
+
+### Findings and implementation
+
+- **Turnover root cause:** invoice and meter-reading schemas enforced unique `(roomId, month, year)`, and single invoice issuance rejected any invoice for the room-period. That prevents separately linked contracts in one calendar month. Tenant invoice listing also used the mutable current room assignment as an authorization path, and invoice detail access fell back to `Room.tenant`; a new tenant could therefore see an unlinked historical invoice. The portal also rendered “0 ₫ (Đã đóng đủ)” when the invoice list was empty.
+- Invoice and meter reading uniqueness is now scoped to `(roomId, month, year, contractId)`. Single/batch issuance and the meter sheet query by the active contract. Room-period readings and invoices for a prior contract are not reused for the current tenant. Tenant history access now requires direct invoice `tenantId` or its linked contract, never the room’s current tenant. Unlinked legacy invoices are withheld until a verified owner/contract association is available.
+- Ending a contract now only releases a room if it is still marked rented by that contract’s tenant. If a successor contract exists, the room’s current assignment is left intact. Regression tests cover both safeguards.
+- Added a guarded, manual index migration script at `server/src/scripts/migrate-contract-period-indexes.js`. It checks duplicate room/period/contract records before creating the replacement compound indexes, then drops the old room-period-only indexes. **The migration was not run.** Deploying the new same-month behavior requires a verified backup and applying this migration to the intended database; until then, the old database indexes still block same-room/same-month invoices.
+- The existing landlord-specific bank configuration, VietQR Quick Link API, pending confirmation state, owner-only approval/rejection, notification flow, and cash method were already implemented on this branch and were retained. Added an entry point from invoice detail into the tenant payment modal, clarified empty-invoice balance text, relabeled the list action “Thanh toán ngay”, made the modal fit narrow viewports, and added QR retry. The supplied personal QR remains outside the repository because it is not assigned to a landlord profile; no beneficiary data was hardcoded.
+- The room editor remains the existing RIPT modal. Scoped CSS now sets a responsive 940px desktop maximum and a constrained mobile width/scroll body; the form includes room number, landlord-owned block choice, electricity/water/service rates, and keeps the status control disabled for a rented room. Save loading/error state and existing image previews/upload flow are retained.
+
+### Files changed in this implementation
+
+- `server/src/controllers/contract.controller.js`
+- `server/src/controllers/invoice.controller.js`
+- `server/src/controllers/meterReading.controller.js`
+- `server/src/models/invoice.model.js`
+- `server/src/models/meterReading.model.js`
+- `server/src/scripts/migrate-contract-period-indexes.js`
+- `server/test/billing-integrity.test.js`
+- `server/test/contract-access.test.js`
+- `client/src/pages/TenantPortalPage.jsx`
+- `client/src/pages/InvoiceDetailPage.jsx`
+- `client/src/pages/landlord/LandlordDashboardPage.jsx`
+- `client/public/css/landlord.css`
+- `docs/QUALITY_PLAN.md`
+
+### Verification and limits
+
+- Backend `npm test`: **49/49 PASS** (mock/unit; no database connection). Includes ownership, cross-tenant historical invoice denial, duplicate key handling, contract-scoped index declarations, payment confirmation state, and zero service fee.
+- `node --check` for edited backend controllers and migration: **PASS**.
+- Frontend `npm run build`: **PASS**.
+- `git diff --check`: **PASS**.
+- MongoDB integration/index migration and actual tenant/landlord session flows: **NOT VERIFIED**. Browser visual checks at 390/768/1024/1440px, bank-app QR scan, external QR image fetch, and end-to-end payment: **NOT VERIFIED**.
+- Final utility/rent settlement for an outgoing tenant is not added. The current contract termination flow has no handover meter-entry inputs or approved partial-month rent rule, so computing a final bill without an actual handover reading would risk charging the wrong tenant or duplicating consumption. Separate contract-linked readings now allow same-month records after index migration; the landlord still needs to enter each contract’s verified meter boundaries before issuing its invoice.
+- Existing batch processing can report partial completion if a later database write fails; no MongoDB transaction was added because standalone deployment/replica-set capability was not verified. Reconcile the returned partial counts before retrying a failed batch.
+- No production database or actual financial record was read/changed. No `.env` values or QR image were added to repository assets.
+
+### Git state
+
+- Branch: `feat/invoice-vietqr` (continued without switching branches); no push or merge.
+- Commit status: pending final local verification and review.

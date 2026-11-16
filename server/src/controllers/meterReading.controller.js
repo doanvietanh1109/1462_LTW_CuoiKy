@@ -47,6 +47,7 @@ const getMeterSheet = async (req, res, next) => {
 
     const previousPeriodQuery = {
       $or: [{ year: { $lt: year } }, { year, month: { $lt: month } }],
+      contractId: { $in: activeContracts.map((contract) => contract._id) },
       ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
     };
     const [rentedRooms, readings, previousReadings, invoices] = await Promise.all([
@@ -56,21 +57,22 @@ const getMeterSheet = async (req, res, next) => {
       Invoice.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
     ]);
 
-    const readingMap = new Map(readings.map((r) => [r.roomId.toString(), r]));
+    const contractMap = new Map(activeContracts.map((c) => [c.roomId.toString(), c]));
+    const readingMap = new Map(readings.map((r) => [`${r.roomId}:${r.contractId || "legacy"}`, r]));
     const previousReadingMap = new Map();
     for (const reading of previousReadings) {
-      const key = reading.roomId.toString();
+      const key = `${reading.roomId}:${reading.contractId}`;
       if (!previousReadingMap.has(key)) previousReadingMap.set(key, reading);
     }
-    const invoiceMap = new Map(invoices.map((inv) => [inv.roomId.toString(), inv]));
-    const contractMap = new Map(activeContracts.map((c) => [c.roomId.toString(), c]));
+    const invoiceMap = new Map(invoices.map((inv) => [`${inv.roomId}:${inv.contractId || "legacy"}`, inv]));
 
     const rows = rentedRooms.map((room) => {
       const key = room._id.toString();
-      const existingReading = readingMap.get(key);
-      const previousReading = previousReadingMap.get(key);
-      const existingInvoice = invoiceMap.get(key);
       const activeContract = contractMap.get(key);
+      const periodKey = `${key}:${activeContract?._id || "legacy"}`;
+      const existingReading = readingMap.get(periodKey);
+      const previousReading = activeContract ? previousReadingMap.get(`${key}:${activeContract._id}`) : null;
+      const existingInvoice = invoiceMap.get(periodKey);
       const previousElectricity = previousReading?.newElectricity ?? activeContract?.initialElectricity ?? room.currentElectricity ?? 0;
       const previousWater = previousReading?.newWater ?? activeContract?.initialWater ?? room.currentWater ?? 0;
       const oldElectricity = existingReading
@@ -207,9 +209,11 @@ const saveBatchMeterReadings = async (req, res, next) => {
       roomId: { $in: roomIds }, month: numMonth, year: numYear,
       ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
     });
-    const invoiceByRoom = new Map(existingInvoices.map((invoice) => [invoice.roomId.toString(), invoice]));
+    const activeContractByRoom = new Map(activeContracts.map((contract) => [contract.roomId.toString(), contract]));
+    const invoiceByRoom = new Map(existingInvoices.map((invoice) => [`${invoice.roomId}:${invoice.contractId || "legacy"}`, invoice]));
     for (const row of rows) {
-      const issued = invoiceByRoom.get(row.roomId);
+      const activeContract = activeContractByRoom.get(row.roomId);
+      const issued = invoiceByRoom.get(`${row.roomId}:${activeContract?._id || "legacy"}`);
       if (issued && (
         Number(row.oldElectricity) !== issued.oldElectricity || Number(row.newElectricity) !== issued.newElectricity ||
         Number(row.oldWater) !== issued.oldWater || Number(row.newWater) !== issued.newWater
@@ -232,8 +236,8 @@ const saveBatchMeterReadings = async (req, res, next) => {
 
     for (const row of rows) {
       const room = targetById.get(row.roomId);
-
-      const issuedInvoice = invoiceByRoom.get(row.roomId);
+      const activeContract = contractByRoom.get(row.roomId);
+      const issuedInvoice = invoiceByRoom.get(`${row.roomId}:${activeContract?._id || "legacy"}`);
       if (issuedInvoice) {
         skippedInvoices.push({
           roomId: room._id,
@@ -242,8 +246,6 @@ const saveBatchMeterReadings = async (req, res, next) => {
         });
         continue;
       }
-
-      const activeContract = contractByRoom.get(row.roomId);
 
       const oldElectricity = Number(row.oldElectricity);
       const newElectricity = Number(row.newElectricity);
@@ -305,7 +307,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
       }
 
       const reading = await MeterReading.findOneAndUpdate(
-        { roomId: room._id, month: numMonth, year: numYear },
+        { roomId: room._id, month: numMonth, year: numYear, contractId: activeContract?._id || null },
         {
           roomId: room._id,
           contractId: activeContract?._id || null,

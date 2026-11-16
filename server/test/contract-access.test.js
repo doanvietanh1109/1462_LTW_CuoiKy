@@ -1,10 +1,18 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { Contract } = require("../src/models/contract.model");
-const { canAccessContract, buildContractQuery } = require("../src/controllers/contract.controller");
+const { Room } = require("../src/models/room.model");
+const { canAccessContract, buildContractQuery, updateRoomAfterContractTermination } = require("../src/controllers/contract.controller");
 
 const idA = "aaaaaaaaaaaaaaaaaaaaaaaa";
 const idB = "bbbbbbbbbbbbbbbbbbbbbbbb";
+const originalRoomMethods = {};
+const originalContractFindOne = Contract.findOne;
+test.afterEach(() => {
+  for (const [key, value] of Object.entries(originalRoomMethods)) Room[key] = value;
+  for (const key of Object.keys(originalRoomMethods)) delete originalRoomMethods[key];
+  Contract.findOne = originalContractFindOne;
+});
 
 test("contract access is limited to its landlord or tenant", () => {
   const contract = { landlordId: idA, tenantId: idB, tenantEmail: "tenant@example.test" };
@@ -36,4 +44,31 @@ test("contract schema declares a unique partial index for active room occupancy"
     keys.roomId === 1 && options.unique && options.partialFilterExpression?.status === "active"
   );
   assert.ok(index, "expected a unique partial index on active contracts by room");
+});
+
+test("ending an old contract preserves a room assigned to its successor", async () => {
+  const room = { _id: idA, status: "rented", tenant: { userId: idB } };
+  originalRoomMethods.findById = Room.findById;
+  originalRoomMethods.findOneAndUpdate = Room.findOneAndUpdate;
+  const successor = { _id: idB };
+  Contract.findOne = async () => successor;
+  Room.findById = async () => room;
+  let released = false;
+  Room.findOneAndUpdate = async () => { released = true; return null; };
+  const result = await updateRoomAfterContractTermination({ roomId: idA, tenantId: idA });
+  assert.equal(result.successor, successor);
+  assert.equal(result.room, room);
+  assert.equal(released, false);
+});
+
+test("ending a contract only releases a room still assigned to that tenant", async () => {
+  originalRoomMethods.findOneAndUpdate = Room.findOneAndUpdate;
+  Contract.findOne = async () => null;
+  let filter;
+  const releasedRoom = { _id: idA, status: "available" };
+  Room.findOneAndUpdate = async (query) => { filter = query; return releasedRoom; };
+  const result = await updateRoomAfterContractTermination({ roomId: idA, tenantId: idB });
+  assert.equal(result.room, releasedRoom);
+  assert.equal(filter.status, "rented");
+  assert.equal(filter["tenant.userId"], idB);
 });

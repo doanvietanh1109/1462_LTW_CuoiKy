@@ -32,6 +32,15 @@ const row = (roomId = idA, overrides = {}) => ({ roomId, oldElectricity: 10, new
 
 test.afterEach(restore);
 
+test("invoice and meter uniqueness scope a monthly record to its contract", () => {
+  for (const [schema, name] of [[Invoice.schema, "uniq_invoice_room_period_contract"], [MeterReading.schema, "uniq_meter_room_period_contract"]]) {
+    const index = schema.indexes().find(([, options]) => options.name === name);
+    assert.ok(index);
+    assert.deepEqual(index[0], { roomId: 1, month: 1, year: 1, contractId: 1 });
+    assert.equal(index[1].unique, true);
+  }
+});
+
 test("landlord A cannot batch-write landlord B's room", async () => {
   replace(Room, "find", async () => []);
   replace(Contract, "find", async () => []);
@@ -62,6 +71,14 @@ test("tenant may read their invoice through its direct tenantId link", async () 
   const res = await invoke(billing.getInvoiceById, { params: { id: idB }, user: { _id: idA, email: "a@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.data.invoice, invoice);
+});
+
+test("current room tenant does not gain access to an unlinked historical invoice", async () => {
+  const invoice = { _id: idB, tenantId: null, roomId: { tenant: { userId: idA } }, contractId: null };
+  const query = { populate() { return this; }, then(resolve) { resolve(invoice); } };
+  replace(Invoice, "findById", () => query);
+  const res = await invoke(billing.getInvoiceById, { params: { id: idB }, user: { _id: idA, email: "new@example.test", role: "user" } });
+  assert.equal(res.statusCode, 403);
 });
 
 test("tenant payment instructions use the owned invoice amount and configured landlord account", async () => {
@@ -100,7 +117,7 @@ test("tenant invoice list includes records linked directly by tenantId", async (
   replace(Invoice, "countDocuments", async () => 1);
   const res = await invoke(billing.getInvoices, { query: {}, user: { _id: idA, email: "a@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(capturedQuery.$or, [{ roomId: { $in: [] } }, { tenantId: idA }]);
+  assert.deepEqual(capturedQuery.$or, [{ tenantId: idA }, { contractId: { $in: [] } }]);
   assert.deepEqual(res.body.data.invoices, [{ _id: idB }]);
 });
 
