@@ -40,7 +40,14 @@ export const LandlordInvoicesPage = () => {
   };
 
   const reviewPayment = async (id, approve) => {
-    try { await apiRequest(`/invoices/${id}/${approve ? "pay" : "payment-reject"}`, { method: "PATCH" }); setNotice(approve ? "Đã xác nhận đã nhận tiền." : "Đã từ chối yêu cầu; hóa đơn trở lại trạng thái chưa thanh toán."); loadInvoices(); }
+    const body = {};
+    if (approve && !window.confirm("Tôi xác nhận đã kiểm tra tài khoản ngân hàng và thực sự nhận được số tiền thanh toán cho hóa đơn này.")) return;
+    if (!approve) {
+      const reason = window.prompt("Lý do từ chối yêu cầu (không bắt buộc):", "");
+      if (reason === null) return;
+      body.reason = reason;
+    }
+    try { await apiRequest(`/invoices/${id}/${approve ? "pay" : "payment-reject"}`, { method: "PATCH", ...(Object.keys(body).length ? { body } : {}) }); setNotice(approve ? "Đã xác nhận đã nhận tiền." : "Đã từ chối yêu cầu; hóa đơn trở lại trạng thái chưa thanh toán."); loadInvoices(); }
     catch (error) { setNotice(error.message || "Không xử lý được yêu cầu."); }
   };
 
@@ -62,8 +69,9 @@ export const LandlordInvoicesPage = () => {
   }, [statusFilter, monthFilter, yearFilter, search, page]);
 
   const handleMarkPaid = async (id) => {
-    await dispatch(markInvoicePaidThunk(id)).unwrap();
-    setNotice("Đã đánh dấu thu tiền hóa đơn!");
+    if (!window.confirm("Tôi xác nhận đã thực sự nhận đủ khoản tiền mặt cho hóa đơn này.")) return;
+    try { await dispatch(markInvoicePaidThunk(id)).unwrap(); setNotice("Đã ghi nhận thanh toán tiền mặt."); }
+    catch (error) { setNotice(`Không ghi nhận được thanh toán: ${error}`); }
   };
 
   const handleRemind = async (id) => {
@@ -225,10 +233,12 @@ export const LandlordInvoicesPage = () => {
                       </td>
                       <td>
                         <StatusBadge type="invoice" status={inv.status} />
+                        {(inv.paymentConfirmationStatus === "pending" || inv.status === "pending_confirmation") && <small className="d-block text-warning-emphasis mt-1">Chờ xác nhận · {inv.paymentSubmittedAt ? new Date(inv.paymentSubmittedAt).toLocaleString("vi-VN") : ""}</small>}
+                        {inv.paymentConfirmationStatus === "rejected" && <small className="d-block text-danger mt-1">Yêu cầu bị từ chối</small>}
                       </td>
                       <td className="text-end">
                         <div className="btn-group btn-group-sm">
-                          {inv.status !== "paid" && (
+                          {inv.status !== "paid" && inv.paymentConfirmationStatus !== "pending" && inv.status !== "pending_confirmation" && (
                             <>
                               <button
                                 type="button"
@@ -248,7 +258,7 @@ export const LandlordInvoicesPage = () => {
                               </button>
                             </>
                           )}
-                          {inv.status === "pending_confirmation" && <><button type="button" className="btn btn-success" onClick={() => reviewPayment(inv._id, true)} title="Xác nhận tiền đã thực nhận"><i className="bi bi-check2-circle"/> Xác nhận</button><button type="button" className="btn btn-outline-danger" onClick={() => reviewPayment(inv._id, false)} title="Từ chối yêu cầu"><i className="bi bi-x-circle"/> Từ chối</button></>}
+                          {(inv.paymentConfirmationStatus === "pending" || inv.status === "pending_confirmation") && <><button type="button" className="btn btn-success" onClick={() => reviewPayment(inv._id, true)} title="Xác nhận tiền đã thực nhận"><i className="bi bi-check2-circle"/> Xác nhận</button><button type="button" className="btn btn-outline-danger" onClick={() => reviewPayment(inv._id, false)} title="Từ chối yêu cầu"><i className="bi bi-x-circle"/> Từ chối</button></>}
                           <Link
                             to={`/invoices/${inv._id}`}
                             className="btn btn-outline-primary"

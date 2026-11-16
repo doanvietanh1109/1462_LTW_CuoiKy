@@ -68,7 +68,7 @@ export const markInvoicePaidThunk = createAsyncThunk(
   "invoices/markPaid",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await apiRequest(`/invoices/${id}/pay`, { method: "PATCH" });
+      const res = await apiRequest(`/invoices/${id}/pay`, { method: "PATCH", body: { paymentMethod: "cash" } });
       return res.data.invoice;
     } catch (error) {
       return rejectWithValue(error.message);

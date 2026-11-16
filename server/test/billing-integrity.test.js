@@ -105,16 +105,62 @@ test("tenant invoice list includes records linked directly by tenantId", async (
 });
 
 test("tenant payment request waits for landlord confirmation instead of marking paid", async () => {
-  const invoice = { _id: idA, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA } }, contractId: null };
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "none", totalAmount: 1000, invoiceCode: "INV-1", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA }, roomNumber: "901" }, contractId: null };
   replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
-  replace(Invoice, "findOneAndUpdate", async (filter, update) => { assert.equal(filter.status, "unpaid"); invoice.status = update.$set.status; invoice.paymentSubmittedAt = update.$set.paymentSubmittedAt; return invoice; });
-  replace(Notification, "create", async () => ({}));
-  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(Invoice, "findOneAndUpdate", async (filter, update) => { assert.equal(filter.status, "unpaid"); assert.equal(update.$set.paymentConfirmationStatus, "pending"); invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; invoice.paymentSubmittedAt = update.$set.paymentSubmittedAt; invoice.paymentConfirmationRequests = update.$push.paymentConfirmationRequests; return invoice; });
+  const recipients = [];
+  replace(Notification, "create", async (data) => { recipients.push(data.userId); return {}; });
   const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);
-  assert.equal(invoice.status, "pending_confirmation");
+  assert.equal(invoice.status, "unpaid");
+  assert.equal(invoice.paymentConfirmationStatus, "pending");
   assert.ok(invoice.paymentSubmittedAt instanceof Date);
   assert.equal(invoice.paidAt, undefined);
+  assert.deepEqual(recipients, [idB, idA]);
+});
+
+test("landlord confirmation marks paid once and sends the tenant a success notification", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "pending", paymentSubmittedAt: new Date(), paymentConfirmationRequests: [{ tenantId: idB, status: "pending" }], landlordId: { toString: () => idA }, tenantId: idB, invoiceCode: "INV-2", totalAmount: 3147500 };
+  let reads = 0; let writes = 0; const notices = [];
+  replace(Invoice, "findById", () => ++reads === 1 ? Promise.resolve(invoice) : ({ populate() { return this; }, then(resolve) { resolve({ ...invoice }); } }));
+  replace(Invoice, "findOneAndUpdate", async (filter, update) => { writes += 1; assert.equal(filter.paymentConfirmationStatus, "pending"); invoice.status = update.$set.status; invoice.paymentMethod = update.$set.paymentMethod; invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; return invoice; });
+  replace(Notification, "create", async (notice) => { notices.push(notice); return {}; });
+  const req = { params: { id: idA }, body: {}, user: { _id: idA, role: "landlord" } };
+  const first = await invoke(billing.markInvoicePaid, req);
+  const second = await invoke(billing.markInvoicePaid, req);
+  assert.equal(first.statusCode, 200);
+  assert.equal(second.statusCode, 409);
+  assert.equal(writes, 1);
+  assert.equal(invoice.status, "paid");
+  assert.equal(invoice.paymentMethod, "bank_transfer");
+  assert.equal(notices.length, 1);
+  assert.equal(notices[0].userId, idB);
+  assert.equal(notices[0].title, "Thanh toán đã được xác nhận");
+});
+
+test("landlord rejection keeps invoice unpaid, records reason, and notifies only its tenant", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "pending", paymentSubmittedAt: new Date(), paymentConfirmationRequests: [{ tenantId: idB, status: "pending" }], landlordId: { toString: () => idA }, tenantId: idB, invoiceCode: "INV-3" };
+  replace(Invoice, "findById", async () => invoice);
+  replace(Invoice, "findOneAndUpdate", async (_filter, update) => { invoice.status = update.$set.status; invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; invoice.paymentRejectionReason = update.$set.paymentRejectionReason; return invoice; });
+  let notice;
+  replace(Notification, "create", async (data) => { notice = data; return {}; });
+  const res = await invoke(billing.rejectPaymentRequest, { params: { id: idA }, body: { reason: "Chưa thấy giao dịch vào tài khoản" }, user: { _id: idA, role: "landlord" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(invoice.status, "unpaid");
+  assert.equal(invoice.paymentConfirmationStatus, "rejected");
+  assert.equal(invoice.paymentRejectionReason, "Chưa thấy giao dịch vào tài khoản");
+  assert.equal(notice.userId, idB);
+  assert.match(notice.message, /Chưa thấy giao dịch/);
+});
+
+test("tenant cannot submit a duplicate request while one is pending", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "pending", tenantId: idA, roomId: { tenant: { userId: idA } }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  let wrote = false;
+  replace(Invoice, "findOneAndUpdate", async () => { wrote = true; });
+  const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 409);
+  assert.equal(wrote, false);
 });
 
 test("batch rejects decreasing readings, invalid numbers, periods, and repeated room IDs", async () => {

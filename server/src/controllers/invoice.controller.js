@@ -18,6 +18,7 @@ const isTenantInvoiceOwner = (invoice, user) => Boolean(
   invoice.roomId?.tenant?.userId?.toString() === user._id.toString() ||
   invoice.contractId?.tenantEmail?.toLowerCase() === user.email?.toLowerCase()
 );
+const hasPendingPaymentRequest = (invoice) => invoice.paymentConfirmationStatus === "pending" || invoice.status === "pending_confirmation";
 
 // Lấy danh sách hóa đơn (có kiểm tra quyền 403 cho người thuê)
 const getInvoices = async (req, res, next) => {
@@ -80,7 +81,13 @@ const getInvoices = async (req, res, next) => {
 
     if (month) query.month = Number(month);
     if (year) query.year = Number(year);
-    if (status && status !== "all") query.status = status;
+    if (status === "paid") query.status = "paid";
+    if (status === "unpaid") Object.assign(query, { status: "unpaid", paymentConfirmationStatus: { $ne: "pending" } });
+    if (status === "pending_confirmation") {
+      const existingOr = query.$or;
+      delete query.$or;
+      query.$and = [...(query.$and || []), ...(existingOr ? [{ $or: existingOr }] : []), { $or: [{ status: "pending_confirmation" }, { status: "unpaid", paymentConfirmationStatus: "pending" }] }];
+    }
 
     if (!Number.isInteger(Number(page)) || !Number.isInteger(Number(limit)) || Number(page) < 1 || Number(limit) < 1) return sendError(res, "Phân trang không hợp lệ", null, 400);
     const pageNum = Number(page);
@@ -148,7 +155,7 @@ const getPaymentInstructions = async (req, res, next) => {
     const invoice = await Invoice.findById(req.params.id).populate("roomId", "title roomNumber tenant").populate("contractId", "tenantEmail");
     if (!invoice) return sendError(res, "Không tìm thấy hóa đơn", null, 404);
     if (!isTenantInvoiceOwner(invoice, req.user)) return sendError(res, "Bạn không có quyền xem hướng dẫn thanh toán hóa đơn này", null, 403);
-    if (invoice.status !== "unpaid") return sendError(res, "Hóa đơn không ở trạng thái chờ thanh toán", null, 409);
+    if (invoice.status !== "unpaid" || hasPendingPaymentRequest(invoice)) return sendError(res, "Hóa đơn không ở trạng thái chờ thanh toán", null, 409);
     const landlord = await User.findById(invoice.landlordId).select("+bankAccount");
     if (!landlord?.bankAccount) return sendSuccess(res, "Chủ trọ chưa cấu hình tài khoản nhận tiền", { configured: false });
     const amount = Math.round(Number(invoice.totalAmount));
@@ -331,8 +338,8 @@ const createInvoice = async (req, res, next) => {
       .populate("roomId", "title roomNumber price area district")
       .populate("tenantId", "name email phone");
 
-    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Hóa đơn mới",
-      message: `Hóa đơn ${invoice.invoiceCode} kỳ ${numMonth}/${numYear} đã được phát hành.`, resourceType: "invoice", resourceId: invoice._id });
+    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Hóa đơn mới cần thanh toán",
+      message: `Bạn có hóa đơn tiền phòng tháng ${numMonth}/${numYear} (${invoice.invoiceCode}) với số tiền ${Number(invoice.totalAmount).toLocaleString("vi-VN")} đồng. Vui lòng kiểm tra và thanh toán trước hạn.`, resourceType: "invoice", resourceId: invoice._id });
 
     return sendSuccess(res, "Phát hành hóa đơn thành công", { invoice: populated }, 201);
   } catch (error) {
@@ -353,13 +360,19 @@ const markInvoicePaid = async (req, res, next) => {
       return sendError(res, "Bạn không có quyền thay đổi hóa đơn này", null, 403);
     }
     if (invoice.status === "paid") return sendError(res, "Hóa đơn đã được xác nhận đã thu tiền", null, 409);
-
-    const paid = await Invoice.findOneAndUpdate({ _id: invoice._id, status: { $in: ["unpaid", "pending_confirmation"] } }, { $set: { status: "paid", paidAt: new Date(), paymentConfirmedBy: req.user._id }, $push: { paymentConfirmationRequests: { tenantId: invoice.tenantId, submittedAt: invoice.paymentSubmittedAt || new Date(), status: "confirmed", reviewedAt: new Date(), reviewedBy: req.user._id } } }, { new: true });
+    const pending = hasPendingPaymentRequest(invoice);
+    const paymentMethod = pending ? "bank_transfer" : "cash";
+    if (req.body?.paymentMethod && req.body.paymentMethod !== paymentMethod) return sendError(res, "Phương thức thanh toán không phù hợp với trạng thái hóa đơn", null, 400);
+    if (req.user.role === "landlord" && !pending && req.body?.paymentMethod !== "cash") return sendError(res, "Hãy xác nhận rõ khoản tiền mặt đã thực nhận", null, 400);
+    const paymentStateFilter = pending
+      ? (invoice.status === "pending_confirmation" ? {} : { paymentConfirmationStatus: "pending" })
+      : { paymentConfirmationStatus: { $ne: "pending" } };
+    const paid = await Invoice.findOneAndUpdate({ _id: invoice._id, status: pending ? { $in: ["unpaid", "pending_confirmation"] } : "unpaid", ...paymentStateFilter }, { $set: { status: "paid", paymentConfirmationStatus: pending ? "confirmed" : "none", paymentMethod, paymentRejectionReason: "", paidAt: new Date(), paymentConfirmedBy: req.user._id }, ...(pending ? { $push: { paymentConfirmationRequests: { tenantId: invoice.tenantId, submittedAt: invoice.paymentSubmittedAt || new Date(), status: "confirmed", reviewedAt: new Date(), reviewedBy: req.user._id } } } : {}) }, { new: true });
     if (!paid) return sendError(res, "Hóa đơn đã được xử lý", null, 409);
     invoice.status = paid.status;
     const paymentRequest = [...(invoice.paymentConfirmationRequests || [])].reverse().find((request) => request.status === "pending");
-    await createNotification({ userId: paymentRequest?.tenantId || invoice.tenantId, type: "invoice", title: "Đã xác nhận thanh toán",
-      message: `Chủ trọ đã xác nhận thanh toán hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
+    await createNotification({ userId: paymentRequest?.tenantId || invoice.tenantId, type: "invoice", title: pending ? "Thanh toán đã được xác nhận" : "Đã ghi nhận thanh toán tiền mặt",
+      message: pending ? `Chủ trọ đã xác nhận nhận đủ ${Number(invoice.totalAmount).toLocaleString("vi-VN")} đồng cho hóa đơn ${invoice.invoiceCode}. Hóa đơn đã được ghi nhận thanh toán.` : `Chủ trọ đã xác nhận nhận tiền mặt cho hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")
@@ -399,11 +412,15 @@ const tenantPayInvoice = async (req, res, next) => {
       }
     }
 
-    if (invoice.status !== "unpaid") return sendError(res, "Hóa đơn không ở trạng thái có thể gửi xác nhận thanh toán", null, 409);
+    if (invoice.status !== "unpaid" || hasPendingPaymentRequest(invoice)) return sendError(res, "Hóa đơn không ở trạng thái có thể gửi xác nhận thanh toán", null, 409);
     const submittedAt = new Date();
-    const updated = await Invoice.findOneAndUpdate({ _id: invoice._id, status: "unpaid" }, { $set: { status: "pending_confirmation", paymentSubmittedAt: submittedAt }, $push: { paymentConfirmationRequests: { tenantId: req.user._id, submittedAt, status: "pending" } } }, { new: true });
+    const updated = await Invoice.findOneAndUpdate({ _id: invoice._id, status: "unpaid", paymentConfirmationStatus: { $ne: "pending" } }, { $set: { paymentConfirmationStatus: "pending", paymentSubmittedAt: submittedAt, paymentRejectionReason: "" }, $push: { paymentConfirmationRequests: { tenantId: req.user._id, submittedAt, status: "pending" } } }, { new: true });
     if (!updated) return sendError(res, "Đã có yêu cầu thanh toán hoặc hóa đơn đã được xử lý", null, 409);
-    await createNotification({ userId: invoice.landlordId, type: "invoice", title: "Yêu cầu xác nhận thanh toán", message: `Người thuê gửi yêu cầu xác nhận cho hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
+    const roomLabel = invoice.roomId?.roomNumber || invoice.roomId?.title || "phòng thuê";
+    await Promise.all([
+      createNotification({ userId: invoice.landlordId, type: "invoice", title: "Có yêu cầu xác nhận chuyển khoản", message: `Người thuê phòng ${roomLabel} đã báo chuyển khoản ${Number(invoice.totalAmount).toLocaleString("vi-VN")} đồng cho hóa đơn ${invoice.invoiceCode}. Vui lòng kiểm tra tài khoản ngân hàng trước khi xác nhận.`, resourceType: "invoice", resourceId: invoice._id }),
+      createNotification({ userId: req.user._id, type: "invoice", title: "Đã gửi yêu cầu xác nhận thanh toán", message: `Yêu cầu xác nhận chuyển khoản cho hóa đơn ${invoice.invoiceCode} đã được gửi. Vui lòng chờ chủ trọ kiểm tra.`, resourceType: "invoice", resourceId: invoice._id }),
+    ]);
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")
@@ -419,10 +436,16 @@ const tenantPayInvoice = async (req, res, next) => {
 
 const rejectPaymentRequest = async (req, res, next) => {
   try {
-    const invoice = await Invoice.findOneAndUpdate({ _id: req.params.id, landlordId: req.user._id, status: "pending_confirmation" }, { $set: { status: "unpaid", paymentSubmittedAt: null }, $push: { paymentConfirmationRequests: { tenantId: null, submittedAt: new Date(), status: "rejected", reviewedAt: new Date(), reviewedBy: req.user._id } } }, { new: true });
+    const reason = typeof req.body?.reason === "string" ? req.body.reason.trim().slice(0, 300) : "";
+    const current = await Invoice.findById(req.params.id);
+    if (!current) return sendError(res, "Không tìm thấy hóa đơn", null, 404);
+    if (req.user.role === "landlord" && current.landlordId.toString() !== req.user._id.toString()) return sendError(res, "Bạn không có quyền thay đổi hóa đơn này", null, 403);
+    if (!hasPendingPaymentRequest(current)) return sendError(res, "Hóa đơn không có yêu cầu chờ xác nhận", null, 409);
+    const currentRequest = [...(current.paymentConfirmationRequests || [])].reverse().find((request) => request.status === "pending");
+    const legacyPending = current.status === "pending_confirmation";
+    const invoice = await Invoice.findOneAndUpdate({ _id: req.params.id, landlordId: req.user._id, status: legacyPending ? "pending_confirmation" : "unpaid", ...(legacyPending ? {} : { paymentConfirmationStatus: "pending" }) }, { $set: { status: "unpaid", paymentConfirmationStatus: "rejected", paymentSubmittedAt: null, paymentRejectionReason: reason }, $push: { paymentConfirmationRequests: { tenantId: currentRequest?.tenantId || current.tenantId, submittedAt: current.paymentSubmittedAt || new Date(), status: "rejected", reviewedAt: new Date(), reviewedBy: req.user._id, note: reason } } }, { new: true });
     if (!invoice) return sendError(res, "Không tìm thấy yêu cầu chờ xác nhận thuộc quyền của bạn", null, 404);
-    const pendingRequest = [...(invoice.paymentConfirmationRequests || [])].reverse().find((request) => request.status === "pending");
-    await createNotification({ userId: pendingRequest?.tenantId || invoice.tenantId, type: "invoice", title: "Yêu cầu thanh toán bị từ chối", message: `Chủ trọ chưa xác nhận khoản thanh toán hóa đơn ${invoice.invoiceCode}. Vui lòng liên hệ chủ trọ.`, resourceType: "invoice", resourceId: invoice._id });
+    await createNotification({ userId: currentRequest?.tenantId || invoice.tenantId, type: "invoice", title: "Yêu cầu xác nhận thanh toán chưa được chấp thuận", message: `Chủ trọ chưa thể xác nhận khoản chuyển tiền của hóa đơn ${invoice.invoiceCode}.${reason ? ` Lý do: ${reason}` : " Vui lòng kiểm tra giao dịch hoặc liên hệ chủ trọ."}`, resourceType: "invoice", resourceId: invoice._id });
     return sendSuccess(res, "Đã từ chối yêu cầu xác nhận", { invoice });
   } catch (error) { return next(error); }
 };

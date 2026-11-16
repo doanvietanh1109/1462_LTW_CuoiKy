@@ -86,6 +86,8 @@ export const InvoiceDetailPage = () => {
 
         <section className="invoice-footer" aria-label="Ghi chú và trạng thái">
           <div><strong>Trạng thái:</strong> <StatusBadge type="invoice" status={invoice.status}/>{invoice.paidAt && <span className="ms-2 text-muted">Xác nhận ngày {formatDateVN(invoice.paidAt)}</span>}</div>
+          {invoice.paymentConfirmationStatus === "pending" && <div className="alert alert-warning mt-3 mb-0"><i className="bi bi-hourglass-split me-2"/>Đã gửi yêu cầu xác nhận chuyển khoản. Hóa đơn vẫn chưa được thanh toán cho đến khi chủ trọ xác nhận.</div>}
+          {invoice.paymentConfirmationStatus === "rejected" && <div className="alert alert-danger mt-3 mb-0">Yêu cầu xác nhận chưa được chấp thuận.{invoice.paymentRejectionReason ? ` Lý do: ${invoice.paymentRejectionReason}` : " Vui lòng kiểm tra giao dịch hoặc liên hệ chủ trọ."}</div>}
           {invoice.note && <p><strong>Ghi chú:</strong> {invoice.note}</p>}
           <p>Số liệu và khoản thu được lấy từ hóa đơn đã phát hành trên hệ thống.</p>
         </section>

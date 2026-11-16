@@ -207,3 +207,49 @@
 - Branch: `feat/invoice-vietqr`.
 - Base commit: `1987476`; feature commit: `fd31e34` (`feat: add per-landlord VietQR invoice payments`).
 - Working tree sạch sau commit tài liệu này; chưa push/merge; `main` không đổi.
+
+## Payment workflow follow-up — 2026-11-16
+
+### QR attachment review
+
+- Inspected the provided QR image locally; it was not uploaded to any external decoder and is not copied into the repository or public assets.
+- Visual inspection suggests it is a recipient QR without a prefilled amount (the bank screen offers “add amount”), but this is an inference only. A local QR decoder was unavailable; Apple Vision command-line decoding could not complete because the sandbox denied its module-cache write. The payload and beneficiary data are therefore **NOT VERIFIED**.
+- The attachment is not assigned to any landlord account: the user did not identify a specific landlord profile, and the account-to-landlord mapping cannot be verified from repository data. Dynamic VietQR remains generated from each landlord’s own saved bank settings. No bank information from the image was hardcoded.
+
+### Workflow updates
+
+- Invoice financial state remains `unpaid` while a separate `paymentConfirmationStatus` is `pending` or `rejected`; old `pending_confirmation` invoice records remain readable and actionable. No existing historical records are mass-updated.
+- Tenant submit atomically records the request and sends distinct invoice notifications to that tenant and the invoice landlord. The landlord message includes room, amount and invoice reference, and does not claim funds were received.
+- Landlord confirm prompts for actual receipt, atomically marks the invoice `paid`, records confirmer/time/method and sends a success notification to the tenant. Repeated confirmation returns conflict and cannot count revenue twice. Cash uses a distinct payment method and notification.
+- Landlord rejection can include a reason, records it, leaves invoice unpaid, and notifies the tenant. A rejected request can be submitted again; another request while one is pending is rejected. Tenant list and invoice detail display pending/rejected request status separately from paid/unpaid.
+- New invoice notification includes billing period, amount and a reminder to pay before due date.
+
+### Verification
+
+- Added controller tests for request/confirmation/rejection notification recipients, status separation, duplicate request rejection, idempotent confirmation, reason persistence, correct invoice amount in the QR URL, missing bank configuration, and forbidden invoice access.
+- Backend: `npm --prefix server test` — 45/45 PASS (mock/unit; no MongoDB).
+- Frontend: `npm --prefix client run build` — PASS.
+- Syntax checks for invoice/user controllers, invoice model and invoice routes — PASS. `git diff --check` — PASS.
+- Browser UI, persistent database state, actual external QR image load/scan, and bank/mobile-app preview remain **NOT VERIFIED**. No actual transfer or real MongoDB was used.
+
+### Files changed in this follow-up
+
+- `server/src/models/invoice.model.js`
+- `server/src/controllers/invoice.controller.js`
+- `server/test/billing-integrity.test.js`
+- `client/src/pages/TenantPortalPage.jsx`
+- `client/src/pages/InvoiceDetailPage.jsx`
+- `client/src/pages/landlord/LandlordInvoicesPage.jsx`
+- `client/src/store/slices/invoiceSlice.js`
+- `docs/QUALITY_PLAN.md`
+
+### Continue
+
+- Configure each landlord’s own bank profile and use a dedicated MongoDB test database with fixtures for two landlords and two tenants.
+- Browser-check tenant payment, notifications/read state after refresh, landlord rejection/confirmation prompts, cash receipt wording and responsive modal. Confirm QR recipient, amount and reference using a banking app preview only; do not submit a transfer.
+- Keep the attached QR out of the repository unless a specific landlord profile is identified and the payload is locally verified.
+
+### Git
+
+- Work continues on `feat/invoice-vietqr`, based at `1987476`; previous local commits `fd31e34` and `dce4eca` remain preserved.
+- Follow-up code/docs are committed locally after the verification above; no push/merge; `main` unchanged. See `git log -3 --oneline` for the exact commit.
