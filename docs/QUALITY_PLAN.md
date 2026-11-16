@@ -205,5 +205,5 @@
 ### Git cuối lượt
 
 - Branch: `feat/invoice-vietqr`.
-- Base commit: `1987476`; commit feature sẽ được ghi sau khi hoàn tất kiểm thử cuối.
-- Working tree: đang có thay đổi chưa commit; chưa push/merge; `main` không đổi.
+- Base commit: `1987476`; feature commit: `fd31e34` (`feat: add per-landlord VietQR invoice payments`).
+- Working tree sạch sau commit tài liệu này; chưa push/merge; `main` không đổi.
