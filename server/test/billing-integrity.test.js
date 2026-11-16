@@ -8,6 +8,7 @@ const { Notification } = require("../src/models/notification.model");
 const { User } = require("../src/models/user.model");
 const meter = require("../src/controllers/meterReading.controller");
 const billing = require("../src/controllers/invoice.controller");
+const { COLLECTIONS: indexMigrationCollections, matchesLegacyUniqueIndex } = require("../src/scripts/migrate-contract-period-indexes");
 
 const originals = new Map();
 const replace = (object, key, value) => {
@@ -50,6 +51,19 @@ test("batch duplicate-key classifier distinguishes legacy indexes from contract-
   assert.equal(contractScoped.requiresIndexMigration, false);
   const invoiceCode = meter.describeDuplicateKey({ keyPattern: { invoiceCode: 1 } });
   assert.equal(invoiceCode.code, "invoice_code_conflict");
+  const billingMonthNull = meter.describeDuplicateKey({ keyPattern: { roomId: 1, billingMonth: 1 }, keyValue: { roomId: idA, billingMonth: null } });
+  assert.equal(billingMonthNull.code, "legacy_billing_month_index");
+  assert.equal(billingMonthNull.requiresIndexMigration, true);
+});
+
+test("invoice schema uses month/year and migration recognizes the legacy billingMonth unique index", () => {
+  assert.equal(Invoice.schema.path("billingMonth"), undefined);
+  assert.ok(Invoice.schema.path("month"));
+  assert.ok(Invoice.schema.path("year"));
+  const invoicePlan = indexMigrationCollections.find((item) => item.name === "invoices");
+  assert.ok(invoicePlan.legacyUniqueKeyPatterns.some((keys) => keys.billingMonth === 1));
+  assert.equal(matchesLegacyUniqueIndex({ unique: true, key: { roomId: 1, billingMonth: 1 } }, invoicePlan.legacyUniqueKeyPatterns), true);
+  assert.equal(matchesLegacyUniqueIndex({ unique: false, key: { roomId: 1, billingMonth: 1 } }, invoicePlan.legacyUniqueKeyPatterns), false);
 });
 
 test("batch issue reports the legacy room-period index instead of a generic race", async () => {
@@ -356,6 +370,7 @@ test("new contract receives a new unpaid invoice in a room-period already billed
   assert.equal(duplicateQuery.contractId, idB);
   assert.equal(created.contractId, idB);
   assert.equal(created.tenantId, newTenantId);
+  assert.equal(created.billingMonth, undefined);
   assert.equal(created.status, "unpaid");
   assert.equal(oldInvoice.status, "paid");
   assert.equal(oldInvoice.tenantId, oldContractId);

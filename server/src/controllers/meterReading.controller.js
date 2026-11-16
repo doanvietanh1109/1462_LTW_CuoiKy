@@ -19,6 +19,14 @@ const describeDuplicateKey = (error) => {
       message: "MongoDB đang từ chối dữ liệu theo index cũ roomId + tháng + năm. Cần quản trị viên kiểm tra và áp dụng migration index theo hợp đồng; không thử lưu lại liên tục.",
     };
   }
+  const legacyBillingMonthIndex = keys.has("roomId") && keys.has("billingMonth") && !keys.has("contractId");
+  if (legacyBillingMonthIndex) {
+    return {
+      code: "legacy_billing_month_index",
+      requiresIndexMigration: true,
+      message: "MongoDB đang dùng unique index legacy roomId + billingMonth, nhưng ứng dụng lưu kỳ bằng month + year. Index này coi billingMonth bị thiếu là null và có thể chặn invoice tiếp theo của cùng phòng. Cần quản trị viên kiểm tra và áp dụng migration index; không thử lưu lại liên tục.",
+    };
+  }
   if (keys.has("contractId")) {
     return {
       code: "contract_period_conflict",

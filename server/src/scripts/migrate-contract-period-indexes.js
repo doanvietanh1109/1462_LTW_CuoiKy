@@ -4,9 +4,11 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const COLLECTIONS = [
-  { name: "invoices", oldKeys: { roomId: 1, month: 1, year: 1 }, next: "uniq_invoice_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
-  { name: "meterreadings", oldKeys: { roomId: 1, month: 1, year: 1 }, next: "uniq_meter_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
+  { name: "invoices", legacyUniqueKeyPatterns: [{ roomId: 1, month: 1, year: 1 }, { roomId: 1, billingMonth: 1 }], next: "uniq_invoice_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
+  { name: "meterreadings", legacyUniqueKeyPatterns: [{ roomId: 1, month: 1, year: 1 }], next: "uniq_meter_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
 ];
+
+const matchesLegacyUniqueIndex = (index, patterns) => index.unique && patterns.some((keys) => JSON.stringify(index.key) === JSON.stringify(keys));
 
 async function migrate() {
   if (!process.env.MONGO_URI) throw new Error("MONGO_URI is required; no database was selected.");
@@ -26,7 +28,7 @@ async function migrate() {
       if (replacement && (!replacement.unique || JSON.stringify(replacement.key) !== JSON.stringify(definition.keys))) {
         throw new Error(`An index named ${definition.next} exists with unexpected keys; migration stopped before changes.`);
       }
-      const legacyIndexes = existing.filter((index) => index.unique && JSON.stringify(index.key) === JSON.stringify(definition.oldKeys));
+      const legacyIndexes = existing.filter((index) => matchesLegacyUniqueIndex(index, definition.legacyUniqueKeyPatterns));
       plans.push({ ...definition, collection, existing, legacyIndexes });
     }
 
@@ -44,7 +46,7 @@ async function migrate() {
       if (!indexes.some((index) => index.name === plan.next && index.unique && JSON.stringify(index.key) === JSON.stringify(plan.keys))) {
         throw new Error(`Replacement unique index was not confirmed for ${plan.name}.`);
       }
-      if (indexes.some((index) => index.unique && JSON.stringify(index.key) === JSON.stringify(plan.oldKeys))) {
+      if (indexes.some((index) => matchesLegacyUniqueIndex(index, plan.legacyUniqueKeyPatterns))) {
         throw new Error(`Legacy index remains on ${plan.name}; inspect the index state and rerun after resolving it.`);
       }
     }
@@ -53,7 +55,11 @@ async function migrate() {
   }
 }
 
-migrate().catch((error) => {
-  console.error(`Contract-period index migration stopped: ${error.message}`);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  migrate().catch((error) => {
+    console.error(`Contract-period index migration stopped: ${error.message}`);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { COLLECTIONS, matchesLegacyUniqueIndex, migrate };

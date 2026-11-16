@@ -106,7 +106,7 @@ export const BatchMeterTable = ({ month, year }) => {
       setFeedback({
         type: "danger",
         text: err.message || "Có lỗi khi lưu bảng chỉ số điện nước",
-        canReload: err.status === 409 && err.details?.code !== "legacy_room_period_index",
+        canReload: err.status === 409 && err.details?.requiresIndexMigration !== true,
       });
     } finally {
       setSubmitting(false);
