@@ -50,6 +50,8 @@ const invoiceSchema = new mongoose.Schema(
       default: "unpaid",
     },
     paymentSubmittedAt: { type: Date, default: null },
+    paymentConfirmedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    paymentConfirmationRequests: [{ tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, submittedAt: { type: Date, default: Date.now }, status: { type: String, enum: ["pending", "confirmed", "rejected"] }, reviewedAt: Date, reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" } }],
     paidAt: { type: Date, default: null },
     dueDate: { type: Date, default: null },
     reminderSentAt: { type: Date, default: null },

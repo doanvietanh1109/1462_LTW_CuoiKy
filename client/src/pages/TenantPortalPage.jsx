@@ -32,6 +32,20 @@ export const TenantPortalPage = () => {
   // Invoice list filter state
   const [invoiceFilter, setInvoiceFilter] = useState("all");
   const [payingInvoice, setPayingInvoice] = useState(null);
+  const [paymentInstructions, setPaymentInstructions] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentError, setPaymentError] = useState("");
+  const [paymentSubmitting, setPaymentSubmitting] = useState(false);
+  const [qrFailed, setQrFailed] = useState(false);
+
+  const openPayment = async (invoice) => {
+    setPayingInvoice(invoice); setPaymentInstructions(null); setPaymentError(""); setQrFailed(false); setPaymentLoading(true);
+    try {
+      const response = await apiRequest(`/invoices/${invoice._id || invoice.id}/payment-instructions`);
+      setPaymentInstructions(response?.data?.data || null);
+    } catch (error) { setPaymentError(error.message || "Không tải được thông tin thanh toán."); }
+    finally { setPaymentLoading(false); }
+  };
 
   useEffect(() => {
     if (!rooms.length) {
@@ -142,6 +156,7 @@ export const TenantPortalPage = () => {
   // Gửi yêu cầu xác nhận sau khi người thuê đã thanh toán theo phương thức đã thống nhất.
   const handleConfirmPayInvoice = async (inv) => {
     if (!inv) return;
+    setPaymentSubmitting(true);
     const invId = inv._id || inv.id;
 
     try {
@@ -158,7 +173,7 @@ export const TenantPortalPage = () => {
       setToastMsg("Đã gửi yêu cầu xác nhận thanh toán. Hóa đơn sẽ được cập nhật sau khi chủ trọ xác nhận.");
     } catch {
       setToastMsg("Không gửi được yêu cầu thanh toán. Hãy thử lại hoặc liên hệ chủ trọ.");
-    }
+    } finally { setPaymentSubmitting(false); }
   };
 
   const handleCreateRepair = async (payload) => {
@@ -962,7 +977,7 @@ export const TenantPortalPage = () => {
                     </div>
                     <div className="tenant-invoice-actions">
                       <Link to={"/invoices/" + invId} className="btn btn-outline-primary"><i className="bi bi-eye me-1"/>Xem chi tiết / In</Link>
-                      {inv.status === "unpaid" && <button type="button" className="btn btn-primary" onClick={() => setPayingInvoice(inv)}><i className="bi bi-credit-card me-1"/>Gửi xác nhận thanh toán</button>}
+                      {inv.status === "unpaid" && <button type="button" className="btn btn-primary" onClick={() => openPayment(inv)}><i className="bi bi-credit-card me-1"/>Thanh toán</button>}
                       {inv.status === "pending_confirmation" && <span className="tenant-payment-pending"><i className="bi bi-hourglass-split me-1"/>Đang chờ chủ trọ xác nhận</span>}
                     </div>
                   </article>
@@ -1105,7 +1120,7 @@ export const TenantPortalPage = () => {
         </section>
       )}
 
-      {/* Modal gửi yêu cầu xác nhận sau khi người thuê đã thanh toán */}
+      {/* Modal thanh toán qua VietQR; status chỉ đổi sau khi chủ trọ xác nhận */}
       {payingInvoice && (
         <div
           className="modal"
@@ -1119,11 +1134,7 @@ export const TenantPortalPage = () => {
             style={{ maxWidth: 460, padding: 28 }}
           >
             <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-              <h5 className="fw-bold mb-0 text-primary">
-                <i className="bi bi-credit-card me-2"></i>
-                Xác nhận thanh toán tháng {payingInvoice.month}/
-                {payingInvoice.year}
-              </h5>
+              <h5 className="fw-bold mb-0 text-primary"><i className="bi bi-credit-card me-2"></i>Thanh toán hóa đơn</h5>
               <button
                 type="button"
                 className="btn-close"
@@ -1132,27 +1143,27 @@ export const TenantPortalPage = () => {
             </div>
 
             <div className="p-3 rounded-3 bg-light border mb-3 text-start small">
+              <div className="d-flex justify-content-between mb-1"><span className="text-muted">Phòng / kỳ:</span><strong>{paymentInstructions?.invoice?.room || payingInvoice.roomId?.roomNumber || payingInvoice.roomId?.title || "—"} · {payingInvoice.month}/{payingInvoice.year}</strong></div>
               <div className="d-flex justify-content-between mb-1">
                 <span className="text-muted">Mã hóa đơn:</span>
                 <strong>{payingInvoice.invoiceCode}</strong>
               </div>
               <div className="d-flex justify-content-between mb-1">
-                <span className="text-muted">Nội dung chuyển khoản:</span>
-                <strong className="text-primary">
-                  TT {payingInvoice.invoiceCode}
-                </strong>
+                <span className="text-muted">Nội dung chuyển khoản:</span><strong className="text-primary">{paymentInstructions?.transferContent || "—"}</strong>
               </div>
               <div className="d-flex justify-content-between border-top pt-2 mt-2">
                 <span className="fw-bold">Tổng số tiền:</span>
                 <strong className="text-danger fs-5">
-                  {formatVND(payingInvoice.totalAmount)}
+                  {formatVND(paymentInstructions?.invoice?.amount ?? payingInvoice.totalAmount)}
                 </strong>
               </div>
             </div>
 
-            <div className="alert alert-info text-start small" role="note">
-              Hệ thống chưa lưu thông tin tài khoản nhận tiền cho hóa đơn này. Vui lòng thanh toán theo phương thức đã thống nhất với chủ trọ; sau khi thanh toán, gửi yêu cầu bên dưới. Hóa đơn chỉ chuyển sang “Đã thu tiền” khi chủ trọ xác nhận.
-            </div>
+            {paymentLoading ? <div className="py-3"><span className="spinner-border spinner-border-sm me-2"/>Đang tải thông tin thanh toán…</div> : paymentError ? <div className="alert alert-danger">{paymentError}</div> : !paymentInstructions?.configured ? <div className="alert alert-warning text-start small">Chủ trọ chưa cấu hình thông tin nhận chuyển khoản. Vui lòng liên hệ chủ trọ.</div> : <div className="text-start small">
+              {qrFailed ? <div className="alert alert-warning">Không tải được hình VietQR. Bạn vẫn có thể chuyển thủ công bằng thông tin bên dưới.</div> : <div className="text-center mb-3"><img src={paymentInstructions.qrUrl} onError={() => setQrFailed(true)} alt="Mã VietQR thanh toán hóa đơn" style={{ width: "min(100%, 320px)", height: "auto", objectFit: "contain" }} /></div>}
+              <div className="p-3 rounded-3 bg-light border mb-3"><div><strong>{paymentInstructions.bank.bankName}</strong> · {paymentInstructions.bank.accountName}</div><div>Số tài khoản: <strong>{paymentInstructions.bank.accountNumber}</strong> <button className="btn btn-sm btn-outline-secondary ms-1" onClick={() => navigator.clipboard.writeText(paymentInstructions.bank.accountNumber)}>Sao chép</button></div><div>Nội dung: <strong>{paymentInstructions.transferContent}</strong> <button className="btn btn-sm btn-outline-secondary ms-1" onClick={() => navigator.clipboard.writeText(paymentInstructions.transferContent)}>Sao chép</button></div><div>Số tiền: <strong>{formatVND(paymentInstructions.invoice.amount)}</strong> <button className="btn btn-sm btn-outline-secondary ms-1" onClick={() => navigator.clipboard.writeText(String(paymentInstructions.invoice.amount))}>Sao chép</button></div></div>
+              <div className="alert alert-info">Quét mã bằng ứng dụng ngân hàng và kiểm tra thông tin trước khi chuyển. Gửi yêu cầu không tự xác nhận đã nhận tiền; hóa đơn chỉ được đánh dấu đã thanh toán sau khi chủ trọ kiểm tra và xác nhận.</div>
+            </div>}
 
             <div className="d-flex gap-2">
               <button
@@ -1166,8 +1177,9 @@ export const TenantPortalPage = () => {
                 type="button"
                 className="btn btn-success w-50 fw-bold"
                 onClick={() => handleConfirmPayInvoice(payingInvoice)}
+                disabled={paymentLoading || paymentSubmitting || !paymentInstructions?.configured}
               >
-                <i className="bi bi-send me-1"></i> Tôi đã thanh toán
+                <i className="bi bi-send me-1"></i> Tôi đã chuyển khoản — Gửi yêu cầu
               </button>
             </div>
           </div>

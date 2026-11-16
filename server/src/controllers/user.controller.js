@@ -2,6 +2,39 @@ const { User } = require("../models/user.model");
 const { Room } = require("../models/room.model");
 const { sendSuccess, sendError } = require("../utils/response");
 
+let bankOptionsCache = { expiresAt: 0, banks: [] };
+const fetchBankOptions = async () => {
+  if (bankOptionsCache.expiresAt > Date.now()) return bankOptionsCache.banks;
+  const response = await fetch("https://api.vietqr.io/v2/banks", { signal: AbortSignal.timeout(5000) });
+  if (!response.ok) throw new Error("Bank list unavailable");
+  const payload = await response.json();
+  bankOptionsCache = { expiresAt: Date.now() + 86400000, banks: (payload.data || []).filter((bank) => Number(bank.transferSupported) === 1).map(({ bin, shortName, name }) => ({ bin: String(bin), shortName, name })) };
+  return bankOptionsCache.banks;
+};
+const getBankOptions = async (req, res) => {
+  try {
+    return sendSuccess(res, "Danh sách ngân hàng", { banks: await fetchBankOptions() });
+  } catch { return sendError(res, "Không tải được danh sách ngân hàng VietQR. Hãy thử lại sau.", null, 503); }
+};
+
+const getMyBankAccount = async (req, res) => {
+  const user = await User.findById(req.user._id).select("+bankAccount");
+  return sendSuccess(res, "Thông tin tài khoản nhận tiền", { bankAccount: user?.bankAccount || null });
+};
+
+const updateMyBankAccount = async (req, res) => {
+  try {
+    if (req.user.role !== "landlord") return sendError(res, "Chỉ chủ trọ mới được cấu hình tài khoản nhận tiền", null, 403);
+    const { bankBin, bankName, accountNumber, accountName } = req.body || {};
+    if (!/^\d{6}$/.test(String(bankBin || "")) || !/^[A-Za-z0-9]{6,19}$/.test(String(accountNumber || "")) || typeof bankName !== "string" || !bankName.trim() || typeof accountName !== "string" || accountName.trim().length < 5 || accountName.trim().length > 50) return sendError(res, "Thông tin ngân hàng không hợp lệ", null, 400);
+    const banks = await fetchBankOptions();
+    const bank = banks.find((item) => item.bin === String(bankBin));
+    if (!bank || ![bank.shortName, bank.name].includes(bankName.trim())) return sendError(res, "Hãy chọn ngân hàng từ danh sách VietQR hiện hành", null, 400);
+    const user = await User.findByIdAndUpdate(req.user._id, { $set: { bankAccount: { bankBin, bankName: bank.shortName || bank.name, accountNumber, accountName: accountName.trim(), updatedAt: new Date() } } }, { new: true, runValidators: true }).select("+bankAccount");
+    return sendSuccess(res, "Đã lưu thông tin tài khoản nhận tiền", { bankAccount: user.bankAccount });
+  } catch { return sendError(res, "Không lưu được thông tin tài khoản", null, 400); }
+};
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
@@ -140,15 +173,6 @@ const getBookmarkedRooms = async (req, res) => {
   }
 };
 
-module.exports = {
-  getAllUsers,
-  getUserById,
-  updateUserStatus,
-  toggleBookmark,
-  getBookmarkedRooms
-};
-
-
 const getUserByEmail = async (req, res) => {
   try {
     const { email } = req.query;
@@ -177,5 +201,8 @@ module.exports = {
   updateUserRole,
   toggleBookmark,
   getBookmarkedRooms,
-  getUserByEmail
+  getUserByEmail,
+  getBankOptions,
+  getMyBankAccount,
+  updateMyBankAccount,
 };

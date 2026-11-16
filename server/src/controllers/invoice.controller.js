@@ -6,6 +6,7 @@ const { MeterReading } = require("../models/meterReading.model");
 const { calculateTieredElectricity } = require("./meterReading.controller");
 const { sendSuccess, sendError } = require("../utils/response");
 const { createNotification } = require("../utils/createNotification");
+const { User } = require("../models/user.model");
 
 const isNumericInput = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value));
 const validPeriod = (month, year) => isNumericInput(month) && Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && isNumericInput(year) && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
@@ -139,6 +140,25 @@ const getInvoiceById = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+const getPaymentInstructions = async (req, res, next) => {
+  try {
+    if (req.user.role !== "user") return sendError(res, "Chỉ người thuê mới được xem hướng dẫn thanh toán", null, 403);
+    const invoice = await Invoice.findById(req.params.id).populate("roomId", "title roomNumber tenant").populate("contractId", "tenantEmail");
+    if (!invoice) return sendError(res, "Không tìm thấy hóa đơn", null, 404);
+    if (!isTenantInvoiceOwner(invoice, req.user)) return sendError(res, "Bạn không có quyền xem hướng dẫn thanh toán hóa đơn này", null, 403);
+    if (invoice.status !== "unpaid") return sendError(res, "Hóa đơn không ở trạng thái chờ thanh toán", null, 409);
+    const landlord = await User.findById(invoice.landlordId).select("+bankAccount");
+    if (!landlord?.bankAccount) return sendSuccess(res, "Chủ trọ chưa cấu hình tài khoản nhận tiền", { configured: false });
+    const amount = Math.round(Number(invoice.totalAmount));
+    if (!Number.isSafeInteger(amount) || amount <= 0 || String(amount).length > 13) return sendError(res, "Số tiền hóa đơn không hợp lệ để tạo VietQR", null, 422);
+    const transferContent = `RIPT${invoice._id.toString().toUpperCase()}`;
+    const bank = landlord.bankAccount;
+    const qr = new URL(`https://img.vietqr.io/image/${encodeURIComponent(bank.bankBin)}-${encodeURIComponent(bank.accountNumber)}-compact2.svg`);
+    qr.searchParams.set("amount", String(amount)); qr.searchParams.set("addInfo", transferContent); qr.searchParams.set("accountName", bank.accountName);
+    return sendSuccess(res, "Hướng dẫn thanh toán", { configured: true, invoice: { id: invoice._id, invoiceCode: invoice.invoiceCode, month: invoice.month, year: invoice.year, amount, room: invoice.roomId?.roomNumber || invoice.roomId?.title || "" }, bank: { bankBin: bank.bankBin, bankName: bank.bankName, accountNumber: bank.accountNumber, accountName: bank.accountName }, transferContent, qrUrl: qr.toString() });
+  } catch (error) { return next(error); }
 };
 
 // Phát hành hóa đơn đơn lẻ (Tính toán hoàn toàn ở Server)
@@ -334,10 +354,11 @@ const markInvoicePaid = async (req, res, next) => {
     }
     if (invoice.status === "paid") return sendError(res, "Hóa đơn đã được xác nhận đã thu tiền", null, 409);
 
-    invoice.status = "paid";
-    invoice.paidAt = new Date();
-    await invoice.save();
-    await createNotification({ userId: invoice.tenantId, type: "invoice", title: "Đã xác nhận thanh toán",
+    const paid = await Invoice.findOneAndUpdate({ _id: invoice._id, status: { $in: ["unpaid", "pending_confirmation"] } }, { $set: { status: "paid", paidAt: new Date(), paymentConfirmedBy: req.user._id }, $push: { paymentConfirmationRequests: { tenantId: invoice.tenantId, submittedAt: invoice.paymentSubmittedAt || new Date(), status: "confirmed", reviewedAt: new Date(), reviewedBy: req.user._id } } }, { new: true });
+    if (!paid) return sendError(res, "Hóa đơn đã được xử lý", null, 409);
+    invoice.status = paid.status;
+    const paymentRequest = [...(invoice.paymentConfirmationRequests || [])].reverse().find((request) => request.status === "pending");
+    await createNotification({ userId: paymentRequest?.tenantId || invoice.tenantId, type: "invoice", title: "Đã xác nhận thanh toán",
       message: `Chủ trọ đã xác nhận thanh toán hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
 
     const populated = await Invoice.findById(invoice._id)
@@ -379,9 +400,10 @@ const tenantPayInvoice = async (req, res, next) => {
     }
 
     if (invoice.status !== "unpaid") return sendError(res, "Hóa đơn không ở trạng thái có thể gửi xác nhận thanh toán", null, 409);
-    invoice.status = "pending_confirmation";
-    invoice.paymentSubmittedAt = new Date();
-    await invoice.save();
+    const submittedAt = new Date();
+    const updated = await Invoice.findOneAndUpdate({ _id: invoice._id, status: "unpaid" }, { $set: { status: "pending_confirmation", paymentSubmittedAt: submittedAt }, $push: { paymentConfirmationRequests: { tenantId: req.user._id, submittedAt, status: "pending" } } }, { new: true });
+    if (!updated) return sendError(res, "Đã có yêu cầu thanh toán hoặc hóa đơn đã được xử lý", null, 409);
+    await createNotification({ userId: invoice.landlordId, type: "invoice", title: "Yêu cầu xác nhận thanh toán", message: `Người thuê gửi yêu cầu xác nhận cho hóa đơn ${invoice.invoiceCode}.`, resourceType: "invoice", resourceId: invoice._id });
 
     const populated = await Invoice.findById(invoice._id)
       .populate("roomId", "title roomNumber price area district")
@@ -393,6 +415,16 @@ const tenantPayInvoice = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+const rejectPaymentRequest = async (req, res, next) => {
+  try {
+    const invoice = await Invoice.findOneAndUpdate({ _id: req.params.id, landlordId: req.user._id, status: "pending_confirmation" }, { $set: { status: "unpaid", paymentSubmittedAt: null }, $push: { paymentConfirmationRequests: { tenantId: null, submittedAt: new Date(), status: "rejected", reviewedAt: new Date(), reviewedBy: req.user._id } } }, { new: true });
+    if (!invoice) return sendError(res, "Không tìm thấy yêu cầu chờ xác nhận thuộc quyền của bạn", null, 404);
+    const pendingRequest = [...(invoice.paymentConfirmationRequests || [])].reverse().find((request) => request.status === "pending");
+    await createNotification({ userId: pendingRequest?.tenantId || invoice.tenantId, type: "invoice", title: "Yêu cầu thanh toán bị từ chối", message: `Chủ trọ chưa xác nhận khoản thanh toán hóa đơn ${invoice.invoiceCode}. Vui lòng liên hệ chủ trọ.`, resourceType: "invoice", resourceId: invoice._id });
+    return sendSuccess(res, "Đã từ chối yêu cầu xác nhận", { invoice });
+  } catch (error) { return next(error); }
 };
 
 // Gửi thông báo / email nhắc nợ (Tính năng nâng cao cộng điểm)
@@ -599,9 +631,11 @@ const getDashboardAggregations = async (req, res, next) => {
 module.exports = {
   getInvoices,
   getInvoiceById,
+  getPaymentInstructions,
   createInvoice,
   markInvoicePaid,
   tenantPayInvoice,
+  rejectPaymentRequest,
   sendDebtReminder,
   getDashboardAggregations,
   validPeriod,

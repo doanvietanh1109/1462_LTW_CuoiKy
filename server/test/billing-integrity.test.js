@@ -4,6 +4,8 @@ const { Room } = require("../src/models/room.model");
 const { Contract } = require("../src/models/contract.model");
 const { Invoice } = require("../src/models/invoice.model");
 const { MeterReading } = require("../src/models/meterReading.model");
+const { Notification } = require("../src/models/notification.model");
+const { User } = require("../src/models/user.model");
 const meter = require("../src/controllers/meterReading.controller");
 const billing = require("../src/controllers/invoice.controller");
 
@@ -62,6 +64,33 @@ test("tenant may read their invoice through its direct tenantId link", async () 
   assert.equal(res.body.data.invoice, invoice);
 });
 
+test("tenant payment instructions use the owned invoice amount and configured landlord account", async () => {
+  const invoice = { _id: idB, invoiceCode: "INV-1", month: 11, year: 2026, totalAmount: 3147500, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: null, roomNumber: "901" }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: { bankBin: "970000", bankName: "Bank", accountNumber: "12345678", accountName: "TENANT OWNER" } }); } }));
+  const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.data.invoice.amount, 3147500);
+  assert.equal(new URL(res.body.data.qrUrl).searchParams.get("amount"), "3147500");
+  assert.equal(new URL(res.body.data.qrUrl).searchParams.get("addInfo"), `RIPT${idB.toUpperCase()}`);
+});
+
+test("tenant cannot get payment instructions for another tenant invoice", async () => {
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve({ _id: idB, status: "unpaid", landlordId: idB, tenantId: idB, roomId: { tenant: null }, contractId: null }); } }));
+  const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 403);
+});
+
+test("payment instructions do not return a QR when landlord has no bank account", async () => {
+  const invoice = { _id: idB, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: null }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: null }); } }));
+  const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.data.configured, false);
+  assert.equal(res.body.data.qrUrl, undefined);
+});
+
 test("tenant invoice list includes records linked directly by tenantId", async () => {
   replace(Contract, "find", () => ({ select: async () => [] }));
   replace(Room, "find", () => ({ select: async () => [] }));
@@ -76,7 +105,10 @@ test("tenant invoice list includes records linked directly by tenantId", async (
 });
 
 test("tenant payment request waits for landlord confirmation instead of marking paid", async () => {
-  const invoice = { _id: idA, status: "unpaid", roomId: { tenant: { userId: idA } }, contractId: null, save: async () => {} };
+  const invoice = { _id: idA, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA } }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(Invoice, "findOneAndUpdate", async (filter, update) => { assert.equal(filter.status, "unpaid"); invoice.status = update.$set.status; invoice.paymentSubmittedAt = update.$set.paymentSubmittedAt; return invoice; });
+  replace(Notification, "create", async () => ({}));
   replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
   const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);

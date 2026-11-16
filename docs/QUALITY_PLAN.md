@@ -149,3 +149,61 @@
 - Các luồng còn thiếu integration/E2E: hợp đồng → meter → invoice → payment; tenant xem invoice/repair/notification; guest contact; upload Cloudinary; responsive và print/PDF.
 - UI còn cần nâng theo ảnh tham khảo: tenant dashboard/quick access đầy đủ và responsive; danh sách/chi tiết hóa đơn nâng cấp; notification center cho landlord và tenant; sửa chữa, empty/loading/error states. Không redesign trong P0 pass này.
 - Phiên kế tiếp bắt đầu bằng `git status --short --branch` và `git log -3 --oneline`, đọc mục này, giữ nguyên các commit local; ưu tiên browser/DB-test verification trước khi thêm tính năng.
+
+## VietQR hóa đơn theo từng chủ trọ — 2026-11-16
+
+### Công việc đã hoàn thành
+
+- Giữ nguyên branch `feat/invoice-vietqr`, bắt đầu từ `main` sạch tại `1987476`; không sửa `main`, không push/merge, không dùng MongoDB thật.
+- Thêm cấu hình bank account theo User, mặc định rỗng và `select: false`. Cấu hình chỉ qua endpoint self-service có role landlord; ngân hàng được chọn từ VietQR bank list (transfer supported), không lấy thông tin tài khoản từ ảnh tham khảo. `/users/:id`, danh sách user và `req.user` không tự lộ trường này.
+- Thêm `GET /api/users/bank-options`, `GET/PATCH /api/users/me/bank-account`; danh sách ngân hàng VietQR cache trong process 24h, timeout 5 giây. Không có API key hay dữ liệu tài khoản hardcode.
+- Thêm `GET /api/invoices/:id/payment-instructions`: kiểm tra tenant/invoice ownership, trạng thái chưa thanh toán, lấy amount từ DB và tài khoản từ đúng landlord. Trả `configured:false` nếu chưa có tài khoản. QR Quick Link VietQR dùng amount, account name và mã đối soát `RIPT` + ObjectId invoice; client không thể truyền amount/landlord/account.
+- Tenant modal hiển thị QR và thông tin chuyển thủ công/copy; nếu ảnh QR lỗi, thông tin chuyển khoản vẫn dùng được. Gửi yêu cầu không tự đổi thành paid; thao tác gửi và landlord xác nhận/từ chối dùng update có điều kiện theo status. Lưu audit events trong invoice, thông báo landlord/tenant được tái sử dụng.
+- Landlord invoice page có form tự cấu hình nhận tiền và nút xác nhận/từ chối cho yêu cầu chờ. Nút thu tiền thủ công hiện có vẫn dùng được cho khoản offline.
+- Thêm regression tests cho quyền xem instructions, amount/transfer content, bank account thiếu, và tenant request pending thay vì paid.
+
+### Lỗi đã sửa và bằng chứng
+
+- Trước đây tenant chỉ thấy hướng dẫn giả chung vì hệ thống không có tài khoản nhận tiền; nay tạo QR theo account của landlord gắn invoice, hoặc hiện rõ chưa cấu hình.
+- Trước đây nút tenant submit dùng read-then-save, có thể gửi đua; nay atomic update lọc `status: unpaid`, request lặp nhận 409 và không đánh dấu đã thu.
+- Xác nhận thanh toán được lọc status chưa paid và ghi `paymentConfirmedBy`, tránh cập nhật trùng. Chỉ landlord sở hữu invoice mới được approve/reject.
+- Regression tests kiểm tra amount 3.147.500 được encode đúng từ invoice và tham chiếu phân biệt invoice; unauthorized tenant nhận 403; thiếu bank không trả QR.
+
+### Chưa hoàn thành / lỗi còn tồn tại
+
+- VietQR Quick Link trả ảnh QR từ dịch vụ bên ngoài; không kiểm tra scan thật với ứng dụng ngân hàng. Không có callback/webhook, đối soát giao dịch hoặc xác thực tài khoản ngân hàng. Chủ trọ phải kiểm tra giao dịch thật trước khi xác nhận.
+- Bank list lấy từ VietQR khi cấu hình/lần hết cache; mạng ngoài chưa được kiểm tra trong phiên. Khi dịch vụ lỗi, form cấu hình không lưu và có thể thử tải lại.
+- Chưa có nhắc tenant gửi ảnh biên lai (không phải bằng chứng xác thực); không hỗ trợ thanh toán một phần.
+- Các test approve/reject và cập nhật DB sau refresh chưa có integration test; test hiện tại là unit/mock.
+
+### Test đã chạy
+
+- `npm --prefix server test`: **42/42 PASS**, không kết nối MongoDB.
+- `npm --prefix client run build`: **PASS**.
+- `node --check` controller/routes được chạy trước lần cập nhật UI nhỏ; cần chạy lại cùng `git diff --check` ngay trước commit.
+
+### Integration/E2E còn thiếu
+
+- Chưa xác minh luồng bank profile save/reload, route auth thật, database persistence, payment instructions, approve/reject và cập nhật dashboard/công nợ trên MongoDB test.
+- Chưa có browser E2E cho tenant QR/modal/copy, ảnh QR lỗi, responsive, duplicate click, notification hay PDF/invoice detail.
+- Chưa dùng MongoDB production hoặc thực hiện chuyển khoản ngân hàng; các luồng trên **NOT VERIFIED** ngoài unit tests và production build.
+
+### Màn hình UI cần tiếp tục theo ảnh tham khảo
+
+- Home tenant với quick access, card hợp đồng và danh sách thông báo.
+- Notification center tenant/landlord, lọc loại và trạng thái đã đọc.
+- Feedback/repair empty state, form tạo và theo dõi yêu cầu.
+- Hóa đơn/payment modal cần browser visual QA trên mobile/desktop; giữ nguyên theme RIPT Rental.
+
+### Tiếp tục ở phiên Codex sau
+
+- Bắt đầu bằng `git status --short --branch`, `git log -3 --oneline`, và đọc mục này. Giữ các commit local.
+- Tạo DB test độc lập, cấu hình một landlord/tenant/invoice fixture; chạy integration test quyền, persist bank config, tạo QR instructions, submit, reject/approve và dashboard.
+- Mở app trong browser để quét/kiểm tra hiển thị QR (không chuyển tiền), copy fields, kiểm tra trạng thái và notification; thử responsive. Không dùng production DB.
+- Chạy lại tests/build, cập nhật mục Git cuối, rồi mới commit nếu sạch.
+
+### Git cuối lượt
+
+- Branch: `feat/invoice-vietqr`.
+- Base commit: `1987476`; commit feature sẽ được ghi sau khi hoàn tất kiểm thử cuối.
+- Working tree: đang có thay đổi chưa commit; chưa push/merge; `main` không đổi.

@@ -9,6 +9,7 @@ import {
 import { formatVND } from "../../api/apiClient";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { useDebounce } from "../../hooks/useDebounce";
+import { apiRequest } from "../../api/apiClient";
 
 export const LandlordInvoicesPage = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,28 @@ export const LandlordInvoicesPage = () => {
   const search = useDebounce(searchText, 300);
   const [page, setPage] = useState(1);
   const [notice, setNotice] = useState("");
+  const [bankOptions, setBankOptions] = useState([]);
+  const [bankForm, setBankForm] = useState({ bankBin: "", bankName: "", accountNumber: "", accountName: "" });
+  const [bankSaving, setBankSaving] = useState(false);
+
+  useEffect(() => {
+    Promise.all([apiRequest("/users/bank-options"), apiRequest("/users/me/bank-account")]).then(([banks, account]) => {
+      setBankOptions(banks?.data?.banks || []);
+      if (account?.data?.bankAccount) setBankForm(account.data.bankAccount);
+    }).catch(() => setNotice("Không tải được cấu hình ngân hàng. Hãy thử tải lại trang."));
+  }, []);
+
+  const saveBankAccount = async (event) => {
+    event.preventDefault(); setBankSaving(true);
+    try { await apiRequest("/users/me/bank-account", { method: "PATCH", body: bankForm }); setNotice("Đã lưu tài khoản nhận tiền."); }
+    catch (error) { setNotice(error.message || "Không lưu được tài khoản ngân hàng."); }
+    finally { setBankSaving(false); }
+  };
+
+  const reviewPayment = async (id, approve) => {
+    try { await apiRequest(`/invoices/${id}/${approve ? "pay" : "payment-reject"}`, { method: "PATCH" }); setNotice(approve ? "Đã xác nhận đã nhận tiền." : "Đã từ chối yêu cầu; hóa đơn trở lại trạng thái chưa thanh toán."); loadInvoices(); }
+    catch (error) { setNotice(error.message || "Không xử lý được yêu cầu."); }
+  };
 
   const loadInvoices = () => {
     dispatch(
@@ -80,6 +103,17 @@ export const LandlordInvoicesPage = () => {
           />
         </div>
       )}
+
+      <form className="card border-0 shadow-sm rounded-4 p-3 mb-3" onSubmit={saveBankAccount}>
+        <h6 className="fw-bold">Tài khoản nhận tiền VietQR</h6>
+        <p className="small text-muted mb-2">Thông tin này chỉ dùng cho hóa đơn thuộc chủ trọ của bạn.</p>
+        <div className="row g-2 align-items-end">
+          <div className="col-md-3"><label className="form-label small">Ngân hàng</label><select className="form-select" required value={bankForm.bankBin} onChange={(e) => { const bank = bankOptions.find((item) => item.bin === e.target.value); setBankForm({ ...bankForm, bankBin: e.target.value, bankName: bank?.shortName || bank?.name || "" }); }}><option value="">Chọn ngân hàng</option>{bankOptions.map((bank) => <option key={bank.bin} value={bank.bin}>{bank.shortName || bank.name}</option>)}</select></div>
+          <div className="col-md-3"><label className="form-label small">Số tài khoản</label><input className="form-control" required minLength={6} maxLength={19} pattern="[A-Za-z0-9]{6,19}" value={bankForm.accountNumber} onChange={(e) => setBankForm({ ...bankForm, accountNumber: e.target.value })}/></div>
+          <div className="col-md-4"><label className="form-label small">Tên chủ tài khoản</label><input className="form-control" required minLength={5} maxLength={50} value={bankForm.accountName} onChange={(e) => setBankForm({ ...bankForm, accountName: e.target.value })}/></div>
+          <div className="col-md-2"><button className="btn btn-primary w-100" disabled={bankSaving || bankOptions.length === 0}>{bankSaving ? "Đang lưu…" : "Lưu tài khoản"}</button></div>
+        </div>
+      </form>
 
       <div className="card border-0 shadow-sm rounded-4 p-3 mb-3">
         <div className="d-flex flex-wrap justify-content-between align-items-center gap-2">
@@ -214,6 +248,7 @@ export const LandlordInvoicesPage = () => {
                               </button>
                             </>
                           )}
+                          {inv.status === "pending_confirmation" && <><button type="button" className="btn btn-success" onClick={() => reviewPayment(inv._id, true)} title="Xác nhận tiền đã thực nhận"><i className="bi bi-check2-circle"/> Xác nhận</button><button type="button" className="btn btn-outline-danger" onClick={() => reviewPayment(inv._id, false)} title="Từ chối yêu cầu"><i className="bi bi-x-circle"/> Từ chối</button></>}
                           <Link
                             to={`/invoices/${inv._id}`}
                             className="btn btn-outline-primary"
