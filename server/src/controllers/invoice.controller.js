@@ -158,14 +158,18 @@ const getPaymentInstructions = async (req, res, next) => {
     if (!isTenantInvoiceOwner(invoice, req.user)) return sendError(res, "Bạn không có quyền xem hướng dẫn thanh toán hóa đơn này", null, 403);
     if (invoice.status !== "unpaid" || hasPendingPaymentRequest(invoice)) return sendError(res, "Hóa đơn không ở trạng thái chờ thanh toán", null, 409);
     const landlord = await User.findById(invoice.landlordId).select("+bankAccount");
-    if (!landlord?.bankAccount) return sendSuccess(res, "Chủ trọ chưa cấu hình tài khoản nhận tiền", { configured: false });
+    const bank = landlord?.bankAccount;
+    if (!bank?.bankName || !bank?.accountName || !/^\d{6}$/.test(String(bank?.bankBin || "")) || !/^[A-Za-z0-9]{6,19}$/.test(String(bank?.accountNumber || ""))) {
+      return sendSuccess(res, "Chủ trọ chưa cấu hình tài khoản nhận tiền", { configured: false });
+    }
     const amount = Math.round(Number(invoice.totalAmount));
     if (!Number.isSafeInteger(amount) || amount <= 0 || String(amount).length > 13) return sendError(res, "Số tiền hóa đơn không hợp lệ để tạo VietQR", null, 422);
-    const transferContent = `RIPT${invoice._id.toString().toUpperCase()}`;
-    const bank = landlord.bankAccount;
+    const invoiceReference = String(invoice.invoiceCode || "").replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    if (!invoiceReference || invoiceReference.length > 46) return sendError(res, "Mã hóa đơn không hợp lệ để tạo nội dung VietQR", null, 422);
+    const transferContent = `RIPT${invoiceReference}`;
     const qr = new URL(`https://img.vietqr.io/image/${encodeURIComponent(bank.bankBin)}-${encodeURIComponent(bank.accountNumber)}-compact2.svg`);
     qr.searchParams.set("amount", String(amount)); qr.searchParams.set("addInfo", transferContent); qr.searchParams.set("accountName", bank.accountName);
-    return sendSuccess(res, "Hướng dẫn thanh toán", { configured: true, invoice: { id: invoice._id, invoiceCode: invoice.invoiceCode, month: invoice.month, year: invoice.year, amount, room: invoice.roomId?.roomNumber || invoice.roomId?.title || "" }, bank: { bankBin: bank.bankBin, bankName: bank.bankName, accountNumber: bank.accountNumber, accountName: bank.accountName }, transferContent, qrUrl: qr.toString() });
+    return sendSuccess(res, "Hướng dẫn thanh toán", { configured: true, invoice: { id: invoice._id, invoiceCode: invoice.invoiceCode, month: invoice.month, year: invoice.year, dueDate: invoice.dueDate, status: invoice.status, amount, room: invoice.roomId?.roomNumber || invoice.roomId?.title || "", roomPrice: invoice.roomPrice, electricityCost: invoice.electricityCost, waterCost: invoice.waterCost, serviceFee: invoice.serviceFee }, bank: { bankBin: bank.bankBin, bankName: bank.bankName, accountNumber: bank.accountNumber, accountName: bank.accountName }, transferContent, qrUrl: qr.toString() });
   } catch (error) { return next(error); }
 };
 
@@ -409,6 +413,10 @@ const tenantPayInvoice = async (req, res, next) => {
     }
 
     if (invoice.status !== "unpaid" || hasPendingPaymentRequest(invoice)) return sendError(res, "Hóa đơn không ở trạng thái có thể gửi xác nhận thanh toán", null, 409);
+    const landlord = await User.findById(invoice.landlordId).select("+bankAccount");
+    if (!landlord?.bankAccount) {
+      return sendError(res, "Chủ trọ chưa cấu hình tài khoản nhận tiền. Không thể gửi yêu cầu xác nhận chuyển khoản.", null, 409);
+    }
     const submittedAt = new Date();
     const updated = await Invoice.findOneAndUpdate({ _id: invoice._id, status: "unpaid", paymentConfirmationStatus: { $ne: "pending" } }, { $set: { paymentConfirmationStatus: "pending", paymentSubmittedAt: submittedAt, paymentRejectionReason: "" }, $push: { paymentConfirmationRequests: { tenantId: req.user._id, submittedAt, status: "pending" } } }, { new: true });
     if (!updated) return sendError(res, "Đã có yêu cầu thanh toán hoặc hóa đơn đã được xử lý", null, 409);

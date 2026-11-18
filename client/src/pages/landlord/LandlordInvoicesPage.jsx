@@ -10,8 +10,18 @@ import { formatVND } from "../../api/apiClient";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { useDebounce } from "../../hooks/useDebounce";
 import { apiRequest } from "../../api/apiClient";
+import { useAuth } from "../../contexts/AuthContext";
+import { validateBankAccount } from "../../utils/bankAccountValidation";
+
+const SUGGESTED_ACB_ACCOUNT = {
+  bankBin: "970416",
+  bankName: "ACB",
+  accountNumber: "20129811",
+  accountName: "Đoàn Việt Anh",
+};
 
 export const LandlordInvoicesPage = () => {
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { invoices, loading, pagination } = useSelector((state) => state.invoices);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -24,19 +34,39 @@ export const LandlordInvoicesPage = () => {
   const [bankOptions, setBankOptions] = useState([]);
   const [bankForm, setBankForm] = useState({ bankBin: "", bankName: "", accountNumber: "", accountName: "" });
   const [bankSaving, setBankSaving] = useState(false);
+  const [bankFieldErrors, setBankFieldErrors] = useState({});
 
   useEffect(() => {
     Promise.all([apiRequest("/users/bank-options"), apiRequest("/users/me/bank-account")]).then(([banks, account]) => {
       setBankOptions(banks?.data?.banks || []);
       if (account?.data?.bankAccount) setBankForm(account.data.bankAccount);
+      else if (user?.name?.trim().toLocaleLowerCase("vi") === SUGGESTED_ACB_ACCOUNT.accountName.toLocaleLowerCase("vi")) setBankForm(SUGGESTED_ACB_ACCOUNT);
     }).catch(() => setNotice("Không tải được cấu hình ngân hàng. Hãy thử tải lại trang."));
-  }, []);
+  }, [user?.name]);
 
   const saveBankAccount = async (event) => {
-    event.preventDefault(); setBankSaving(true);
+    event.preventDefault();
+    const fieldErrors = validateBankAccount(bankForm);
+    setBankFieldErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length) {
+      setNotice("Vui lòng kiểm tra các trường được đánh dấu trong biểu mẫu.");
+      return;
+    }
+    setBankSaving(true);
     try { await apiRequest("/users/me/bank-account", { method: "PATCH", body: bankForm }); setNotice("Đã lưu tài khoản nhận tiền."); }
-    catch (error) { setNotice(error.message || "Không lưu được tài khoản ngân hàng."); }
+    catch (error) {
+      const serverFieldErrors = error.details?.fieldErrors;
+      if (serverFieldErrors) setBankFieldErrors(serverFieldErrors);
+      setNotice(error.message || "Không lưu được tài khoản ngân hàng.");
+    }
     finally { setBankSaving(false); }
+  };
+
+  const updateBankField = (field, value, extra = {}) => {
+    const nextForm = { ...bankForm, ...extra, [field]: value };
+    setBankForm(nextForm);
+    setBankFieldErrors((current) => ({ ...current, [field]: undefined, ...(field === "bankBin" ? { bankName: undefined } : {}) }));
+    setNotice("");
   };
 
   const reviewPayment = async (id, approve) => {
@@ -112,13 +142,13 @@ export const LandlordInvoicesPage = () => {
         </div>
       )}
 
-      <form className="card border-0 shadow-sm rounded-4 p-3 mb-3" onSubmit={saveBankAccount}>
+      <form className="card border-0 shadow-sm rounded-4 p-3 mb-3" noValidate onSubmit={saveBankAccount}>
         <h6 className="fw-bold">Tài khoản nhận tiền VietQR</h6>
         <p className="small text-muted mb-2">Thông tin này chỉ dùng cho hóa đơn thuộc chủ trọ của bạn.</p>
         <div className="row g-2 align-items-end">
-          <div className="col-md-3"><label className="form-label small">Ngân hàng</label><select className="form-select" required value={bankForm.bankBin} onChange={(e) => { const bank = bankOptions.find((item) => item.bin === e.target.value); setBankForm({ ...bankForm, bankBin: e.target.value, bankName: bank?.shortName || bank?.name || "" }); }}><option value="">Chọn ngân hàng</option>{bankOptions.map((bank) => <option key={bank.bin} value={bank.bin}>{bank.shortName || bank.name}</option>)}</select></div>
-          <div className="col-md-3"><label className="form-label small">Số tài khoản</label><input className="form-control" required minLength={6} maxLength={19} pattern="[A-Za-z0-9]{6,19}" value={bankForm.accountNumber} onChange={(e) => setBankForm({ ...bankForm, accountNumber: e.target.value })}/></div>
-          <div className="col-md-4"><label className="form-label small">Tên chủ tài khoản</label><input className="form-control" required minLength={5} maxLength={50} value={bankForm.accountName} onChange={(e) => setBankForm({ ...bankForm, accountName: e.target.value })}/></div>
+          <div className="col-md-3"><label className="form-label small" htmlFor="bank-account-bank">Ngân hàng</label><select id="bank-account-bank" className={`form-select ${bankFieldErrors.bankBin ? "is-invalid" : ""}`} value={bankForm.bankBin} aria-invalid={Boolean(bankFieldErrors.bankBin)} aria-describedby={bankFieldErrors.bankBin ? "bank-account-bank-error" : undefined} onChange={(e) => { const bank = bankOptions.find((item) => item.bin === e.target.value); updateBankField("bankBin", e.target.value, { bankName: bank?.shortName || bank?.name || "" }); }}><option value="">Chọn ngân hàng</option>{bankOptions.map((bank) => <option key={bank.bin} value={bank.bin}>{bank.shortName || bank.name}</option>)}</select>{bankFieldErrors.bankBin && <div id="bank-account-bank-error" className="invalid-feedback d-block">{bankFieldErrors.bankBin}</div>}</div>
+          <div className="col-md-3"><label className="form-label small" htmlFor="bank-account-number">Số tài khoản</label><input id="bank-account-number" type="text" inputMode="text" autoComplete="off" maxLength={19} className={`form-control ${bankFieldErrors.accountNumber ? "is-invalid" : ""}`} value={bankForm.accountNumber} aria-invalid={Boolean(bankFieldErrors.accountNumber)} aria-describedby={bankFieldErrors.accountNumber ? "bank-account-number-error" : undefined} onChange={(e) => updateBankField("accountNumber", e.target.value)}/>{bankFieldErrors.accountNumber && <div id="bank-account-number-error" className="invalid-feedback d-block">{bankFieldErrors.accountNumber}</div>}</div>
+          <div className="col-md-4"><label className="form-label small" htmlFor="bank-account-name">Tên chủ tài khoản</label><input id="bank-account-name" type="text" autoComplete="name" maxLength={50} className={`form-control ${bankFieldErrors.accountName ? "is-invalid" : ""}`} value={bankForm.accountName} aria-invalid={Boolean(bankFieldErrors.accountName)} aria-describedby={bankFieldErrors.accountName ? "bank-account-name-error" : undefined} onChange={(e) => updateBankField("accountName", e.target.value)}/>{bankFieldErrors.accountName && <div id="bank-account-name-error" className="invalid-feedback d-block">{bankFieldErrors.accountName}</div>}</div>
           <div className="col-md-2"><button className="btn btn-primary w-100" disabled={bankSaving || bankOptions.length === 0}>{bankSaving ? "Đang lưu…" : "Lưu tài khoản"}</button></div>
         </div>
       </form>

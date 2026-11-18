@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
         bankBin: { type: String, required: true, match: /^\d{6}$/ },
         bankName: { type: String, required: true, trim: true, maxlength: 120 },
         accountNumber: { type: String, required: true, match: /^[A-Za-z0-9]{6,19}$/ },
-        accountName: { type: String, required: true, trim: true, minlength: 5, maxlength: 50 },
+        accountName: { type: String, required: true, trim: true, minlength: 5, maxlength: 50, match: /^[^\u0000-\u001f\u007f]+$/ },
         updatedAt: { type: Date, default: Date.now },
       }, { _id: false }),
       default: undefined,

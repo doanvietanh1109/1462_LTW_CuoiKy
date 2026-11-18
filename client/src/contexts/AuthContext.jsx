@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { apiRequest } from "../api/apiClient";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { shouldClearAuthSession } from "./authSessionPolicy";
 
 const AuthContext = createContext(null);
 
@@ -23,8 +24,10 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await apiRequest("/auth/me");
         if (isMounted && res.data?.user) setUser(res.data.user);
-      } catch {
-        if (isMounted) {
+      } catch (error) {
+        // A network failure (for example ERR_CONNECTION_REFUSED) or a missing
+        // endpoint is not proof that the saved session is invalid.
+        if (isMounted && shouldClearAuthSession(error)) {
           localStorage.removeItem("authToken");
           setToken("");
           setUser(null);
@@ -37,7 +40,10 @@ export const AuthProvider = ({ children }) => {
     return () => {
       isMounted = false;
     };
-  }, [setUser]);
+  // This is a one-time session bootstrap. setUser is backed by local storage
+  // and its identity can change when the cached user changes; depending on it
+  // here would re-run this request after every successful response.
+  }, []);
 
   const login = useCallback(
     async (email, password) => {

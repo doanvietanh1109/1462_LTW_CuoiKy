@@ -8,6 +8,9 @@ const { Notification } = require("../src/models/notification.model");
 const { User } = require("../src/models/user.model");
 const meter = require("../src/controllers/meterReading.controller");
 const billing = require("../src/controllers/invoice.controller");
+const users = require("../src/controllers/user.controller");
+const userRoutes = require("../src/routes/user.routes");
+const invoiceRoutes = require("../src/routes/invoice.routes");
 const { COLLECTIONS: indexMigrationCollections, matchesLegacyUniqueIndex } = require("../src/scripts/migrate-contract-period-indexes");
 
 const originals = new Map();
@@ -126,15 +129,23 @@ test("current room tenant does not gain access to an unlinked historical invoice
   assert.equal(res.statusCode, 403);
 });
 
-test("tenant payment instructions use the owned invoice amount and configured landlord account", async () => {
-  const invoice = { _id: idB, invoiceCode: "INV-1", month: 11, year: 2026, totalAmount: 3147500, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: null, roomNumber: "901" }, contractId: null };
+test("tenant payment instructions include invoice breakdown and dynamic ACB VietQR data", async () => {
+  const invoice = { _id: idB, invoiceCode: "INV-202611-AE7B-78", month: 11, year: 2026, dueDate: new Date("2026-11-10T00:00:00Z"), totalAmount: 3147500, roomPrice: 2500000, electricityCost: 375000, waterCost: 125000, serviceFee: 147500, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: null, roomNumber: "901" }, contractId: null };
   replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
-  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: { bankBin: "970000", bankName: "Bank", accountNumber: "12345678", accountName: "TENANT OWNER" } }); } }));
+  replace(User, "findById", (landlordId) => { assert.equal(String(landlordId), idB); return { select() { return this; }, then(resolve) { resolve({ bankAccount: { bankBin: "970416", bankName: "ACB", accountNumber: "20129811", accountName: "DOAN VIET ANH" } }); } }; });
   const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.data.invoice.amount, 3147500);
-  assert.equal(new URL(res.body.data.qrUrl).searchParams.get("amount"), "3147500");
-  assert.equal(new URL(res.body.data.qrUrl).searchParams.get("addInfo"), `RIPT${idB.toUpperCase()}`);
+  assert.equal(res.body.data.invoice.roomPrice, 2500000);
+  assert.equal(res.body.data.invoice.electricityCost, 375000);
+  assert.equal(res.body.data.invoice.waterCost, 125000);
+  assert.equal(res.body.data.invoice.serviceFee, 147500);
+  assert.equal(res.body.data.invoice.dueDate.toISOString(), "2026-11-10T00:00:00.000Z");
+  const qr = new URL(res.body.data.qrUrl);
+  assert.equal(qr.pathname, "/image/970416-20129811-compact2.svg");
+  assert.equal(qr.searchParams.get("amount"), "3147500");
+  assert.equal(qr.searchParams.get("addInfo"), "RIPTINV202611AE7B78");
+  assert.equal(qr.searchParams.get("accountName"), "DOAN VIET ANH");
 });
 
 test("tenant cannot get payment instructions for another tenant invoice", async () => {
@@ -169,6 +180,7 @@ test("tenant invoice list includes records linked directly by tenantId", async (
 test("tenant payment request waits for landlord confirmation instead of marking paid", async () => {
   const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "none", totalAmount: 1000, invoiceCode: "INV-1", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA }, roomNumber: "901" }, contractId: null };
   replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: { bankBin: "970416", bankName: "ACB", accountNumber: "123456789", accountName: "LANDLORD NAME" } }); } }));
   replace(Invoice, "findOneAndUpdate", async (filter, update) => { assert.equal(filter.status, "unpaid"); assert.equal(update.$set.paymentConfirmationStatus, "pending"); invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; invoice.paymentSubmittedAt = update.$set.paymentSubmittedAt; invoice.paymentConfirmationRequests = update.$push.paymentConfirmationRequests; return invoice; });
   const recipients = [];
   replace(Notification, "create", async (data) => { recipients.push(data.userId); return {}; });
@@ -179,6 +191,73 @@ test("tenant payment request waits for landlord confirmation instead of marking 
   assert.ok(invoice.paymentSubmittedAt instanceof Date);
   assert.equal(invoice.paidAt, undefined);
   assert.deepEqual(recipients, [idB, idA]);
+});
+
+test("tenant cannot send a transfer-confirmation request while invoice landlord has no bank account", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "none", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA } }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: null }); } }));
+  let wrote = false;
+  replace(Invoice, "findOneAndUpdate", async () => { wrote = true; });
+  const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 409);
+  assert.match(res.body.message, /chưa cấu hình tài khoản nhận tiền/);
+  assert.equal(wrote, false);
+});
+
+test("bank-account UI endpoints are registered under the expected paths and methods", () => {
+  const routes = userRoutes.stack.filter((layer) => layer.route).map((layer) => ({ path: layer.route.path, methods: layer.route.methods }));
+  assert.ok(routes.some((route) => route.path === "/bank-options" && route.methods.get));
+  assert.ok(routes.some((route) => route.path === "/me/bank-account" && route.methods.get));
+  assert.ok(routes.some((route) => route.path === "/me/bank-account" && route.methods.patch));
+  const invoiceInstructionsRoute = invoiceRoutes.stack.find((layer) => layer.route?.path === "/:id/payment-instructions");
+  assert.ok(invoiceInstructionsRoute?.route.methods.get);
+});
+
+test("landlord bank-account save persists the authenticated landlord's account through the model", async () => {
+  const originalFetch = global.fetch;
+  global.fetch = async () => ({ ok: true, json: async () => ({ data: [{ bin: "970416", shortName: "ACB", name: "Asia Commercial Bank", transferSupported: 1 }] }) });
+  let saved;
+  replace(User, "findByIdAndUpdate", (id, update, options) => {
+    saved = { id, update, options };
+    return { select() { return this; }, then(resolve) { resolve({ bankAccount: update.$set.bankAccount }); } };
+  });
+  try {
+    const res = await invoke(users.updateMyBankAccount, {
+      user: { _id: idB, role: "landlord" },
+      body: { bankBin: "970416", bankName: "ACB", accountNumber: "20129811", accountName: "Đoàn Việt Anh" },
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(saved.id, idB);
+    assert.equal(saved.update.$set.bankAccount.bankBin, "970416");
+    assert.equal(saved.update.$set.bankAccount.accountNumber, "20129811");
+    assert.equal(saved.update.$set.bankAccount.accountName, "Đoàn Việt Anh");
+    assert.equal(saved.options.runValidators, true);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("bank-account API returns field-specific validation errors without writing invalid data", async () => {
+  let wrote = false;
+  replace(User, "findByIdAndUpdate", async () => { wrote = true; });
+  const res = await invoke(users.updateMyBankAccount, {
+    user: { _id: idB, role: "landlord" },
+    body: { bankBin: "970416", bankName: "ACB", accountNumber: "20 129 811", accountName: "Đoàn\nViệt Anh" },
+  });
+  assert.equal(res.statusCode, 400);
+  assert.ok(res.body.errors.fieldErrors.accountNumber);
+  assert.ok(res.body.errors.fieldErrors.accountName);
+  assert.equal(wrote, false);
+});
+
+test("landlord bank-account read loads the saved private field for the authenticated account", async () => {
+  const bankAccount = { bankBin: "970416", bankName: "ACB", accountNumber: "123456789", accountName: "LANDLORD NAME" };
+  let selected;
+  replace(User, "findById", (id) => ({ select(field) { selected = field; return this; }, then(resolve) { resolve({ bankAccount }); } }));
+  const res = await invoke(users.getMyBankAccount, { user: { _id: idB, role: "landlord" } });
+  assert.equal(selected, "+bankAccount");
+  assert.equal(res.body.data.bankAccount, bankAccount);
 });
 
 test("landlord confirmation marks paid once and sends the tenant a success notification", async () => {

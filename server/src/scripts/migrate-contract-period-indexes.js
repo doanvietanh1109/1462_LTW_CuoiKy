@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const COLLECTIONS = [
   { name: "invoices", legacyUniqueKeyPatterns: [{ roomId: 1, month: 1, year: 1 }, { roomId: 1, billingMonth: 1 }], next: "uniq_invoice_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
-  { name: "meterreadings", legacyUniqueKeyPatterns: [{ roomId: 1, month: 1, year: 1 }], next: "uniq_meter_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
+  { name: "meterreadings", legacyUniqueKeyPatterns: [{ roomId: 1, month: 1, year: 1 }, { roomId: 1, billingMonth: 1 }], next: "uniq_meter_room_period_contract", keys: { roomId: 1, month: 1, year: 1, contractId: 1 } },
 ];
 
 const matchesLegacyUniqueIndex = (index, patterns) => index.unique && patterns.some((keys) => JSON.stringify(index.key) === JSON.stringify(keys));

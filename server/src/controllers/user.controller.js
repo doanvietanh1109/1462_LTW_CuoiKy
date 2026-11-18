@@ -26,11 +26,16 @@ const updateMyBankAccount = async (req, res) => {
   try {
     if (req.user.role !== "landlord") return sendError(res, "Chỉ chủ trọ mới được cấu hình tài khoản nhận tiền", null, 403);
     const { bankBin, bankName, accountNumber, accountName } = req.body || {};
-    if (!/^\d{6}$/.test(String(bankBin || "")) || !/^[A-Za-z0-9]{6,19}$/.test(String(accountNumber || "")) || typeof bankName !== "string" || !bankName.trim() || typeof accountName !== "string" || accountName.trim().length < 5 || accountName.trim().length > 50) return sendError(res, "Thông tin ngân hàng không hợp lệ", null, 400);
+    const fieldErrors = {};
+    if (!/^\d{6}$/.test(String(bankBin || "")) || typeof bankName !== "string" || !bankName.trim()) fieldErrors.bankBin = "Vui lòng chọn ngân hàng từ danh sách.";
+    if (!/^[A-Za-z0-9]{6,19}$/.test(String(accountNumber || ""))) fieldErrors.accountNumber = "Số tài khoản cần có 6–19 chữ cái hoặc chữ số, không chứa khoảng trắng hay dấu phân cách.";
+    const normalizedAccountName = typeof accountName === "string" ? accountName.trim() : "";
+    if (normalizedAccountName.length < 5 || normalizedAccountName.length > 50 || /[\u0000-\u001f\u007f]/.test(normalizedAccountName)) fieldErrors.accountName = "Tên chủ tài khoản cần dài 5–50 ký tự và không chứa ký tự điều khiển.";
+    if (Object.keys(fieldErrors).length) return sendError(res, "Vui lòng kiểm tra các trường thông tin ngân hàng.", { fieldErrors }, 400);
     const banks = await fetchBankOptions();
     const bank = banks.find((item) => item.bin === String(bankBin));
-    if (!bank || ![bank.shortName, bank.name].includes(bankName.trim())) return sendError(res, "Hãy chọn ngân hàng từ danh sách VietQR hiện hành", null, 400);
-    const user = await User.findByIdAndUpdate(req.user._id, { $set: { bankAccount: { bankBin, bankName: bank.shortName || bank.name, accountNumber, accountName: accountName.trim(), updatedAt: new Date() } } }, { new: true, runValidators: true }).select("+bankAccount");
+    if (!bank || ![bank.shortName, bank.name].includes(bankName.trim())) return sendError(res, "Hãy chọn ngân hàng từ danh sách VietQR hiện hành", { fieldErrors: { bankBin: "Ngân hàng không khớp với danh sách VietQR. Hãy chọn lại ngân hàng." } }, 400);
+    const user = await User.findByIdAndUpdate(req.user._id, { $set: { bankAccount: { bankBin, bankName: bank.shortName || bank.name, accountNumber, accountName: normalizedAccountName, updatedAt: new Date() } } }, { new: true, runValidators: true }).select("+bankAccount");
     return sendSuccess(res, "Đã lưu thông tin tài khoản nhận tiền", { bankAccount: user.bankAccount });
   } catch { return sendError(res, "Không lưu được thông tin tài khoản", null, 400); }
 };
