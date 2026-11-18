@@ -4,8 +4,14 @@ const { Room } = require("../src/models/room.model");
 const { Contract } = require("../src/models/contract.model");
 const { Invoice } = require("../src/models/invoice.model");
 const { MeterReading } = require("../src/models/meterReading.model");
+const { Notification } = require("../src/models/notification.model");
+const { User } = require("../src/models/user.model");
 const meter = require("../src/controllers/meterReading.controller");
 const billing = require("../src/controllers/invoice.controller");
+const users = require("../src/controllers/user.controller");
+const userRoutes = require("../src/routes/user.routes");
+const invoiceRoutes = require("../src/routes/invoice.routes");
+const { COLLECTIONS: indexMigrationCollections, matchesLegacyUniqueIndex } = require("../src/scripts/migrate-contract-period-indexes");
 
 const originals = new Map();
 const replace = (object, key, value) => {
@@ -29,6 +35,59 @@ const idB = "bbbbbbbbbbbbbbbbbbbbbbbb";
 const row = (roomId = idA, overrides = {}) => ({ roomId, oldElectricity: 10, newElectricity: 12, oldWater: 2, newWater: 3, ...overrides });
 
 test.afterEach(restore);
+
+test("invoice and meter uniqueness scope a monthly record to its contract", () => {
+  for (const [schema, name] of [[Invoice.schema, "uniq_invoice_room_period_contract"], [MeterReading.schema, "uniq_meter_room_period_contract"]]) {
+    const index = schema.indexes().find(([, options]) => options.name === name);
+    assert.ok(index);
+    assert.deepEqual(index[0], { roomId: 1, month: 1, year: 1, contractId: 1 });
+    assert.equal(index[1].unique, true);
+  }
+});
+
+test("batch duplicate-key classifier distinguishes legacy indexes from contract-period races", () => {
+  const legacy = meter.describeDuplicateKey({ keyPattern: { roomId: 1, month: 1, year: 1 } });
+  assert.equal(legacy.code, "legacy_room_period_index");
+  assert.equal(legacy.requiresIndexMigration, true);
+  const contractScoped = meter.describeDuplicateKey({ keyPattern: { roomId: 1, month: 1, year: 1, contractId: 1 } });
+  assert.equal(contractScoped.code, "contract_period_conflict");
+  assert.equal(contractScoped.requiresIndexMigration, false);
+  const invoiceCode = meter.describeDuplicateKey({ keyPattern: { invoiceCode: 1 } });
+  assert.equal(invoiceCode.code, "invoice_code_conflict");
+  const billingMonthNull = meter.describeDuplicateKey({ keyPattern: { roomId: 1, billingMonth: 1 }, keyValue: { roomId: idA, billingMonth: null } });
+  assert.equal(billingMonthNull.code, "legacy_billing_month_index");
+  assert.equal(billingMonthNull.requiresIndexMigration, true);
+});
+
+test("invoice schema uses month/year and migration recognizes the legacy billingMonth unique index", () => {
+  assert.equal(Invoice.schema.path("billingMonth"), undefined);
+  assert.ok(Invoice.schema.path("month"));
+  assert.ok(Invoice.schema.path("year"));
+  const invoicePlan = indexMigrationCollections.find((item) => item.name === "invoices");
+  assert.ok(invoicePlan.legacyUniqueKeyPatterns.some((keys) => keys.billingMonth === 1));
+  assert.equal(matchesLegacyUniqueIndex({ unique: true, key: { roomId: 1, billingMonth: 1 } }, invoicePlan.legacyUniqueKeyPatterns), true);
+  assert.equal(matchesLegacyUniqueIndex({ unique: false, key: { roomId: 1, billingMonth: 1 } }, invoicePlan.legacyUniqueKeyPatterns), false);
+});
+
+test("batch issue reports the legacy room-period index instead of a generic race", async () => {
+  const room = { _id: idA, ownerId: idA, status: "rented", price: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  const contract = { _id: idB, roomId: idA, tenantId: idB, rentPrice: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  replace(Room, "find", async () => [room]);
+  replace(Contract, "find", async () => [contract]);
+  replace(Invoice, "find", async () => []);
+  replace(Invoice, "create", async () => { throw { code: 11000, keyPattern: { roomId: 1, month: 1, year: 1 }, keyValue: { roomId: idA, month: 11, year: 2026 } }; });
+  let readingWrite = false;
+  replace(MeterReading, "findOneAndUpdate", async () => { readingWrite = true; });
+  const res = await invoke(meter.saveBatchMeterReadings, {
+    user: { _id: idA, role: "landlord" },
+    body: { month: 11, year: 2026, issueInvoices: true, useTieredElectricity: false, rows: [row(idA)] },
+  });
+  assert.equal(res.statusCode, 409);
+  assert.equal(res.body.errors.code, "legacy_room_period_index");
+  assert.equal(res.body.errors.requiresIndexMigration, true);
+  assert.equal(res.body.errors.contractId, idB);
+  assert.equal(readingWrite, false);
+});
 
 test("landlord A cannot batch-write landlord B's room", async () => {
   replace(Room, "find", async () => []);
@@ -62,6 +121,49 @@ test("tenant may read their invoice through its direct tenantId link", async () 
   assert.equal(res.body.data.invoice, invoice);
 });
 
+test("current room tenant does not gain access to an unlinked historical invoice", async () => {
+  const invoice = { _id: idB, tenantId: null, roomId: { tenant: { userId: idA } }, contractId: null };
+  const query = { populate() { return this; }, then(resolve) { resolve(invoice); } };
+  replace(Invoice, "findById", () => query);
+  const res = await invoke(billing.getInvoiceById, { params: { id: idB }, user: { _id: idA, email: "new@example.test", role: "user" } });
+  assert.equal(res.statusCode, 403);
+});
+
+test("tenant payment instructions include invoice breakdown and dynamic ACB VietQR data", async () => {
+  const invoice = { _id: idB, invoiceCode: "INV-202611-AE7B-78", month: 11, year: 2026, dueDate: new Date("2026-11-10T00:00:00Z"), totalAmount: 3147500, roomPrice: 2500000, electricityCost: 375000, waterCost: 125000, serviceFee: 147500, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: null, roomNumber: "901" }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", (landlordId) => { assert.equal(String(landlordId), idB); return { select() { return this; }, then(resolve) { resolve({ bankAccount: { bankBin: "970416", bankName: "ACB", accountNumber: "20129811", accountName: "DOAN VIET ANH" } }); } }; });
+  const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.data.invoice.amount, 3147500);
+  assert.equal(res.body.data.invoice.roomPrice, 2500000);
+  assert.equal(res.body.data.invoice.electricityCost, 375000);
+  assert.equal(res.body.data.invoice.waterCost, 125000);
+  assert.equal(res.body.data.invoice.serviceFee, 147500);
+  assert.equal(res.body.data.invoice.dueDate.toISOString(), "2026-11-10T00:00:00.000Z");
+  const qr = new URL(res.body.data.qrUrl);
+  assert.equal(qr.pathname, "/image/970416-20129811-compact2.svg");
+  assert.equal(qr.searchParams.get("amount"), "3147500");
+  assert.equal(qr.searchParams.get("addInfo"), "RIPTINV202611AE7B78");
+  assert.equal(qr.searchParams.get("accountName"), "DOAN VIET ANH");
+});
+
+test("tenant cannot get payment instructions for another tenant invoice", async () => {
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve({ _id: idB, status: "unpaid", landlordId: idB, tenantId: idB, roomId: { tenant: null }, contractId: null }); } }));
+  const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 403);
+});
+
+test("payment instructions do not return a QR when landlord has no bank account", async () => {
+  const invoice = { _id: idB, status: "unpaid", landlordId: idB, tenantId: idA, roomId: { tenant: null }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: null }); } }));
+  const res = await invoke(billing.getPaymentInstructions, { params: { id: idB }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.data.configured, false);
+  assert.equal(res.body.data.qrUrl, undefined);
+});
+
 test("tenant invoice list includes records linked directly by tenantId", async () => {
   replace(Contract, "find", () => ({ select: async () => [] }));
   replace(Room, "find", () => ({ select: async () => [] }));
@@ -71,18 +173,135 @@ test("tenant invoice list includes records linked directly by tenantId", async (
   replace(Invoice, "countDocuments", async () => 1);
   const res = await invoke(billing.getInvoices, { query: {}, user: { _id: idA, email: "a@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(capturedQuery.$or, [{ roomId: { $in: [] } }, { tenantId: idA }]);
+  assert.deepEqual(capturedQuery.$or, [{ tenantId: idA }, { contractId: { $in: [] } }]);
   assert.deepEqual(res.body.data.invoices, [{ _id: idB }]);
 });
 
 test("tenant payment request waits for landlord confirmation instead of marking paid", async () => {
-  const invoice = { _id: idA, status: "unpaid", roomId: { tenant: { userId: idA } }, contractId: null, save: async () => {} };
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "none", totalAmount: 1000, invoiceCode: "INV-1", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA }, roomNumber: "901" }, contractId: null };
   replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: { bankBin: "970416", bankName: "ACB", accountNumber: "123456789", accountName: "LANDLORD NAME" } }); } }));
+  replace(Invoice, "findOneAndUpdate", async (filter, update) => { assert.equal(filter.status, "unpaid"); assert.equal(update.$set.paymentConfirmationStatus, "pending"); invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; invoice.paymentSubmittedAt = update.$set.paymentSubmittedAt; invoice.paymentConfirmationRequests = update.$push.paymentConfirmationRequests; return invoice; });
+  const recipients = [];
+  replace(Notification, "create", async (data) => { recipients.push(data.userId); return {}; });
   const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
   assert.equal(res.statusCode, 200);
-  assert.equal(invoice.status, "pending_confirmation");
+  assert.equal(invoice.status, "unpaid");
+  assert.equal(invoice.paymentConfirmationStatus, "pending");
   assert.ok(invoice.paymentSubmittedAt instanceof Date);
   assert.equal(invoice.paidAt, undefined);
+  assert.deepEqual(recipients, [idB, idA]);
+});
+
+test("tenant cannot send a transfer-confirmation request while invoice landlord has no bank account", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "none", landlordId: idB, tenantId: idA, roomId: { tenant: { userId: idA } }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  replace(User, "findById", () => ({ select() { return this; }, then(resolve) { resolve({ bankAccount: null }); } }));
+  let wrote = false;
+  replace(Invoice, "findOneAndUpdate", async () => { wrote = true; });
+  const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 409);
+  assert.match(res.body.message, /chưa cấu hình tài khoản nhận tiền/);
+  assert.equal(wrote, false);
+});
+
+test("bank-account UI endpoints are registered under the expected paths and methods", () => {
+  const routes = userRoutes.stack.filter((layer) => layer.route).map((layer) => ({ path: layer.route.path, methods: layer.route.methods }));
+  assert.ok(routes.some((route) => route.path === "/bank-options" && route.methods.get));
+  assert.ok(routes.some((route) => route.path === "/me/bank-account" && route.methods.get));
+  assert.ok(routes.some((route) => route.path === "/me/bank-account" && route.methods.patch));
+  const invoiceInstructionsRoute = invoiceRoutes.stack.find((layer) => layer.route?.path === "/:id/payment-instructions");
+  assert.ok(invoiceInstructionsRoute?.route.methods.get);
+});
+
+test("landlord bank-account save persists the authenticated landlord's account through the model", async () => {
+  const originalFetch = global.fetch;
+  global.fetch = async () => ({ ok: true, json: async () => ({ data: [{ bin: "970416", shortName: "ACB", name: "Asia Commercial Bank", transferSupported: 1 }] }) });
+  let saved;
+  replace(User, "findByIdAndUpdate", (id, update, options) => {
+    saved = { id, update, options };
+    return { select() { return this; }, then(resolve) { resolve({ bankAccount: update.$set.bankAccount }); } };
+  });
+  try {
+    const res = await invoke(users.updateMyBankAccount, {
+      user: { _id: idB, role: "landlord" },
+      body: { bankBin: "970416", bankName: "ACB", accountNumber: "20129811", accountName: "Đoàn Việt Anh" },
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(saved.id, idB);
+    assert.equal(saved.update.$set.bankAccount.bankBin, "970416");
+    assert.equal(saved.update.$set.bankAccount.accountNumber, "20129811");
+    assert.equal(saved.update.$set.bankAccount.accountName, "Đoàn Việt Anh");
+    assert.equal(saved.options.runValidators, true);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test("bank-account API returns field-specific validation errors without writing invalid data", async () => {
+  let wrote = false;
+  replace(User, "findByIdAndUpdate", async () => { wrote = true; });
+  const res = await invoke(users.updateMyBankAccount, {
+    user: { _id: idB, role: "landlord" },
+    body: { bankBin: "970416", bankName: "ACB", accountNumber: "20 129 811", accountName: "Đoàn\nViệt Anh" },
+  });
+  assert.equal(res.statusCode, 400);
+  assert.ok(res.body.errors.fieldErrors.accountNumber);
+  assert.ok(res.body.errors.fieldErrors.accountName);
+  assert.equal(wrote, false);
+});
+
+test("landlord bank-account read loads the saved private field for the authenticated account", async () => {
+  const bankAccount = { bankBin: "970416", bankName: "ACB", accountNumber: "123456789", accountName: "LANDLORD NAME" };
+  let selected;
+  replace(User, "findById", (id) => ({ select(field) { selected = field; return this; }, then(resolve) { resolve({ bankAccount }); } }));
+  const res = await invoke(users.getMyBankAccount, { user: { _id: idB, role: "landlord" } });
+  assert.equal(selected, "+bankAccount");
+  assert.equal(res.body.data.bankAccount, bankAccount);
+});
+
+test("landlord confirmation marks paid once and sends the tenant a success notification", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "pending", paymentSubmittedAt: new Date(), paymentConfirmationRequests: [{ tenantId: idB, status: "pending" }], landlordId: { toString: () => idA }, tenantId: idB, invoiceCode: "INV-2", totalAmount: 3147500 };
+  let reads = 0; let writes = 0; const notices = [];
+  replace(Invoice, "findById", () => ++reads === 1 ? Promise.resolve(invoice) : ({ populate() { return this; }, then(resolve) { resolve({ ...invoice }); } }));
+  replace(Invoice, "findOneAndUpdate", async (filter, update) => { writes += 1; assert.equal(filter.paymentConfirmationStatus, "pending"); invoice.status = update.$set.status; invoice.paymentMethod = update.$set.paymentMethod; invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; return invoice; });
+  replace(Notification, "create", async (notice) => { notices.push(notice); return {}; });
+  const req = { params: { id: idA }, body: {}, user: { _id: idA, role: "landlord" } };
+  const first = await invoke(billing.markInvoicePaid, req);
+  const second = await invoke(billing.markInvoicePaid, req);
+  assert.equal(first.statusCode, 200);
+  assert.equal(second.statusCode, 409);
+  assert.equal(writes, 1);
+  assert.equal(invoice.status, "paid");
+  assert.equal(invoice.paymentMethod, "bank_transfer");
+  assert.equal(notices.length, 1);
+  assert.equal(notices[0].userId, idB);
+  assert.equal(notices[0].title, "Thanh toán đã được xác nhận");
+});
+
+test("landlord rejection keeps invoice unpaid, records reason, and notifies only its tenant", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "pending", paymentSubmittedAt: new Date(), paymentConfirmationRequests: [{ tenantId: idB, status: "pending" }], landlordId: { toString: () => idA }, tenantId: idB, invoiceCode: "INV-3" };
+  replace(Invoice, "findById", async () => invoice);
+  replace(Invoice, "findOneAndUpdate", async (_filter, update) => { invoice.status = update.$set.status; invoice.paymentConfirmationStatus = update.$set.paymentConfirmationStatus; invoice.paymentRejectionReason = update.$set.paymentRejectionReason; return invoice; });
+  let notice;
+  replace(Notification, "create", async (data) => { notice = data; return {}; });
+  const res = await invoke(billing.rejectPaymentRequest, { params: { id: idA }, body: { reason: "Chưa thấy giao dịch vào tài khoản" }, user: { _id: idA, role: "landlord" } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(invoice.status, "unpaid");
+  assert.equal(invoice.paymentConfirmationStatus, "rejected");
+  assert.equal(invoice.paymentRejectionReason, "Chưa thấy giao dịch vào tài khoản");
+  assert.equal(notice.userId, idB);
+  assert.match(notice.message, /Chưa thấy giao dịch/);
+});
+
+test("tenant cannot submit a duplicate request while one is pending", async () => {
+  const invoice = { _id: idA, status: "unpaid", paymentConfirmationStatus: "pending", tenantId: idA, roomId: { tenant: { userId: idA } }, contractId: null };
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(invoice); } }));
+  let wrote = false;
+  replace(Invoice, "findOneAndUpdate", async () => { wrote = true; });
+  const res = await invoke(billing.tenantPayInvoice, { params: { id: idA }, user: { _id: idA, email: "tenant@example.test", role: "user" } });
+  assert.equal(res.statusCode, 409);
+  assert.equal(wrote, false);
 });
 
 test("batch rejects decreasing readings, invalid numbers, periods, and repeated room IDs", async () => {
@@ -204,4 +423,34 @@ test("invoice creation converts a unique-index race into HTTP 409", async () => 
   assert.equal(res.statusCode, 409);
   assert.match(res.body.message, /đã được tạo bởi yêu cầu khác/);
   assert.equal(readingWritten, false);
+});
+
+test("new contract receives a new unpaid invoice in a room-period already billed to an old contract", async () => {
+  const oldContractId = "cccccccccccccccccccccccc";
+  const newTenantId = "dddddddddddddddddddddddd";
+  const room = { _id: idA, ownerId: idA, status: "rented", price: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0, currentElectricity: 12, currentWater: 3, save: async () => {} };
+  const activeContract = { _id: idB, roomId: idA, tenantId: newTenantId, rentPrice: 1000, electricityPrice: 3, waterPrice: 4, serviceFee: 0 };
+  const oldInvoice = { _id: "eeeeeeeeeeeeeeeeeeeeeeee", roomId: idA, contractId: oldContractId, tenantId: oldContractId, status: "paid", invoiceCode: "OLD-PAID" };
+  const created = { _id: "ffffffffffffffffffffffff", tenantId: newTenantId, contractId: idB, status: "unpaid", serviceFee: 0, totalAmount: 1006, save: async () => {} };
+  let duplicateQuery;
+  replace(Invoice, "findOne", async (query) => { duplicateQuery = query; return query.contractId === oldContractId ? oldInvoice : null; });
+  replace(Invoice, "create", async (data) => { Object.assign(created, data); return created; });
+  replace(Invoice, "findById", () => ({ populate() { return this; }, then(resolve) { resolve(created); } }));
+  replace(Room, "findById", async () => room);
+  replace(Contract, "findOne", async () => activeContract);
+  replace(MeterReading, "findOneAndUpdate", async () => ({ _id: "reading-id" }));
+  replace(Notification, "create", async () => ({}));
+  const now = new Date();
+  const res = await invoke(billing.createInvoice, {
+    user: { _id: idA, role: "landlord" },
+    body: { roomId: idA, month: now.getMonth() + 1, year: now.getFullYear(), oldElectricity: 10, newElectricity: 12, oldWater: 2, newWater: 3, serviceFee: 0 },
+  });
+  assert.equal(res.statusCode, 201);
+  assert.equal(duplicateQuery.contractId, idB);
+  assert.equal(created.contractId, idB);
+  assert.equal(created.tenantId, newTenantId);
+  assert.equal(created.billingMonth, undefined);
+  assert.equal(created.status, "unpaid");
+  assert.equal(oldInvoice.status, "paid");
+  assert.equal(oldInvoice.tenantId, oldContractId);
 });

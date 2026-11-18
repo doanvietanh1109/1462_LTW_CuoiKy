@@ -2,6 +2,44 @@ const { User } = require("../models/user.model");
 const { Room } = require("../models/room.model");
 const { sendSuccess, sendError } = require("../utils/response");
 
+let bankOptionsCache = { expiresAt: 0, banks: [] };
+const fetchBankOptions = async () => {
+  if (bankOptionsCache.expiresAt > Date.now()) return bankOptionsCache.banks;
+  const response = await fetch("https://api.vietqr.io/v2/banks", { signal: AbortSignal.timeout(5000) });
+  if (!response.ok) throw new Error("Bank list unavailable");
+  const payload = await response.json();
+  bankOptionsCache = { expiresAt: Date.now() + 86400000, banks: (payload.data || []).filter((bank) => Number(bank.transferSupported) === 1).map(({ bin, shortName, name }) => ({ bin: String(bin), shortName, name })) };
+  return bankOptionsCache.banks;
+};
+const getBankOptions = async (req, res) => {
+  try {
+    return sendSuccess(res, "Danh sách ngân hàng", { banks: await fetchBankOptions() });
+  } catch { return sendError(res, "Không tải được danh sách ngân hàng VietQR. Hãy thử lại sau.", null, 503); }
+};
+
+const getMyBankAccount = async (req, res) => {
+  const user = await User.findById(req.user._id).select("+bankAccount");
+  return sendSuccess(res, "Thông tin tài khoản nhận tiền", { bankAccount: user?.bankAccount || null });
+};
+
+const updateMyBankAccount = async (req, res) => {
+  try {
+    if (req.user.role !== "landlord") return sendError(res, "Chỉ chủ trọ mới được cấu hình tài khoản nhận tiền", null, 403);
+    const { bankBin, bankName, accountNumber, accountName } = req.body || {};
+    const fieldErrors = {};
+    if (!/^\d{6}$/.test(String(bankBin || "")) || typeof bankName !== "string" || !bankName.trim()) fieldErrors.bankBin = "Vui lòng chọn ngân hàng từ danh sách.";
+    if (!/^[A-Za-z0-9]{6,19}$/.test(String(accountNumber || ""))) fieldErrors.accountNumber = "Số tài khoản cần có 6–19 chữ cái hoặc chữ số, không chứa khoảng trắng hay dấu phân cách.";
+    const normalizedAccountName = typeof accountName === "string" ? accountName.trim() : "";
+    if (normalizedAccountName.length < 5 || normalizedAccountName.length > 50 || /[\u0000-\u001f\u007f]/.test(normalizedAccountName)) fieldErrors.accountName = "Tên chủ tài khoản cần dài 5–50 ký tự và không chứa ký tự điều khiển.";
+    if (Object.keys(fieldErrors).length) return sendError(res, "Vui lòng kiểm tra các trường thông tin ngân hàng.", { fieldErrors }, 400);
+    const banks = await fetchBankOptions();
+    const bank = banks.find((item) => item.bin === String(bankBin));
+    if (!bank || ![bank.shortName, bank.name].includes(bankName.trim())) return sendError(res, "Hãy chọn ngân hàng từ danh sách VietQR hiện hành", { fieldErrors: { bankBin: "Ngân hàng không khớp với danh sách VietQR. Hãy chọn lại ngân hàng." } }, 400);
+    const user = await User.findByIdAndUpdate(req.user._id, { $set: { bankAccount: { bankBin, bankName: bank.shortName || bank.name, accountNumber, accountName: normalizedAccountName, updatedAt: new Date() } } }, { new: true, runValidators: true }).select("+bankAccount");
+    return sendSuccess(res, "Đã lưu thông tin tài khoản nhận tiền", { bankAccount: user.bankAccount });
+  } catch { return sendError(res, "Không lưu được thông tin tài khoản", null, 400); }
+};
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
@@ -140,15 +178,6 @@ const getBookmarkedRooms = async (req, res) => {
   }
 };
 
-module.exports = {
-  getAllUsers,
-  getUserById,
-  updateUserStatus,
-  toggleBookmark,
-  getBookmarkedRooms
-};
-
-
 const getUserByEmail = async (req, res) => {
   try {
     const { email } = req.query;
@@ -177,5 +206,8 @@ module.exports = {
   updateUserRole,
   toggleBookmark,
   getBookmarkedRooms,
-  getUserByEmail
+  getUserByEmail,
+  getBankOptions,
+  getMyBankAccount,
+  updateMyBankAccount,
 };

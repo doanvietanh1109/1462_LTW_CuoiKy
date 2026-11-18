@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import { apiRequest, formatVND, formatDateVN } from "../api/apiClient";
 import { StatusBadge } from "../components/common/StatusBadge";
 import "../styles/tenant.css";
@@ -16,6 +17,7 @@ const InvoiceItem = ({ number, title, detail, quantity, unit, amount }) => (
 export const InvoiceDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,7 +48,11 @@ export const InvoiceDetailPage = () => {
     <main className="container py-4 invoice-page">
       <div className="d-flex justify-content-between align-items-center gap-2 mb-3 d-print-none">
         <button type="button" className="btn btn-outline-secondary" onClick={() => navigate(-1)}><i className="bi bi-arrow-left me-1"/>Quay lại</button>
-        <button type="button" className="btn btn-primary fw-semibold" onClick={() => window.print()}><i className="bi bi-printer me-1"/>In / Lưu PDF</button>
+        <div className="d-flex flex-wrap gap-2">
+          {user?.role === "user" && invoice.status === "unpaid" && invoice.paymentConfirmationStatus !== "pending" && <button type="button" className="btn btn-success fw-semibold" onClick={() => navigate(`/tenant/my-room?pay=${encodeURIComponent(invoice._id || id)}`)}><i className="bi bi-credit-card me-1"/>Thanh toán ngay</button>}
+          {user?.role === "user" && (invoice.paymentConfirmationStatus === "pending" || invoice.status === "pending_confirmation") && <span className="btn btn-outline-warning disabled">Đang chờ chủ trọ xác nhận</span>}
+          <button type="button" className="btn btn-primary fw-semibold" onClick={() => window.print()}><i className="bi bi-printer me-1"/>In / Lưu PDF</button>
+        </div>
       </div>
 
       <article className="invoice-receipt card border-0 shadow-sm rounded-4">
@@ -86,6 +92,8 @@ export const InvoiceDetailPage = () => {
 
         <section className="invoice-footer" aria-label="Ghi chú và trạng thái">
           <div><strong>Trạng thái:</strong> <StatusBadge type="invoice" status={invoice.status}/>{invoice.paidAt && <span className="ms-2 text-muted">Xác nhận ngày {formatDateVN(invoice.paidAt)}</span>}</div>
+          {invoice.paymentConfirmationStatus === "pending" && <div className="alert alert-warning mt-3 mb-0"><i className="bi bi-hourglass-split me-2"/>Đã gửi yêu cầu xác nhận chuyển khoản. Hóa đơn vẫn chưa được thanh toán cho đến khi chủ trọ xác nhận.</div>}
+          {invoice.paymentConfirmationStatus === "rejected" && <div className="alert alert-danger mt-3 mb-0">Yêu cầu xác nhận chưa được chấp thuận.{invoice.paymentRejectionReason ? ` Lý do: ${invoice.paymentRejectionReason}` : " Vui lòng kiểm tra giao dịch hoặc liên hệ chủ trọ."}</div>}
           {invoice.note && <p><strong>Ghi chú:</strong> {invoice.note}</p>}
           <p>Số liệu và khoản thu được lấy từ hóa đơn đã phát hành trên hệ thống.</p>
         </section>

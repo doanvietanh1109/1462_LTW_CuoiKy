@@ -149,3 +149,171 @@
 - Các luồng còn thiếu integration/E2E: hợp đồng → meter → invoice → payment; tenant xem invoice/repair/notification; guest contact; upload Cloudinary; responsive và print/PDF.
 - UI còn cần nâng theo ảnh tham khảo: tenant dashboard/quick access đầy đủ và responsive; danh sách/chi tiết hóa đơn nâng cấp; notification center cho landlord và tenant; sửa chữa, empty/loading/error states. Không redesign trong P0 pass này.
 - Phiên kế tiếp bắt đầu bằng `git status --short --branch` và `git log -3 --oneline`, đọc mục này, giữ nguyên các commit local; ưu tiên browser/DB-test verification trước khi thêm tính năng.
+
+## VietQR hóa đơn theo từng chủ trọ — 2026-11-16
+
+### Công việc đã hoàn thành
+
+- Giữ nguyên branch `feat/invoice-vietqr`, bắt đầu từ `main` sạch tại `1987476`; không sửa `main`, không push/merge, không dùng MongoDB thật.
+- Thêm cấu hình bank account theo User, mặc định rỗng và `select: false`. Cấu hình chỉ qua endpoint self-service có role landlord; ngân hàng được chọn từ VietQR bank list (transfer supported), không lấy thông tin tài khoản từ ảnh tham khảo. `/users/:id`, danh sách user và `req.user` không tự lộ trường này.
+- Thêm `GET /api/users/bank-options`, `GET/PATCH /api/users/me/bank-account`; danh sách ngân hàng VietQR cache trong process 24h, timeout 5 giây. Không có API key hay dữ liệu tài khoản hardcode.
+- Thêm `GET /api/invoices/:id/payment-instructions`: kiểm tra tenant/invoice ownership, trạng thái chưa thanh toán, lấy amount từ DB và tài khoản từ đúng landlord. Trả `configured:false` nếu chưa có tài khoản. QR Quick Link VietQR dùng amount, account name và mã đối soát `RIPT` + ObjectId invoice; client không thể truyền amount/landlord/account.
+- Tenant modal hiển thị QR và thông tin chuyển thủ công/copy; nếu ảnh QR lỗi, thông tin chuyển khoản vẫn dùng được. Gửi yêu cầu không tự đổi thành paid; thao tác gửi và landlord xác nhận/từ chối dùng update có điều kiện theo status. Lưu audit events trong invoice, thông báo landlord/tenant được tái sử dụng.
+- Landlord invoice page có form tự cấu hình nhận tiền và nút xác nhận/từ chối cho yêu cầu chờ. Nút thu tiền thủ công hiện có vẫn dùng được cho khoản offline.
+- Thêm regression tests cho quyền xem instructions, amount/transfer content, bank account thiếu, và tenant request pending thay vì paid.
+
+### Lỗi đã sửa và bằng chứng
+
+- Trước đây tenant chỉ thấy hướng dẫn giả chung vì hệ thống không có tài khoản nhận tiền; nay tạo QR theo account của landlord gắn invoice, hoặc hiện rõ chưa cấu hình.
+- Trước đây nút tenant submit dùng read-then-save, có thể gửi đua; nay atomic update lọc `status: unpaid`, request lặp nhận 409 và không đánh dấu đã thu.
+- Xác nhận thanh toán được lọc status chưa paid và ghi `paymentConfirmedBy`, tránh cập nhật trùng. Chỉ landlord sở hữu invoice mới được approve/reject.
+- Regression tests kiểm tra amount 3.147.500 được encode đúng từ invoice và tham chiếu phân biệt invoice; unauthorized tenant nhận 403; thiếu bank không trả QR.
+
+### Chưa hoàn thành / lỗi còn tồn tại
+
+- VietQR Quick Link trả ảnh QR từ dịch vụ bên ngoài; không kiểm tra scan thật với ứng dụng ngân hàng. Không có callback/webhook, đối soát giao dịch hoặc xác thực tài khoản ngân hàng. Chủ trọ phải kiểm tra giao dịch thật trước khi xác nhận.
+- Bank list lấy từ VietQR khi cấu hình/lần hết cache; mạng ngoài chưa được kiểm tra trong phiên. Khi dịch vụ lỗi, form cấu hình không lưu và có thể thử tải lại.
+- Chưa có nhắc tenant gửi ảnh biên lai (không phải bằng chứng xác thực); không hỗ trợ thanh toán một phần.
+- Các test approve/reject và cập nhật DB sau refresh chưa có integration test; test hiện tại là unit/mock.
+
+### Test đã chạy
+
+- `npm --prefix server test`: **42/42 PASS**, không kết nối MongoDB.
+- `npm --prefix client run build`: **PASS**.
+- `node --check` controller/routes được chạy trước lần cập nhật UI nhỏ; cần chạy lại cùng `git diff --check` ngay trước commit.
+
+### Integration/E2E còn thiếu
+
+- Chưa xác minh luồng bank profile save/reload, route auth thật, database persistence, payment instructions, approve/reject và cập nhật dashboard/công nợ trên MongoDB test.
+- Chưa có browser E2E cho tenant QR/modal/copy, ảnh QR lỗi, responsive, duplicate click, notification hay PDF/invoice detail.
+- Chưa dùng MongoDB production hoặc thực hiện chuyển khoản ngân hàng; các luồng trên **NOT VERIFIED** ngoài unit tests và production build.
+
+### Màn hình UI cần tiếp tục theo ảnh tham khảo
+
+- Home tenant với quick access, card hợp đồng và danh sách thông báo.
+- Notification center tenant/landlord, lọc loại và trạng thái đã đọc.
+- Feedback/repair empty state, form tạo và theo dõi yêu cầu.
+- Hóa đơn/payment modal cần browser visual QA trên mobile/desktop; giữ nguyên theme RIPT Rental.
+
+### Tiếp tục ở phiên Codex sau
+
+- Bắt đầu bằng `git status --short --branch`, `git log -3 --oneline`, và đọc mục này. Giữ các commit local.
+- Tạo DB test độc lập, cấu hình một landlord/tenant/invoice fixture; chạy integration test quyền, persist bank config, tạo QR instructions, submit, reject/approve và dashboard.
+- Mở app trong browser để quét/kiểm tra hiển thị QR (không chuyển tiền), copy fields, kiểm tra trạng thái và notification; thử responsive. Không dùng production DB.
+- Chạy lại tests/build, cập nhật mục Git cuối, rồi mới commit nếu sạch.
+
+### Git cuối lượt
+
+- Branch: `feat/invoice-vietqr`.
+- Base commit: `1987476`; feature commit: `fd31e34` (`feat: add per-landlord VietQR invoice payments`).
+- Working tree sạch sau commit tài liệu này; chưa push/merge; `main` không đổi.
+
+## Payment workflow follow-up — 2026-11-16
+
+### QR attachment review
+
+- Inspected the provided QR image locally; it was not uploaded to any external decoder and is not copied into the repository or public assets.
+- Visual inspection suggests it is a recipient QR without a prefilled amount (the bank screen offers “add amount”), but this is an inference only. A local QR decoder was unavailable; Apple Vision command-line decoding could not complete because the sandbox denied its module-cache write. The payload and beneficiary data are therefore **NOT VERIFIED**.
+- The attachment is not assigned to any landlord account: the user did not identify a specific landlord profile, and the account-to-landlord mapping cannot be verified from repository data. Dynamic VietQR remains generated from each landlord’s own saved bank settings. No bank information from the image was hardcoded.
+
+### Workflow updates
+
+- Invoice financial state remains `unpaid` while a separate `paymentConfirmationStatus` is `pending` or `rejected`; old `pending_confirmation` invoice records remain readable and actionable. No existing historical records are mass-updated.
+- Tenant submit atomically records the request and sends distinct invoice notifications to that tenant and the invoice landlord. The landlord message includes room, amount and invoice reference, and does not claim funds were received.
+- Landlord confirm prompts for actual receipt, atomically marks the invoice `paid`, records confirmer/time/method and sends a success notification to the tenant. Repeated confirmation returns conflict and cannot count revenue twice. Cash uses a distinct payment method and notification.
+- Landlord rejection can include a reason, records it, leaves invoice unpaid, and notifies the tenant. A rejected request can be submitted again; another request while one is pending is rejected. Tenant list and invoice detail display pending/rejected request status separately from paid/unpaid.
+- New invoice notification includes billing period, amount and a reminder to pay before due date.
+
+### Verification
+
+- Added controller tests for request/confirmation/rejection notification recipients, status separation, duplicate request rejection, idempotent confirmation, reason persistence, correct invoice amount in the QR URL, missing bank configuration, and forbidden invoice access.
+- Backend: `npm --prefix server test` — 45/45 PASS (mock/unit; no MongoDB).
+- Frontend: `npm --prefix client run build` — PASS.
+- Syntax checks for invoice/user controllers, invoice model and invoice routes — PASS. `git diff --check` — PASS.
+- Browser UI, persistent database state, actual external QR image load/scan, and bank/mobile-app preview remain **NOT VERIFIED**. No actual transfer or real MongoDB was used.
+
+### Files changed in this follow-up
+
+- `server/src/models/invoice.model.js`
+- `server/src/controllers/invoice.controller.js`
+- `server/test/billing-integrity.test.js`
+- `client/src/pages/TenantPortalPage.jsx`
+- `client/src/pages/InvoiceDetailPage.jsx`
+- `client/src/pages/landlord/LandlordInvoicesPage.jsx`
+- `client/src/store/slices/invoiceSlice.js`
+- `docs/QUALITY_PLAN.md`
+
+### Continue
+
+- Configure each landlord’s own bank profile and use a dedicated MongoDB test database with fixtures for two landlords and two tenants.
+- Browser-check tenant payment, notifications/read state after refresh, landlord rejection/confirmation prompts, cash receipt wording and responsive modal. Confirm QR recipient, amount and reference using a banking app preview only; do not submit a transfer.
+- Keep the attached QR out of the repository unless a specific landlord profile is identified and the payload is locally verified.
+
+### Git
+
+- Work continues on `feat/invoice-vietqr`, based at `1987476`; previous local commits `fd31e34` and `dce4eca` remain preserved.
+- Follow-up code/docs are committed locally after the verification above; no push/merge; `main` unchanged. See `git log -3 --oneline` for the exact commit.
+
+## Tenant turnover, payment entry point, and room editor — 2026-11-16
+
+### Findings and implementation
+
+- **Turnover root cause:** invoice and meter-reading schemas enforced unique `(roomId, month, year)`, and single invoice issuance rejected any invoice for the room-period. That prevents separately linked contracts in one calendar month. Tenant invoice listing also used the mutable current room assignment as an authorization path, and invoice detail access fell back to `Room.tenant`; a new tenant could therefore see an unlinked historical invoice. The portal also rendered “0 ₫ (Đã đóng đủ)” when the invoice list was empty.
+- Invoice and meter reading uniqueness is now scoped to `(roomId, month, year, contractId)`. Single/batch issuance and the meter sheet query by the active contract. Room-period readings and invoices for a prior contract are not reused for the current tenant. Tenant history access now requires direct invoice `tenantId` or its linked contract, never the room’s current tenant. Unlinked legacy invoices are withheld until a verified owner/contract association is available.
+- Ending a contract now only releases a room if it is still marked rented by that contract’s tenant. If a successor contract exists, the room’s current assignment is left intact. Regression tests cover both safeguards.
+- Added a guarded, manual index migration script at `server/src/scripts/migrate-contract-period-indexes.js`. It checks duplicate room/period/contract records before creating the replacement compound indexes, then drops the old room-period-only indexes. **The migration was not run.** Deploying the new same-month behavior requires a verified backup and applying this migration to the intended database; until then, the old database indexes still block same-room/same-month invoices.
+- The existing landlord-specific bank configuration, VietQR Quick Link API, pending confirmation state, owner-only approval/rejection, notification flow, and cash method were already implemented on this branch and were retained. Added an entry point from invoice detail into the tenant payment modal, clarified empty-invoice balance text, relabeled the list action “Thanh toán ngay”, made the modal fit narrow viewports, and added QR retry. The supplied personal QR remains outside the repository because it is not assigned to a landlord profile; no beneficiary data was hardcoded.
+- The room editor remains the existing RIPT modal. Scoped CSS now sets a responsive 940px desktop maximum and a constrained mobile width/scroll body; the form includes room number, landlord-owned block choice, electricity/water/service rates, and keeps the status control disabled for a rented room. Save loading/error state and existing image previews/upload flow are retained.
+
+### Files changed in this implementation
+
+- `server/src/controllers/contract.controller.js`
+- `server/src/controllers/invoice.controller.js`
+- `server/src/controllers/meterReading.controller.js`
+- `server/src/models/invoice.model.js`
+- `server/src/models/meterReading.model.js`
+- `server/src/scripts/migrate-contract-period-indexes.js`
+- `server/test/billing-integrity.test.js`
+- `server/test/contract-access.test.js`
+- `client/src/pages/TenantPortalPage.jsx`
+- `client/src/pages/InvoiceDetailPage.jsx`
+- `client/src/pages/landlord/LandlordDashboardPage.jsx`
+- `client/public/css/landlord.css`
+- `docs/QUALITY_PLAN.md`
+
+### Verification and limits
+
+- Backend `npm test`: **49/49 PASS** (mock/unit; no database connection). Includes ownership, cross-tenant historical invoice denial, duplicate key handling, contract-scoped index declarations, payment confirmation state, and zero service fee.
+- `node --check` for edited backend controllers and migration: **PASS**.
+- Frontend `npm run build`: **PASS**.
+- `git diff --check`: **PASS**.
+- MongoDB integration/index migration and actual tenant/landlord session flows: **NOT VERIFIED**. Browser visual checks at 390/768/1024/1440px, bank-app QR scan, external QR image fetch, and end-to-end payment: **NOT VERIFIED**.
+- Final utility/rent settlement for an outgoing tenant is not added. The current contract termination flow has no handover meter-entry inputs or approved partial-month rent rule, so computing a final bill without an actual handover reading would risk charging the wrong tenant or duplicating consumption. Separate contract-linked readings now allow same-month records after index migration; the landlord still needs to enter each contract’s verified meter boundaries before issuing its invoice.
+- Existing batch processing can report partial completion if a later database write fails; no MongoDB transaction was added because standalone deployment/replica-set capability was not verified. Reconcile the returned partial counts before retrying a failed batch.
+- No production database or actual financial record was read/changed. No `.env` values or QR image were added to repository assets.
+
+### Git state
+
+- Branch: `feat/invoice-vietqr` (continued without switching branches); no push or merge.
+- Local commit: `243afd4` (`fix: isolate turnover billing and improve payment entry`). Working tree clean after commit; no push or merge.
+
+## P.114 batch conflict follow-up — 2026-11-16
+
+- Exact source of the displayed text was `saveBatchMeterReadings` handling Mongo `E11000` and returning HTTP 409; the response previously included only `keyValue`. The tenant landlord meter UI displayed `error.message`, and its thunk discarded all error details except row validation errors.
+- The reported text alone cannot prove which index failed. An old `{roomId, month, year}` unique index would reject the new contract’s first invoice insert before any meter write. A `{roomId, month, year, contractId}` conflict could instead mean a prior/retried request already created it. A UI double-click is less likely because both batch buttons are disabled while submitting, but parallel tabs/retries remain possible. **Live request body, HTTP status, running app source, and MongoDB indexes were not queried** because the configured database target was not verified as an isolated test database and the running process listing was denied by the environment.
+- Batch duplicate responses now identify old room-period index versus contract-period conflict, invoice-code conflict, or unknown duplicate; include failed room/contract/phase and key pattern/value; and explicitly identify partial writes. The UI offers a manual reload for conflict states that may be reconciled, but no automatic retry. Legacy-index conflicts direct the operator to migration and do not present reload as a fix.
+- Added tests for legacy-index versus contract-period error classification, simulated legacy-index failure before meter write, and successful invoice creation for a new contract in a period that already has a paid prior-contract invoice. The new invoice is asserted to use the active contract/tenant and remain unpaid; the prior invoice remains paid and unchanged.
+- MongoDB migration remains **NOT RUN**. If the live MongoDB still has the old invoice index, P.114 invoice issuance remains blocked until an authorized operator validates and applies the guarded migration in `server/src/scripts/migrate-contract-period-indexes.js`. Do not retry the billing operation until the index state is verified.
+- This regression does not invent a partial-month rent rule. Synthetic tests establish contract ownership and isolation only; a real bill for Phùng Thanh Độ still requires verified contract start date, actual handover electric/water readings, and the project’s approved rent proration policy. No invoice was generated in live data.
+- Backend tests: 52/52 PASS (mock/unit only); frontend build PASS; edited backend syntax checks PASS; `git diff --check` PASS. Browser, running source version, API live response, database index state, and tenant portal’s persisted invoice remain **NOT VERIFIED**.
+- Files changed in this follow-up: `server/src/controllers/meterReading.controller.js`, `server/test/billing-integrity.test.js`, `client/src/store/slices/invoiceSlice.js`, `client/src/components/landlord/BatchMeterTable.jsx`, `server/src/scripts/migrate-contract-period-indexes.js`, and this document.
+- Local commit: `298aab0` (`fix: diagnose contract-period batch conflicts`); branch remains `feat/invoice-vietqr`, no push or merge.
+
+## Legacy billingMonth index evidence — 2026-11-16
+
+- DevTools evidence shows HTTP 409 during `invoice_insert` with duplicate key pattern `{roomId: 1, billingMonth: 1}` and duplicate value `billingMonth: null`.
+- Current `Invoice` schema has `month` and `year` and no `billingMonth`; both invoice creation paths submit `month`/`year` and omit `billingMonth`. This confirms a schema/index mismatch in the runtime database: the unique `roomId + billingMonth` key is not the period constraint used by current code. New invoices lacking that field index as `null`, so only one such record per room can exist under the unique key. The response proves an existing or concurrent record collided; it does not identify which document won, so P.109’s particular colliding record was not inferred.
+- The failure is in `Invoice.create` (runtime phase), so the meter upsert was not reached for P.109. The frontend did not create a second request within one click path by code design (buttons are disabled while submitting), but the screenshot has multiple historical batch entries and cannot rule out cross-tab/retry concurrency.
+- P.114 is exposed to the same index rule: if Quang’s invoice carries a null/missing `billingMonth` key, it blocks a second invoice for Độ under the current collection index even when the application’s contract-scoped duplicate lookup considers a different contract. The invoice document and index metadata were not queried, so this exact P.114 collision remains conditional. No invoice or historical record was edited.
+- Duplicate diagnostics now classify `{roomId, billingMonth}` as `legacy_billing_month_index` and set `requiresIndexMigration: true`. The guarded migration recognizes unique indexes by key pattern (regardless of index name), including `roomId + billingMonth` for invoices, and only the prior `roomId + month + year` pattern for meter readings. It still creates contract-period indexes and preflights duplicates before removing legacy indexes. Migration remains **NOT RUN**.
+- Added regression coverage for `keyPattern: {roomId: 1, billingMonth: 1}` with `keyValue.billingMonth: null`, schema field mismatch, and migration pattern recognition. Backend tests: 53/53 PASS (mock/unit only); frontend build and backend syntax checks PASS; database metadata and persisted tenant invoice remain NOT VERIFIED.

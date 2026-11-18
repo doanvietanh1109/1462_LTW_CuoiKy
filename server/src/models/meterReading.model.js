@@ -28,7 +28,11 @@ const meterReadingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-meterReadingSchema.index({ roomId: 1, month: 1, year: 1 }, { unique: true });
+// Giữ riêng chỉ số theo hợp đồng khi phòng bàn giao trong cùng một kỳ.
+meterReadingSchema.index(
+  { roomId: 1, month: 1, year: 1, contractId: 1 },
+  { unique: true, name: "uniq_meter_room_period_contract" }
+);
 
 const MeterReading = mongoose.model("MeterReading", meterReadingSchema);
 

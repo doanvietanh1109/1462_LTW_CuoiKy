@@ -7,6 +7,46 @@ const { sendSuccess, sendError } = require("../utils/response");
 const isNumericInput = (value) => (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) && Number.isFinite(Number(value));
 const isValidMeterValue = (value) => isNumericInput(value) && Number(value) >= 0;
 const isValidPeriod = (month, year) => isNumericInput(month) && Number.isInteger(Number(month)) && Number(month) >= 1 && Number(month) <= 12 && isNumericInput(year) && Number.isInteger(Number(year)) && Number(year) >= 2020 && Number(year) <= 2100;
+const describeDuplicateKey = (error) => {
+  const keyPattern = error?.keyPattern || {};
+  const keyValue = error?.keyValue || {};
+  const keys = new Set([...Object.keys(keyPattern), ...Object.keys(keyValue)]);
+  const legacyRoomPeriodIndex = keys.has("roomId") && keys.has("month") && keys.has("year") && !keys.has("contractId");
+  if (legacyRoomPeriodIndex) {
+    return {
+      code: "legacy_room_period_index",
+      requiresIndexMigration: true,
+      message: "MongoDB đang từ chối dữ liệu theo index cũ roomId + tháng + năm. Cần quản trị viên kiểm tra và áp dụng migration index theo hợp đồng; không thử lưu lại liên tục.",
+    };
+  }
+  const legacyBillingMonthIndex = keys.has("roomId") && keys.has("billingMonth") && !keys.has("contractId");
+  if (legacyBillingMonthIndex) {
+    return {
+      code: "legacy_billing_month_index",
+      requiresIndexMigration: true,
+      message: "MongoDB đang dùng unique index legacy roomId + billingMonth, nhưng ứng dụng lưu kỳ bằng month + year. Index này coi billingMonth bị thiếu là null và có thể chặn invoice tiếp theo của cùng phòng. Cần quản trị viên kiểm tra và áp dụng migration index; không thử lưu lại liên tục.",
+    };
+  }
+  if (keys.has("contractId")) {
+    return {
+      code: "contract_period_conflict",
+      requiresIndexMigration: false,
+      message: "Chỉ số hoặc hóa đơn của hợp đồng này trong kỳ đã được một yêu cầu khác tạo. Hãy tải lại bảng để đối soát trước khi thao tác tiếp.",
+    };
+  }
+  if (keys.has("invoiceCode")) {
+    return {
+      code: "invoice_code_conflict",
+      requiresIndexMigration: false,
+      message: "Mã hóa đơn bị trùng khi phát hành đồng thời. Tải lại bảng và thử lại một lần sau khi đối soát.",
+    };
+  }
+  return {
+    code: "unknown_duplicate_key",
+    requiresIndexMigration: null,
+    message: "MongoDB phát hiện khóa trùng nhưng không xác định được index. Tải lại bảng và gửi mã lỗi cho quản trị viên; không retry liên tục.",
+  };
+};
 
 // Tính giá điện bậc thang (Tính năng nâng cao cộng điểm)
 const calculateTieredElectricity = (usage) => {
@@ -47,6 +87,7 @@ const getMeterSheet = async (req, res, next) => {
 
     const previousPeriodQuery = {
       $or: [{ year: { $lt: year } }, { year, month: { $lt: month } }],
+      contractId: { $in: activeContracts.map((contract) => contract._id) },
       ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
     };
     const [rentedRooms, readings, previousReadings, invoices] = await Promise.all([
@@ -56,21 +97,22 @@ const getMeterSheet = async (req, res, next) => {
       Invoice.find({ month, year, ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}) }).lean(),
     ]);
 
-    const readingMap = new Map(readings.map((r) => [r.roomId.toString(), r]));
+    const contractMap = new Map(activeContracts.map((c) => [c.roomId.toString(), c]));
+    const readingMap = new Map(readings.map((r) => [`${r.roomId}:${r.contractId || "legacy"}`, r]));
     const previousReadingMap = new Map();
     for (const reading of previousReadings) {
-      const key = reading.roomId.toString();
+      const key = `${reading.roomId}:${reading.contractId}`;
       if (!previousReadingMap.has(key)) previousReadingMap.set(key, reading);
     }
-    const invoiceMap = new Map(invoices.map((inv) => [inv.roomId.toString(), inv]));
-    const contractMap = new Map(activeContracts.map((c) => [c.roomId.toString(), c]));
+    const invoiceMap = new Map(invoices.map((inv) => [`${inv.roomId}:${inv.contractId || "legacy"}`, inv]));
 
     const rows = rentedRooms.map((room) => {
       const key = room._id.toString();
-      const existingReading = readingMap.get(key);
-      const previousReading = previousReadingMap.get(key);
-      const existingInvoice = invoiceMap.get(key);
       const activeContract = contractMap.get(key);
+      const periodKey = `${key}:${activeContract?._id || "legacy"}`;
+      const existingReading = readingMap.get(periodKey);
+      const previousReading = activeContract ? previousReadingMap.get(`${key}:${activeContract._id}`) : null;
+      const existingInvoice = invoiceMap.get(periodKey);
       const previousElectricity = previousReading?.newElectricity ?? activeContract?.initialElectricity ?? room.currentElectricity ?? 0;
       const previousWater = previousReading?.newWater ?? activeContract?.initialWater ?? room.currentWater ?? 0;
       const oldElectricity = existingReading
@@ -124,6 +166,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
   const savedReadings = [];
   const createdInvoices = [];
   const skippedInvoices = [];
+  let currentWrite = null;
   try {
     const { month, year, rows, issueInvoices = false, useTieredElectricity = false } = req.body;
 
@@ -207,9 +250,11 @@ const saveBatchMeterReadings = async (req, res, next) => {
       roomId: { $in: roomIds }, month: numMonth, year: numYear,
       ...(req.user.role === "landlord" ? { landlordId: req.user._id } : {}),
     });
-    const invoiceByRoom = new Map(existingInvoices.map((invoice) => [invoice.roomId.toString(), invoice]));
+    const activeContractByRoom = new Map(activeContracts.map((contract) => [contract.roomId.toString(), contract]));
+    const invoiceByRoom = new Map(existingInvoices.map((invoice) => [`${invoice.roomId}:${invoice.contractId || "legacy"}`, invoice]));
     for (const row of rows) {
-      const issued = invoiceByRoom.get(row.roomId);
+      const activeContract = activeContractByRoom.get(row.roomId);
+      const issued = invoiceByRoom.get(`${row.roomId}:${activeContract?._id || "legacy"}`);
       if (issued && (
         Number(row.oldElectricity) !== issued.oldElectricity || Number(row.newElectricity) !== issued.newElectricity ||
         Number(row.oldWater) !== issued.oldWater || Number(row.newWater) !== issued.newWater
@@ -232,8 +277,14 @@ const saveBatchMeterReadings = async (req, res, next) => {
 
     for (const row of rows) {
       const room = targetById.get(row.roomId);
-
-      const issuedInvoice = invoiceByRoom.get(row.roomId);
+      const activeContract = contractByRoom.get(row.roomId);
+      currentWrite = {
+        roomId: room._id.toString(),
+        roomLabel: room.roomNumber || room.title || room._id.toString(),
+        contractId: activeContract?._id?.toString() || null,
+        phase: issueInvoices ? "invoice_insert" : "meter_reading_upsert",
+      };
+      const issuedInvoice = invoiceByRoom.get(`${row.roomId}:${activeContract?._id || "legacy"}`);
       if (issuedInvoice) {
         skippedInvoices.push({
           roomId: room._id,
@@ -242,8 +293,6 @@ const saveBatchMeterReadings = async (req, res, next) => {
         });
         continue;
       }
-
-      const activeContract = contractByRoom.get(row.roomId);
 
       const oldElectricity = Number(row.oldElectricity);
       const newElectricity = Number(row.newElectricity);
@@ -304,8 +353,9 @@ const saveBatchMeterReadings = async (req, res, next) => {
 
       }
 
+      currentWrite.phase = "meter_reading_upsert";
       const reading = await MeterReading.findOneAndUpdate(
-        { roomId: room._id, month: numMonth, year: numYear },
+        { roomId: room._id, month: numMonth, year: numYear, contractId: activeContract?._id || null },
         {
           roomId: room._id,
           contractId: activeContract?._id || null,
@@ -321,6 +371,7 @@ const saveBatchMeterReadings = async (req, res, next) => {
       );
       savedReadings.push(reading);
       if (createdInvoice) {
+        currentWrite.phase = "invoice_link_save";
         createdInvoice.meterReadingId = reading._id;
         await createdInvoice.save();
       }
@@ -347,15 +398,18 @@ const saveBatchMeterReadings = async (req, res, next) => {
       201
     );
   } catch (error) {
+    const duplicate = error.code === 11000 ? describeDuplicateKey(error) : null;
     if (savedReadings.length || createdInvoices.length) {
       return sendError(
         res,
-        `Batch bị dừng sau khi đã ghi một phần (${savedReadings.length} chỉ số, ${createdInvoices.length} hóa đơn). Tải lại bảng để đối soát trước khi thử tiếp.`,
-        { partial: true, savedReadingCount: savedReadings.length, createdInvoiceCount: createdInvoices.length },
-        500
+        duplicate
+          ? `Batch bị dừng tại ${currentWrite?.roomLabel || "một phòng"}: ${duplicate.message} Đã ghi ${savedReadings.length} chỉ số và tạo ${createdInvoices.length} hóa đơn; cần tải lại để đối soát, không gửi lại batch ngay.`
+          : `Batch bị dừng sau khi đã ghi một phần (${savedReadings.length} chỉ số, ${createdInvoices.length} hóa đơn). Tải lại bảng để đối soát trước khi thử tiếp.`,
+        { partial: true, ...(duplicate || {}), ...currentWrite, keyPattern: error.keyPattern || null, keyValue: error.keyValue || null, savedReadingCount: savedReadings.length, createdInvoiceCount: createdInvoices.length },
+        duplicate ? 409 : 500
       );
     }
-    if (error.code === 11000) return sendError(res, "Dữ liệu tháng này đã được tạo bởi một yêu cầu khác; hãy tải lại bảng và thử lại", error.keyValue || null, 409);
+    if (duplicate) return sendError(res, `${currentWrite?.roomLabel ? `${currentWrite.roomLabel}: ` : ""}${duplicate.message}`, { ...duplicate, ...currentWrite, keyPattern: error.keyPattern || null, keyValue: error.keyValue || null }, 409);
     return next(error);
   }
 };
@@ -366,4 +420,5 @@ module.exports = {
   calculateTieredElectricity,
   isValidMeterValue,
   isValidPeriod,
+  describeDuplicateKey,
 };

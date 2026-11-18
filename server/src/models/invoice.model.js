@@ -49,7 +49,12 @@ const invoiceSchema = new mongoose.Schema(
       enum: ["unpaid", "pending_confirmation", "paid"],
       default: "unpaid",
     },
+    paymentConfirmationStatus: { type: String, enum: ["none", "pending", "confirmed", "rejected"], default: "none" },
+    paymentMethod: { type: String, enum: ["bank_transfer", "cash", null], default: null },
+    paymentRejectionReason: { type: String, default: "", maxlength: 300 },
     paymentSubmittedAt: { type: Date, default: null },
+    paymentConfirmedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    paymentConfirmationRequests: [{ tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, submittedAt: { type: Date, default: Date.now }, status: { type: String, enum: ["pending", "confirmed", "rejected"] }, reviewedAt: Date, reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, note: { type: String, maxlength: 300 } }],
     paidAt: { type: Date, default: null },
     dueDate: { type: Date, default: null },
     reminderSentAt: { type: Date, default: null },
@@ -59,8 +64,11 @@ const invoiceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Mỗi phòng chỉ có 1 hóa đơn cho mỗi tháng
-invoiceSchema.index({ roomId: 1, month: 1, year: 1 }, { unique: true });
+// Một hợp đồng có tối đa một hóa đơn cho mỗi kỳ; phòng có thể đổi người thuê giữa tháng.
+invoiceSchema.index(
+  { roomId: 1, month: 1, year: 1, contractId: 1 },
+  { unique: true, name: "uniq_invoice_room_period_contract" }
+);
 
 const Invoice = mongoose.model("Invoice", invoiceSchema);
 

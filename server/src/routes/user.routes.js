@@ -3,8 +3,12 @@ const { getAllUsers, getUserById, updateUserStatus, updateUserRole, toggleBookma
 const { requireAuth, requireAdmin, requireLandlord } = require("../middlewares/auth.middleware");
 
 const router = Router();
+const { getBankOptions, getMyBankAccount, updateMyBankAccount } = require("../controllers/user.controller");
 
 router.use(requireAuth);
+router.get("/bank-options", getBankOptions);
+router.get("/me/bank-account", getMyBankAccount);
+router.patch("/me/bank-account", requireLandlord, updateMyBankAccount);
 router.get("/", requireAdmin, getAllUsers);
 router.get("/search/email", requireLandlord, getUserByEmail);
 router.get("/:id", getUserById);

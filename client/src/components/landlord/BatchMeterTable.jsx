@@ -106,6 +106,7 @@ export const BatchMeterTable = ({ month, year }) => {
       setFeedback({
         type: "danger",
         text: err.message || "Có lỗi khi lưu bảng chỉ số điện nước",
+        canReload: err.status === 409 && err.details?.requiresIndexMigration !== true,
       });
     } finally {
       setSubmitting(false);
@@ -150,6 +151,7 @@ export const BatchMeterTable = ({ month, year }) => {
       {feedback && (
         <div className={`alert alert-${feedback.type} py-2 small`}>
           {feedback.text}
+          {feedback.canReload && <button type="button" className="btn btn-sm btn-outline-secondary ms-2" onClick={async () => { try { await dispatch(fetchMeterSheet({ month, year })).unwrap(); setFeedback({ type: "info", text: "Bảng đã được tải lại. Hãy kiểm tra trạng thái từng phòng trước khi tiếp tục." }); } catch (error) { setFeedback({ type: "danger", text: `Không tải lại được bảng: ${error}` }); } }}>Tải lại bảng để đối soát</button>}
         </div>
       )}
 

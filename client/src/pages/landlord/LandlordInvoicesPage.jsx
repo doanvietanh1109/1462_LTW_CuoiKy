@@ -9,8 +9,19 @@ import {
 import { formatVND } from "../../api/apiClient";
 import { StatusBadge } from "../../components/common/StatusBadge";
 import { useDebounce } from "../../hooks/useDebounce";
+import { apiRequest } from "../../api/apiClient";
+import { useAuth } from "../../contexts/AuthContext";
+import { validateBankAccount } from "../../utils/bankAccountValidation";
+
+const SUGGESTED_ACB_ACCOUNT = {
+  bankBin: "970416",
+  bankName: "ACB",
+  accountNumber: "20129811",
+  accountName: "Đoàn Việt Anh",
+};
 
 export const LandlordInvoicesPage = () => {
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const { invoices, loading, pagination } = useSelector((state) => state.invoices);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -20,6 +31,55 @@ export const LandlordInvoicesPage = () => {
   const search = useDebounce(searchText, 300);
   const [page, setPage] = useState(1);
   const [notice, setNotice] = useState("");
+  const [bankOptions, setBankOptions] = useState([]);
+  const [bankForm, setBankForm] = useState({ bankBin: "", bankName: "", accountNumber: "", accountName: "" });
+  const [bankSaving, setBankSaving] = useState(false);
+  const [bankFieldErrors, setBankFieldErrors] = useState({});
+
+  useEffect(() => {
+    Promise.all([apiRequest("/users/bank-options"), apiRequest("/users/me/bank-account")]).then(([banks, account]) => {
+      setBankOptions(banks?.data?.banks || []);
+      if (account?.data?.bankAccount) setBankForm(account.data.bankAccount);
+      else if (user?.name?.trim().toLocaleLowerCase("vi") === SUGGESTED_ACB_ACCOUNT.accountName.toLocaleLowerCase("vi")) setBankForm(SUGGESTED_ACB_ACCOUNT);
+    }).catch(() => setNotice("Không tải được cấu hình ngân hàng. Hãy thử tải lại trang."));
+  }, [user?.name]);
+
+  const saveBankAccount = async (event) => {
+    event.preventDefault();
+    const fieldErrors = validateBankAccount(bankForm);
+    setBankFieldErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length) {
+      setNotice("Vui lòng kiểm tra các trường được đánh dấu trong biểu mẫu.");
+      return;
+    }
+    setBankSaving(true);
+    try { await apiRequest("/users/me/bank-account", { method: "PATCH", body: bankForm }); setNotice("Đã lưu tài khoản nhận tiền."); }
+    catch (error) {
+      const serverFieldErrors = error.details?.fieldErrors;
+      if (serverFieldErrors) setBankFieldErrors(serverFieldErrors);
+      setNotice(error.message || "Không lưu được tài khoản ngân hàng.");
+    }
+    finally { setBankSaving(false); }
+  };
+
+  const updateBankField = (field, value, extra = {}) => {
+    const nextForm = { ...bankForm, ...extra, [field]: value };
+    setBankForm(nextForm);
+    setBankFieldErrors((current) => ({ ...current, [field]: undefined, ...(field === "bankBin" ? { bankName: undefined } : {}) }));
+    setNotice("");
+  };
+
+  const reviewPayment = async (id, approve) => {
+    const body = {};
+    if (approve && !window.confirm("Tôi xác nhận đã kiểm tra tài khoản ngân hàng và thực sự nhận được số tiền thanh toán cho hóa đơn này.")) return;
+    if (!approve) {
+      const reason = window.prompt("Lý do từ chối yêu cầu (không bắt buộc):", "");
+      if (reason === null) return;
+      body.reason = reason;
+    }
+    try { await apiRequest(`/invoices/${id}/${approve ? "pay" : "payment-reject"}`, { method: "PATCH", ...(Object.keys(body).length ? { body } : {}) }); setNotice(approve ? "Đã xác nhận đã nhận tiền." : "Đã từ chối yêu cầu; hóa đơn trở lại trạng thái chưa thanh toán."); loadInvoices(); }
+    catch (error) { setNotice(error.message || "Không xử lý được yêu cầu."); }
+  };
 
   const loadInvoices = () => {
     dispatch(
@@ -39,8 +99,9 @@ export const LandlordInvoicesPage = () => {
   }, [statusFilter, monthFilter, yearFilter, search, page]);
 
   const handleMarkPaid = async (id) => {
-    await dispatch(markInvoicePaidThunk(id)).unwrap();
-    setNotice("Đã đánh dấu thu tiền hóa đơn!");
+    if (!window.confirm("Tôi xác nhận đã thực sự nhận đủ khoản tiền mặt cho hóa đơn này.")) return;
+    try { await dispatch(markInvoicePaidThunk(id)).unwrap(); setNotice("Đã ghi nhận thanh toán tiền mặt."); }
+    catch (error) { setNotice(`Không ghi nhận được thanh toán: ${error}`); }
   };
 
   const handleRemind = async (id) => {
@@ -80,6 +141,17 @@ export const LandlordInvoicesPage = () => {
           />
         </div>
       )}
+
+      <form className="card border-0 shadow-sm rounded-4 p-3 mb-3" noValidate onSubmit={saveBankAccount}>
+        <h6 className="fw-bold">Tài khoản nhận tiền VietQR</h6>
+        <p className="small text-muted mb-2">Thông tin này chỉ dùng cho hóa đơn thuộc chủ trọ của bạn.</p>
+        <div className="row g-2 align-items-end">
+          <div className="col-md-3"><label className="form-label small" htmlFor="bank-account-bank">Ngân hàng</label><select id="bank-account-bank" className={`form-select ${bankFieldErrors.bankBin ? "is-invalid" : ""}`} value={bankForm.bankBin} aria-invalid={Boolean(bankFieldErrors.bankBin)} aria-describedby={bankFieldErrors.bankBin ? "bank-account-bank-error" : undefined} onChange={(e) => { const bank = bankOptions.find((item) => item.bin === e.target.value); updateBankField("bankBin", e.target.value, { bankName: bank?.shortName || bank?.name || "" }); }}><option value="">Chọn ngân hàng</option>{bankOptions.map((bank) => <option key={bank.bin} value={bank.bin}>{bank.shortName || bank.name}</option>)}</select>{bankFieldErrors.bankBin && <div id="bank-account-bank-error" className="invalid-feedback d-block">{bankFieldErrors.bankBin}</div>}</div>
+          <div className="col-md-3"><label className="form-label small" htmlFor="bank-account-number">Số tài khoản</label><input id="bank-account-number" type="text" inputMode="text" autoComplete="off" maxLength={19} className={`form-control ${bankFieldErrors.accountNumber ? "is-invalid" : ""}`} value={bankForm.accountNumber} aria-invalid={Boolean(bankFieldErrors.accountNumber)} aria-describedby={bankFieldErrors.accountNumber ? "bank-account-number-error" : undefined} onChange={(e) => updateBankField("accountNumber", e.target.value)}/>{bankFieldErrors.accountNumber && <div id="bank-account-number-error" className="invalid-feedback d-block">{bankFieldErrors.accountNumber}</div>}</div>
+          <div className="col-md-4"><label className="form-label small" htmlFor="bank-account-name">Tên chủ tài khoản</label><input id="bank-account-name" type="text" autoComplete="name" maxLength={50} className={`form-control ${bankFieldErrors.accountName ? "is-invalid" : ""}`} value={bankForm.accountName} aria-invalid={Boolean(bankFieldErrors.accountName)} aria-describedby={bankFieldErrors.accountName ? "bank-account-name-error" : undefined} onChange={(e) => updateBankField("accountName", e.target.value)}/>{bankFieldErrors.accountName && <div id="bank-account-name-error" className="invalid-feedback d-block">{bankFieldErrors.accountName}</div>}</div>
+          <div className="col-md-2"><button className="btn btn-primary w-100" disabled={bankSaving || bankOptions.length === 0}>{bankSaving ? "Đang lưu…" : "Lưu tài khoản"}</button></div>
+        </div>
+      </form>
 
       <div className="card border-0 shadow-sm rounded-4 p-3 mb-3">
         <div className="d-flex flex-wrap justify-content-between align-items-center gap-2">
@@ -191,10 +263,12 @@ export const LandlordInvoicesPage = () => {
                       </td>
                       <td>
                         <StatusBadge type="invoice" status={inv.status} />
+                        {(inv.paymentConfirmationStatus === "pending" || inv.status === "pending_confirmation") && <small className="d-block text-warning-emphasis mt-1">Chờ xác nhận · {inv.paymentSubmittedAt ? new Date(inv.paymentSubmittedAt).toLocaleString("vi-VN") : ""}</small>}
+                        {inv.paymentConfirmationStatus === "rejected" && <small className="d-block text-danger mt-1">Yêu cầu bị từ chối</small>}
                       </td>
                       <td className="text-end">
                         <div className="btn-group btn-group-sm">
-                          {inv.status !== "paid" && (
+                          {inv.status !== "paid" && inv.paymentConfirmationStatus !== "pending" && inv.status !== "pending_confirmation" && (
                             <>
                               <button
                                 type="button"
@@ -214,6 +288,7 @@ export const LandlordInvoicesPage = () => {
                               </button>
                             </>
                           )}
+                          {(inv.paymentConfirmationStatus === "pending" || inv.status === "pending_confirmation") && <><button type="button" className="btn btn-success" onClick={() => reviewPayment(inv._id, true)} title="Xác nhận tiền đã thực nhận"><i className="bi bi-check2-circle"/> Xác nhận</button><button type="button" className="btn btn-outline-danger" onClick={() => reviewPayment(inv._id, false)} title="Từ chối yêu cầu"><i className="bi bi-x-circle"/> Từ chối</button></>}
                           <Link
                             to={`/invoices/${inv._id}`}
                             className="btn btn-outline-primary"

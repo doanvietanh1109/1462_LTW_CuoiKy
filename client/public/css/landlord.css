@@ -1154,6 +1154,76 @@ textarea.form-control {
     padding: 0;
 }
 
+/* Room editor: scoped sizing so other landlord modals keep their current dimensions. */
+.modal#roomModal .modal-dialog.modal-custom-60 {
+    width: min(940px, calc(100vw - 2rem)) !important;
+    max-width: min(940px, calc(100vw - 2rem)) !important;
+    max-height: 90vh !important;
+    margin: auto !important;
+}
+
+.modal#roomModal .rm-modal {
+    width: 100%;
+    min-width: 0;
+    max-height: 90vh;
+}
+
+.modal#roomModal .rm-body,
+.modal#roomModal .rm-col,
+.modal#roomModal .rm-section,
+.modal#roomModal .rm-field {
+    min-width: 0;
+}
+
+.modal#roomModal .rm-body {
+    max-height: calc(90vh - 150px);
+    overscroll-behavior: contain;
+}
+
+.modal#roomModal .rm-input,
+.modal#roomModal .rm-select,
+.modal#roomModal select {
+    max-width: 100%;
+    min-width: 0;
+}
+
+.modal#roomModal .rm-cost-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+@media (max-width: 767px) {
+    .modal#roomModal .modal-dialog.modal-custom-60 {
+        width: calc(100vw - 1rem) !important;
+        max-width: calc(100vw - 1rem) !important;
+        max-height: calc(100dvh - 1rem) !important;
+    }
+
+    .modal#roomModal .rm-modal {
+        max-height: calc(100dvh - 1rem);
+    }
+
+    .modal#roomModal .rm-body {
+        max-height: calc(100dvh - 150px);
+    }
+
+    .modal#roomModal .rm-col {
+        padding: 16px;
+    }
+
+    .modal#roomModal .rm-cost-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal#roomModal .rm-footer {
+        padding: 12px 16px;
+        position: sticky;
+        bottom: 0;
+        z-index: 1;
+    }
+}
+
 /* Header */
 .tm-header {
     background: linear-gradient(135deg, #1877f2 0%, #0d5fd3 100%);
