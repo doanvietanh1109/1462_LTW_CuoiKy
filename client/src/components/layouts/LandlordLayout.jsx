@@ -39,13 +39,13 @@ export const LandlordLayout = () => {
               to="/landlord/blocks"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              <i className="bi bi-buildings"></i> Quản lý Dãy trọ
+              <i className="bi bi-buildings"></i> Quản lý dãy trọ
             </NavLink>
             <NavLink
               to="/landlord/rooms"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              <i className="bi bi-door-open"></i> Phòng &amp; Trạng thái
+              <i className="bi bi-door-open"></i> Phòng &amp; trạng thái
             </NavLink>
             <NavLink
               to="/landlord/contracts"
@@ -57,13 +57,13 @@ export const LandlordLayout = () => {
               to="/landlord/meters"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              <i className="bi bi-lightning-charge"></i> Chỉ số Điện Nước
+              <i className="bi bi-lightning-charge"></i> Chỉ số điện nước
             </NavLink>
             <NavLink
               to="/landlord/invoices"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              <i className="bi bi-receipt-cutoff"></i> Hóa đơn &amp; Thu tiền
+              <i className="bi bi-receipt-cutoff"></i> Hóa đơn &amp; thu tiền
             </NavLink>
             <NavLink
               to="/landlord/repairs"
@@ -94,7 +94,7 @@ export const LandlordLayout = () => {
         <main className="dashboard-main">
           <header className="dashboard-topbar">
             <div>
-              <p className="dashboard-kicker">Landlord dashboard</p>
+              <p className="dashboard-kicker">Khu vực chủ trọ</p>
               <h1>Quản lý phòng trọ</h1>
             </div>
             <div className="dashboard-user">

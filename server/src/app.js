@@ -18,6 +18,7 @@ const meterReadingRoutes = require("./routes/meterReading.routes");
 const invoiceRoutes = require("./routes/invoice.routes");
 const repairRequestRoutes = require("./routes/repairRequest.routes");
 const contactRoutes = require("./routes/contact.routes");
+const contactRequestRoutes = require("./routes/contactRequest.routes");
 const notificationRoutes = require("./routes/notification.routes");
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/meter-readings", meterReadingRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/repair-requests", repairRequestRoutes);
 app.use("/api/contacts", contactRoutes);
+app.use("/api/contact-requests", contactRequestRoutes);
 app.use("/api/notifications", notificationRoutes);
 
 app.use((req, res) => {

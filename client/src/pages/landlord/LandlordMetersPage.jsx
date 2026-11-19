@@ -14,19 +14,18 @@ export const LandlordMetersPage = () => {
   }, [dispatch, month, year]);
 
   return (
-    <div>
+    <div className="landlord-meters-page">
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
         <div>
-          <h4 className="fw-bold mb-1">
-            <i className="bi bi-lightning-charge-fill text-warning me-2" />
-            Nhập Chỉ Số Điện Nước Cuối Tháng
+          <h4 className="landlord-page-title fw-bold mb-1">
+            Nhập chỉ số điện nước cuối tháng
           </h4>
           <p className="text-muted small mb-0">
             Nhập chỉ số điện nước cho tất cả phòng trên cùng một bảng và phát hành hóa đơn hàng tháng
           </p>
         </div>
 
-        <div className="d-flex align-items-center gap-2">
+        <div className="landlord-meters-period-controls d-flex align-items-center gap-2">
           <label htmlFor="meter-month" className="small fw-semibold">
             Tháng:
           </label>

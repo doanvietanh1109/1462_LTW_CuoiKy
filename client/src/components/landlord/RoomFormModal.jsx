@@ -196,7 +196,7 @@ export const RoomFormModal = ({
           <div className="modal-header">
             <h5 className="modal-title fw-bold">
               <i className="bi bi-houses me-2 text-primary" />
-              {editingRoom ? "Cập Nhật Thông Tin Phòng" : "Thêm Phòng Trọ Mới"}
+              {editingRoom ? "Cập nhật thông tin phòng" : "Thêm phòng trọ mới"}
             </h5>
             <button type="button" className="btn-close" onClick={onClose} />
           </div>
@@ -271,9 +271,9 @@ export const RoomFormModal = ({
                     value={form.status}
                     onChange={handleChange}
                   >
-                    <option value="available">Trống (Available)</option>
-                    <option value="rented">Đang thuê (Rented)</option>
-                    <option value="maintenance">Đang sửa (Maintenance)</option>
+                    <option value="available">Trống</option>
+                    <option value="rented">Đang thuê</option>
+                    <option value="maintenance">Đang sửa</option>
                   </select>
                 </div>
 

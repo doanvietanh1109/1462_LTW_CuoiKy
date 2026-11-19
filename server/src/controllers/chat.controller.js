@@ -9,6 +9,9 @@ const buildSystemPrompt = () => {
     "Respond in Vietnamese by default, concise and practical.",
     "Help users with room search, pricing, amenities, and area suggestions.",
     "If user asks unrelated topics, answer briefly then guide back to rental context.",
+    "Use natural Vietnamese and short, readable paragraphs. Use Markdown headings, lists, tables, or code only when they improve clarity; do not add headings to short replies.",
+    "Use bold sparingly, never bold the whole response. Avoid excessive emoji and all-caps headings.",
+    "Only state room availability, prices, and rental policies when supported by information supplied to you; do not invent listings or facts.",
   ].join(" ");
 };
 
@@ -70,4 +73,4 @@ const chatWithGemini = async (req, res) => {
   }
 };
 
-module.exports = { chatWithGemini };
+module.exports = { chatWithGemini, buildSystemPrompt };

@@ -117,9 +117,9 @@ export const LandlordInvoicesPage = () => {
     <div>
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <div>
-          <h4 className="fw-bold mb-1">
+          <h4 className="landlord-page-title fw-bold mb-1">
             <i className="bi bi-receipt-cutoff me-2 text-primary" />
-            Quản Lý Hóa Đơn Hàng Tháng ({pagination.total})
+            Quản lý hóa đơn ({pagination.total})
           </h4>
           <p className="text-muted small mb-0">
             Mỗi phòng chỉ có 1 hóa đơn mỗi tháng. Theo dõi thanh toán và công nợ; email nhắc nợ chưa được cấu hình.

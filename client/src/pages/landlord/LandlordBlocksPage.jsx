@@ -47,9 +47,9 @@ export const LandlordBlocksPage = () => {
     <div>
       <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
         <div>
-          <h4 className="fw-bold mb-1">
+          <h4 className="landlord-page-title fw-bold mb-1">
             <i className="bi bi-buildings me-2 text-primary" />
-            Quản Lý Các Dãy Nhà Trọ ({blocks.length} dãy)
+            Quản lý dãy trọ ({blocks.length} dãy)
           </h4>
           <p className="text-muted small mb-0">
             Quản lý một hoặc nhiều dãy trọ kèm đơn giá điện, nước, dịch vụ mặc định
@@ -64,7 +64,7 @@ export const LandlordBlocksPage = () => {
             setModalOpen(true);
           }}
         >
-          <i className="bi bi-plus-circle me-1" /> Thêm Dãy Trọ Mới
+          <i className="bi bi-plus-circle me-1" /> Thêm dãy trọ mới
         </button>
       </div>
 

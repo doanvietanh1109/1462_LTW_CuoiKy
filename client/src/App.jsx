@@ -10,6 +10,10 @@ const ComparePage = lazy(() => import("./pages/ComparePage").then((m) => ({ defa
 const RoomDetailPage = lazy(() => import("./pages/RoomDetailPage").then((m) => ({ default: m.RoomDetailPage })));
 const InvoiceDetailPage = lazy(() => import("./pages/InvoiceDetailPage").then((m) => ({ default: m.InvoiceDetailPage })));
 const TenantPortalPage = lazy(() => import("./pages/TenantPortalPage").then((m) => ({ default: m.TenantPortalPage })));
+const AboutPage = lazy(() => import("./pages/AboutPage").then((m) => ({ default: m.AboutPage })));
+const BlogPage = lazy(() => import("./pages/BlogPage").then((m) => ({ default: m.BlogPage })));
+const BlogArticlePage = lazy(() => import("./pages/BlogArticlePage").then((m) => ({ default: m.BlogArticlePage })));
+const ContactPage = lazy(() => import("./pages/ContactPage").then((m) => ({ default: m.ContactPage })));
 const LoginPage = lazy(() => import("./pages/LoginPage").then((m) => ({ default: m.LoginPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 const AdminDashboardPage = lazy(() => import("./pages/AdminDashboardPage").then((m) => ({ default: m.AdminDashboardPage })));
@@ -74,6 +78,10 @@ export const App = () => {
         <Route path="compare" element={<ComparePage />} />
         <Route path="rooms/:id" element={<RoomDetailPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="blog" element={<BlogPage />} />
+        <Route path="blog/:slug" element={<BlogArticlePage />} />
+        <Route path="contact" element={<ContactPage />} />
 
         {/* Route bảo vệ cho Người thuê */}
         <Route
