@@ -1,74 +1,79 @@
 import React, { useEffect, useRef } from "react";
 import { Chart, registerables } from "chart.js";
+import { formatRevenueVnd, getRevenueChartData, formatRevenueAxisVnd } from "../../utils/revenueChart";
 
 Chart.register(...registerables);
 
-// Biểu đồ doanh thu 12 tháng từ Aggregation Pipeline (sử dụng useRef + useEffect có cleanup)
 export const RevenueChart = ({ monthlyRevenue = [] }) => {
   const canvasRef = useRef(null);
   const chartInstanceRef = useRef(null);
+  const chartData = getRevenueChartData(monthlyRevenue);
 
   useEffect(() => {
-    if (!canvasRef.current) return undefined;
+    if (!canvasRef.current || chartData.labels.length === 0) return undefined;
 
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-
-    const labels =
-      monthlyRevenue.length > 0
-        ? monthlyRevenue.map((item) => item.label)
-        : ["T1", "T2", "T3", "T4", "T5", "T6"];
-
-    const values =
-      monthlyRevenue.length > 0
-        ? monthlyRevenue.map((item) => item.totalRevenue)
-        : [0, 0, 0, 0, 0, 0];
-
-    const ctx = canvasRef.current.getContext("2d");
-    chartInstanceRef.current = new Chart(ctx, {
-      type: "bar",
+    chartInstanceRef.current?.destroy();
+    chartInstanceRef.current = new Chart(canvasRef.current.getContext("2d"), {
+      type: "line",
       data: {
-        labels,
-        datasets: [
-          {
-            label: "Doanh thu đã thu (VNĐ)",
-            data: values,
-            backgroundColor: "rgba(37, 99, 235, 0.75)",
-            borderColor: "#1d4ed8",
-            borderWidth: 1,
-            borderRadius: 6,
-          },
-        ],
+        labels: chartData.labels,
+        datasets: [{
+          label: "Doanh thu đã thu",
+          data: chartData.values,
+          borderColor: "#15803D",
+          backgroundColor: "rgba(21, 128, 61, 0.12)",
+          pointBackgroundColor: "#15803D",
+          pointBorderColor: "#ffffff",
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          borderWidth: 3,
+          tension: 0.28,
+          fill: true,
+        }],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        interaction: { mode: "index", intersect: false },
         plugins: {
-          legend: { position: "top" },
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              title: (items) => items[0]?.label || "",
+              label: (item) => `Doanh thu: ${formatRevenueVnd(item.parsed.y)}`,
+            },
+          },
         },
         scales: {
+          x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true } },
           y: {
             beginAtZero: true,
-            ticks: {
-              callback: (val) => `${Number(val).toLocaleString("vi-VN")} đ`,
-            },
+            grid: { color: "rgba(15, 23, 42, 0.08)" },
+            ticks: { callback: (value) => formatRevenueAxisVnd(value) },
           },
         },
       },
     });
 
-    // Cleanup hủy instance Chart khi unmount hoặc dữ liệu thay đổi
     return () => {
-      if (chartInstanceRef.current) {
-        chartInstanceRef.current.destroy();
-      }
+      chartInstanceRef.current?.destroy();
+      chartInstanceRef.current = null;
     };
-  }, [monthlyRevenue]);
+  }, [chartData.labels, chartData.values]);
+
+  if (!chartData.labels.length) {
+    return <div className="revenue-chart-state" role="status">Chưa có dữ liệu doanh thu đã thanh toán.</div>;
+  }
 
   return (
-    <div style={{ height: "300px", width: "100%" }}>
-      <canvas ref={canvasRef} />
+    <div>
+      <div className="revenue-chart-wrap">
+        <canvas ref={canvasRef} role="img" aria-label="Biểu đồ đường doanh thu đã thu theo tháng" />
+      </div>
+      {chartData.labels.length === 1 && (
+        <p className="text-muted small mb-0 mt-2">Hiện chỉ có một tháng dữ liệu, chưa đủ để xác định xu hướng.</p>
+      )}
     </div>
   );
 };

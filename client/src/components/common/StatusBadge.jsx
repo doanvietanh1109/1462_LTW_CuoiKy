@@ -30,7 +30,7 @@ const STATUS_MAP = {
 export const StatusBadge = ({ type = "room", status }) => {
   const group = STATUS_MAP[type] || STATUS_MAP.room;
   const config = group[status] || {
-    label: status || "N/A",
+    label: status || "Chưa xác định",
     className: "bg-secondary text-white",
     icon: "bi-info-circle",
   };

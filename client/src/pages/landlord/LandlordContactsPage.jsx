@@ -33,9 +33,9 @@ export const LandlordContactsPage = () => {
   return (
     <div>
       <div className="mb-3">
-        <h4 className="fw-bold mb-1">
+        <h4 className="landlord-page-title fw-bold mb-1">
           <i className="bi bi-person-lines-fill me-2 text-primary" />
-          Danh Sách Khách Để Lại Thông Tin Liên Hệ ({inquiries.length})
+          Khách liên hệ ({inquiries.length})
         </h4>
         <p className="text-muted small mb-0">
           Thông tin khách vãng lai (không đăng nhập) gửi từ trang Chi tiết phòng trống

@@ -1,21 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { apiRequest } from "../../api/apiClient";
+import { ChatMarkdown } from "./ChatMarkdown";
 
 const INITIAL_BOT_MESSAGE = {
   id: "welcome",
   sender: "bot",
   isWelcome: true,
-};
-
-const formatBotSegments = (text = "") => {
-  return String(text)
-    .split(/(\*\*.+?\*\*)/g)
-    .map((part, idx) => {
-      if (part.startsWith("**") && part.endsWith("**")) {
-        return <strong key={idx}>{part.slice(2, -2)}</strong>;
-      }
-      return <React.Fragment key={idx}>{part}</React.Fragment>;
-    });
 };
 
 export const ChatbotWidget = () => {
@@ -118,7 +108,10 @@ export const ChatbotWidget = () => {
               <i className="bi bi-robot"></i>
             </div>
             <div className="chat-header-info">
-              <span className="chat-title">Ript Rental ChatBot</span>
+              <div className="chat-brand">
+                <span className="chat-title">RIPT AI</span>
+                <span className="chat-subtitle">Trợ lý tìm phòng trọ thông minh</span>
+              </div>
               <span className="chat-status">
                 <i className="bi bi-circle-fill"></i> Online
               </span>
@@ -152,20 +145,15 @@ export const ChatbotWidget = () => {
                   <i className="bi bi-robot"></i>
                 </div>
                 <div className="message-text">
-                  <p>
-                    <strong>
-                      Xin chào! Tôi là Ript Rental ChatBot - trợ lý AI của RIPT
-                      Rental 🏠✨
-                    </strong>
-                  </p>
-                  <p>Tôi có thể giúp bạn:</p>
+                  <p className="welcome-greeting">Xin chào! 👋</p>
+                  <p>Mình là trợ lý AI của RIPT Rental. Mình có thể giúp bạn tìm phòng trọ phù hợp, so sánh giá và giải đáp các thắc mắc về thuê phòng.</p>
+                  <p><strong>Bạn có thể hỏi mình về:</strong></p>
                   <ul>
-                    <li>🔍 Tìm kiếm nhà trọ theo địa điểm</li>
-                    <li>💰 Tư vấn về giá cả và tiện nghi</li>
-                    <li>📍 Gợi ý khu vực phù hợp</li>
-                    <li>❓ Giải đáp thắc mắc về dịch vụ</li>
+                    <li>Tìm phòng theo khu vực và ngân sách.</li>
+                    <li>So sánh giá thuê, diện tích và tiện nghi.</li>
+                    <li>Tìm hiểu quy trình đặt phòng và ký hợp đồng.</li>
                   </ul>
-                  <p>Bạn đang tìm kiếm gì hôm nay?</p>
+                  <p>Bạn đang tìm phòng ở khu vực nào?</p>
                 </div>
               </div>
             ) : msg.sender === "user" ? (
@@ -180,11 +168,8 @@ export const ChatbotWidget = () => {
                 <div className="message-avatar">
                   <i className="bi bi-robot"></i>
                 </div>
-                <div
-                  className="message-text"
-                  style={{ whiteSpace: "pre-line" }}
-                >
-                  {formatBotSegments(msg.text)}
+                <div className="message-text chat-response">
+                  <ChatMarkdown content={msg.text}/>
                 </div>
               </div>
             )

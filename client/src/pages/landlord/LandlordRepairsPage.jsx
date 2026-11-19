@@ -43,9 +43,9 @@ export const LandlordRepairsPage = () => {
   return (
     <div>
       <div className="mb-3">
-        <h4 className="fw-bold mb-1">
+        <h4 className="landlord-page-title fw-bold mb-1">
           <i className="bi bi-tools me-2 text-primary" />
-          Quản Lý Yêu Cầu Sửa Chữa Của Người Thuê ({requests.length})
+          Yêu cầu sửa chữa ({requests.length})
         </h4>
         <p className="text-muted small mb-0">
           Cập nhật tiến độ xử lý sự cố: Mới → Đang xử lý → Xong

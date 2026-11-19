@@ -4,6 +4,7 @@ import { fetchRoomsThunk } from "../store/slices/roomSlice";
 import { RoomCard } from "../components/rooms/RoomCard";
 import { apiRequest } from "../api/apiClient";
 import { useAuth } from "../contexts/AuthContext";
+import { formatPriceFilterValue, isWithinRange, moveRangeEndpoint } from "../utils/rangeFilter";
 
 const AMENITY_OPTIONS = [
   { value: "Giường", icon: "bi-lamp-fill", label: "Giường" },
@@ -40,7 +41,7 @@ const highlightSegments = (text = "", query = "") => {
 
 export const SearchPage = () => {
   const dispatch = useDispatch();
-  const { items: rooms, loading } = useSelector((state) => state.rooms);
+  const { items: rooms, loading, error: roomsError } = useSelector((state) => state.rooms);
   const { isAuthenticated } = useAuth();
 
   const [searchText, setSearchText] = useState("");
@@ -161,10 +162,10 @@ export const SearchPage = () => {
         (room.description || room.desc || "").toLowerCase().includes(kw);
 
       const roomArea = Number(room.area) || 25;
-      const matchArea = roomArea >= areaMin && roomArea <= areaMax;
+      const matchArea = isWithinRange(roomArea, areaMin, areaMax);
 
       const roomPrice = Number(room.price) || 0;
-      const matchPrice = roomPrice >= priceMin && roomPrice <= priceMax;
+      const matchPrice = isWithinRange(roomPrice, priceMin, priceMax);
 
       let matchAmenities = true;
       if (selectedAmenities.length > 0) {
@@ -294,11 +295,12 @@ export const SearchPage = () => {
             <label className="filter-label">
               <i className="bi bi-arrows-angle-expand"></i> Lọc theo diện tích
             </label>
-            <div className="range-values">
-              <span>
+            <div className="range-values" aria-live="polite">
+              <span className="range-value">
                 <strong id="area-min-value">{areaMin}</strong> m²
               </span>
-              <span>
+              <span className="range-separator" aria-hidden="true">–</span>
+              <span className="range-value range-value-end">
                 <strong id="area-max-value">{areaMax}</strong> m²
               </span>
             </div>
@@ -312,27 +314,31 @@ export const SearchPage = () => {
               <input
                 type="range"
                 id="area-min"
+                aria-label="Diện tích tối thiểu"
+                aria-valuetext={`${areaMin} mét vuông`}
                 min="0"
-                max="100"
+                max={Math.max(0, areaMax - 5)}
                 value={areaMin}
                 step="5"
                 className="range-slider"
                 onChange={(e) => {
-                  const val = Math.min(Number(e.target.value), areaMax);
-                  setAreaMin(val);
+                  const next = moveRangeEndpoint({ min: areaMin, max: areaMax, value: e.target.value, endpoint: "min", step: 5, lowerBound: 0, upperBound: 100 });
+                  setAreaMin(next.min);
                 }}
               />
               <input
                 type="range"
                 id="area-max"
-                min="0"
+                aria-label="Diện tích tối đa"
+                aria-valuetext={`${areaMax} mét vuông`}
+                min={Math.min(100, areaMin + 5)}
                 max="100"
                 value={areaMax}
                 step="5"
                 className="range-slider"
                 onChange={(e) => {
-                  const val = Math.max(Number(e.target.value), areaMin);
-                  setAreaMax(val);
+                  const next = moveRangeEndpoint({ min: areaMin, max: areaMax, value: e.target.value, endpoint: "max", step: 5, lowerBound: 0, upperBound: 100 });
+                  setAreaMax(next.max);
                 }}
               />
             </div>
@@ -343,18 +349,13 @@ export const SearchPage = () => {
             <label className="filter-label">
               <i className="bi bi-currency-dollar"></i> Lọc theo giá
             </label>
-            <div className="range-values">
-              <span>
-                <strong id="price-min-value">
-                  {priceMin.toLocaleString("vi-VN")}
-                </strong>{" "}
-                đ
+            <div className="range-values" aria-live="polite">
+              <span className="range-value">
+                <strong id="price-min-value">{formatPriceFilterValue(priceMin)}</strong>
               </span>
-              <span>
-                <strong id="price-max-value">
-                  {priceMax.toLocaleString("vi-VN")}
-                </strong>{" "}
-                đ
+              <span className="range-separator" aria-hidden="true">–</span>
+              <span className="range-value range-value-end">
+                <strong id="price-max-value">{formatPriceFilterValue(priceMax)}</strong>
               </span>
             </div>
             <div
@@ -367,27 +368,31 @@ export const SearchPage = () => {
               <input
                 type="range"
                 id="price-min"
+                aria-label="Giá thuê tối thiểu mỗi tháng"
+                aria-valuetext={formatPriceFilterValue(priceMin)}
                 min="0"
-                max="6000000"
+                max={Math.max(0, priceMax - 100000)}
                 value={priceMin}
                 step="100000"
                 className="range-slider"
                 onChange={(e) => {
-                  const val = Math.min(Number(e.target.value), priceMax);
-                  setPriceMin(val);
+                  const next = moveRangeEndpoint({ min: priceMin, max: priceMax, value: e.target.value, endpoint: "min", step: 100000, lowerBound: 0, upperBound: 6000000 });
+                  setPriceMin(next.min);
                 }}
               />
               <input
                 type="range"
                 id="price-max"
-                min="0"
+                aria-label="Giá thuê tối đa mỗi tháng"
+                aria-valuetext={formatPriceFilterValue(priceMax)}
+                min={Math.min(6000000, priceMin + 100000)}
                 max="6000000"
                 value={priceMax}
                 step="100000"
                 className="range-slider"
                 onChange={(e) => {
-                  const val = Math.max(Number(e.target.value), priceMin);
-                  setPriceMax(val);
+                  const next = moveRangeEndpoint({ min: priceMin, max: priceMax, value: e.target.value, endpoint: "max", step: 100000, lowerBound: 0, upperBound: 6000000 });
+                  setPriceMax(next.max);
                 }}
               />
             </div>
@@ -439,8 +444,8 @@ export const SearchPage = () => {
       {/* Main Content Area */}
       <main className="search-main">
         <div className="search-header">
-          <h2 id="results-count">
-            Tìm thấy {filteredAndSortedRooms.length} phòng trọ
+          <h2 id="results-count" aria-live="polite">
+            {loading ? "Đang tải danh sách phòng…" : roomsError ? "Không tải được danh sách phòng" : `Tìm thấy ${filteredAndSortedRooms.length} phòng trọ`}
           </h2>
           <button
             type="button"
@@ -457,6 +462,12 @@ export const SearchPage = () => {
               <i className="bi bi-hourglass-split"></i> Đang tải danh sách
               phòng...
             </p>
+          ) : roomsError ? (
+            <div className="empty-message search-error-state" role="alert">
+              <i className="bi bi-wifi-off" aria-hidden="true"></i>
+              <span>{roomsError}</span>
+              <button type="button" className="btn btn-outline-primary btn-sm" onClick={() => dispatch(fetchRoomsThunk({ page: 1, limit: 50 }))}>Thử tải lại</button>
+            </div>
           ) : filteredAndSortedRooms.length === 0 ? (
             <p className="empty-message">
               <i className="bi bi-search"></i> Không tìm thấy phòng nào phù hợp

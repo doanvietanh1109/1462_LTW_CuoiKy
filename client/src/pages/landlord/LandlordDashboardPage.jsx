@@ -374,7 +374,7 @@ export const LandlordDashboardPage = () => {
       <section id="rooms" className="dashboard-panel">
         <div className="panel-header">
           <div>
-            <p className="panel-kicker">Rooms</p>
+            <p className="panel-kicker">Danh sách phòng</p>
             <h2>Phòng của tôi</h2>
           </div>
           <button
@@ -515,7 +515,7 @@ export const LandlordDashboardPage = () => {
       <section id="history" className="dashboard-panel">
         <div className="panel-header">
           <div>
-            <p className="panel-kicker">Rental History</p>
+            <p className="panel-kicker">Lịch sử thuê</p>
             <h2>Lịch sử cho thuê phòng</h2>
           </div>
           <div className="btn-group" role="group">
@@ -619,12 +619,13 @@ export const LandlordDashboardPage = () => {
         </div>
       </section>
 
-      {/* Biểu đồ doanh thu theo tháng (Đề 4 - Aggregation Pipeline) */}
+      {/* Doanh thu đã thu, nhóm theo kỳ hóa đơn */}
       <section className="dashboard-panel">
         <div className="panel-header">
           <div>
-            <p className="panel-kicker">Revenue Analytics</p>
-            <h2>Biểu đồ doanh thu theo tháng (Aggregation Pipeline)</h2>
+            <p className="panel-kicker">Thống kê doanh thu</p>
+            <h2>Doanh thu theo tháng</h2>
+            <p className="text-muted small mb-0">Gồm hóa đơn đã thanh toán, nhóm theo tháng/năm ghi trên hóa đơn.</p>
           </div>
           <Link to="/landlord/meters" className="btn btn-primary btn-sm">
             <i className="bi bi-lightning-charge"></i> Nhập điện nước cuối tháng
@@ -633,12 +634,12 @@ export const LandlordDashboardPage = () => {
         <RevenueChart monthlyRevenue={monthlyRevenue} />
       </section>
 
-      {/* Danh sách phòng nợ tiền (Đề 4 - Aggregation Pipeline) */}
+      {/* Hóa đơn chưa thanh toán */}
       <section className="dashboard-panel">
         <div className="panel-header">
           <div>
-            <p className="panel-kicker">Unpaid Invoices</p>
-            <h2>Danh sách phòng nợ tiền ({unpaidRooms.length})</h2>
+            <p className="panel-kicker">Hóa đơn chưa thanh toán</p>
+            <h2>Phòng còn công nợ ({unpaidRooms.length})</h2>
           </div>
           <Link
             to="/landlord/invoices"
@@ -672,7 +673,7 @@ export const LandlordDashboardPage = () => {
                     <tr key={item._id}>
                       <td>
                         <strong>
-                          P.{item.roomNumber || "N/A"} - {item.roomTitle}
+                          P.{item.roomNumber || "Chưa rõ"} - {item.roomTitle}
                         </strong>
                       </td>
                       <td>

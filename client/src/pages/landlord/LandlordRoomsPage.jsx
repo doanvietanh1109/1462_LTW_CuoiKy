@@ -87,12 +87,12 @@ export const LandlordRoomsPage = () => {
   };
 
   return (
-    <div>
+    <div className="landlord-rooms-page">
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <div>
-          <h4 className="fw-bold mb-1">
+          <h4 className="landlord-page-title fw-bold mb-1">
             <i className="bi bi-houses-fill me-2 text-primary" />
-            Quản Lý Phòng Trọ ({rooms.length} phòng)
+            Phòng &amp; trạng thái ({rooms.length} phòng)
           </h4>
           <p className="text-muted small mb-0">
             Quản lý giá thuê, diện tích (m²), đơn giá điện nước và 3 trạng thái: Trống / Đang thuê / Đang sửa
@@ -107,7 +107,7 @@ export const LandlordRoomsPage = () => {
             setRoomModalOpen(true);
           }}
         >
-          <i className="bi bi-plus-circle me-1" /> Thêm Phòng Mới
+          <i className="bi bi-plus-circle me-1" /> Thêm phòng mới
         </button>
       </div>
 
@@ -130,6 +130,7 @@ export const LandlordRoomsPage = () => {
                       ? "btn-primary"
                       : "btn-outline-primary"
                   }`}
+                  aria-pressed={statusFilter === st.key}
                   onClick={() => setStatusFilter(st.key)}
                 >
                   {st.label}
@@ -169,7 +170,7 @@ export const LandlordRoomsPage = () => {
       ) : (
         <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
           <div className="table-responsive">
-            <table className="table table-hover align-middle mb-0">
+            <table className="table table-hover align-middle mb-0 landlord-rooms-table">
               <thead className="table-light">
                 <tr>
                   <th>Mã / Tên phòng</th>

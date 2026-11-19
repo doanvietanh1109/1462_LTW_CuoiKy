@@ -32,6 +32,15 @@ export const Footer = () => {
               <li>
                 <Link to="/bookmarks">Đã lưu</Link>
               </li>
+              <li>
+                <Link to="/about">Giới thiệu</Link>
+              </li>
+              <li>
+                <Link to="/blog">Cẩm nang thuê trọ</Link>
+              </li>
+              <li>
+                <Link to="/contact">Liên hệ</Link>
+              </li>
             </ul>
           </div>
 
@@ -45,9 +54,6 @@ export const Footer = () => {
                 className="social-icon"
               >
                 <i className="bi bi-facebook"></i>
-              </a>
-              <a href="#instagram" className="social-icon">
-                <i className="bi bi-instagram"></i>
               </a>
             </div>
           </div>

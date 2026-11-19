@@ -219,12 +219,25 @@
 /* ======================== RANGE SLIDERS ======================== */
 
 .range-values {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: baseline;
+    gap: 5px;
+    min-width: 0;
     font-size: 11px;
     color: #0077b6;
     margin-bottom: 8px;
-    text-align: center;
     font-weight: 600;
 }
+
+.range-value {
+    min-width: 0;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.range-value-end { text-align: right; }
+.range-separator { color: #758594; text-align: center; }
 
 .range-slider-wrapper {
     position: relative;
@@ -254,7 +267,7 @@
     content: '';
     position: absolute;
     left: calc(4px + var(--range-left));
-    width: calc(var(--range-width)-4px);
+    width: calc(var(--range-width) - 8px);
     top: 50%;
     transform: translateY(-50%);
     height: 6px;

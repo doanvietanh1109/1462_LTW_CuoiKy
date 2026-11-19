@@ -102,19 +102,19 @@ export const Header = ({ onToggleChat }) => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <a href="#about" className="nav-link">
+            <NavLink to="/about" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
               Giới thiệu
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a href="#blog" className="nav-link">
+            <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
               Blog
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a href="#contact" className="nav-link">
+            <NavLink to="/contact" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
               Liên hệ
-            </a>
+            </NavLink>
           </li>
           <li className="dropdown nav-item">
             <a
@@ -128,9 +128,9 @@ export const Header = ({ onToggleChat }) => {
               <a href="#chat-ai" onClick={handleToggleChat}>
                 <i className="bi bi-chat-dots"></i> Chat với AI
               </a>
-              <a href="tel:0987654321">
-                <i className="bi bi-telephone"></i> Gọi: 0987.654.321
-              </a>
+              <Link to="/contact">
+                <i className="bi bi-envelope"></i> Gửi yêu cầu hỗ trợ
+              </Link>
               <a
                 href="#theme"
                 onClick={(e) => {

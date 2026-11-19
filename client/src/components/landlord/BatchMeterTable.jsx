@@ -126,8 +126,8 @@ export const BatchMeterTable = ({ month, year }) => {
     <div className="card border-0 shadow-sm rounded-4 p-3">
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
         <div>
-          <h5 className="fw-bold mb-1">
-            Bảng Nhập Chỉ Số Điện Nước Hàng Loạt - Tháng {month}/{year}
+          <h5 className="landlord-page-title fw-bold mb-1">
+            Bảng nhập chỉ số điện, nước hàng loạt · Tháng {month}/{year}
           </h5>
           <p className="text-muted small mb-0">
             Nhập trực tiếp chỉ số mới cho tất cả các phòng đang thuê. Hệ thống kiểm tra từng dòng và báo lỗi ngay nếu chỉ số mới nhỏ hơn chỉ số cũ.
@@ -156,7 +156,7 @@ export const BatchMeterTable = ({ month, year }) => {
       )}
 
       <div className="table-responsive">
-        <table className="table table-bordered table-hover align-middle mb-0">
+        <table className="table table-bordered table-hover align-middle mb-0 landlord-meter-table">
           <thead className="table-light">
             <tr>
               <th>Phòng / Dãy trọ</th>
@@ -224,7 +224,7 @@ export const BatchMeterTable = ({ month, year }) => {
             onClick={() => handleSaveBatch(false)}
           >
             <i className="bi bi-floppy me-1" />
-            Chỉ Lưu Chỉ Số Điện Nước
+            Chỉ lưu chỉ số điện, nước
           </button>
           <button
             type="button"
@@ -235,7 +235,7 @@ export const BatchMeterTable = ({ month, year }) => {
             <i className="bi bi-receipt-cutoff me-1" />
             {submitting
               ? "Đang xử lý..."
-              : `Lưu Chỉ Số & Phát Hành Hóa Đơn Tháng ${month}/${year}`}
+              : `Lưu chỉ số và phát hành hóa đơn tháng ${month}/${year}`}
           </button>
         </div>
       )}

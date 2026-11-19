@@ -66,9 +66,9 @@ export const LandlordContractsPage = () => {
     <div>
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
         <div>
-          <h4 className="fw-bold mb-1">
+          <h4 className="landlord-page-title fw-bold mb-1">
             <i className="bi bi-file-earmark-text-fill me-2 text-primary" />
-            Quản Lý Hợp Đồng Thuê Phòng ({contracts.length})
+            Quản lý hợp đồng thuê ({contracts.length})
           </h4>
           <p className="text-muted small mb-0">
             Không cho tạo hợp đồng mới vào phòng đang có hợp đồng hiệu lực; trạng thái phòng tự đổi khi tạo/kết thúc hợp đồng.
