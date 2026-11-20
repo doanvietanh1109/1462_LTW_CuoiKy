@@ -1,71 +1,59 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BrandLogo } from "./BrandLogo";
 
-export const Footer = () => {
-  return (
-    <footer>
-      <div className="footer-content">
-        <div className="footer-brand">
-          <Link to="/" className="logo d-flex align-items-center gap-2">
-            <img
-              src="/images/logo.jpg"
-              alt="Logo"
-              style={{ height: "50px", width: "auto", borderRadius: "4px" }}
-            />
-            <span style={{ fontWeight: 600, fontSize: "1.2rem" }}>RIPT Rental</span>
-          </Link>
-          <p className="footer-tagline">
-            Nền tảng tìm kiếm và đặt thuê phòng trọ uy tín
+const exploreLinks = [
+  ["Trang chủ", "/"],
+  ["Tìm phòng", "/search"],
+  ["Đã lưu", "/bookmarks"],
+  ["Giới thiệu", "/about"],
+  ["Cẩm nang thuê trọ", "/blog"],
+];
+
+export const Footer = () => (
+  <footer className="site-footer">
+    <div className="site-footer__inner">
+      <div className="site-footer__main">
+        <section className="site-footer__brand" aria-label="Về RIPT Rental">
+          <BrandLogo variant="dark" className="site-footer__brand-logo" />
+          <p className="site-footer__slogan">Tìm phòng dễ dàng. Thuê trọ an tâm.</p>
+          <p className="site-footer__description">
+            Nền tảng kết nối người tìm trọ và chủ nhà, giúp việc tìm kiếm và quản lý
+            phòng trở nên thuận tiện hơn.
           </p>
-        </div>
+          <a
+            href="https://web.facebook.com/oanvietanhspike/?locale=vi_VN"
+            target="_blank"
+            rel="noreferrer"
+            className="site-footer__social"
+            aria-label="RIPT Rental trên Facebook (mở tab mới)"
+          >
+            <i className="bi bi-facebook" aria-hidden="true" />
+            <span>Facebook</span>
+          </a>
+        </section>
 
-        <div className="footer-links">
-          <div className="footer-column">
-            <h4>Liên kết</h4>
-            <ul>
-              <li>
-                <Link to="/">Trang chủ</Link>
-              </li>
-              <li>
-                <Link to="/search">Tìm phòng</Link>
-              </li>
-              <li>
-                <Link to="/bookmarks">Đã lưu</Link>
-              </li>
-              <li>
-                <Link to="/about">Giới thiệu</Link>
-              </li>
-              <li>
-                <Link to="/blog">Cẩm nang thuê trọ</Link>
-              </li>
-              <li>
-                <Link to="/contact">Liên hệ</Link>
-              </li>
-            </ul>
-          </div>
+        <nav className="site-footer__column" aria-label="Khám phá">
+          <h2 className="site-footer__heading">Khám phá</h2>
+          <ul>
+            {exploreLinks.map(([label, to]) => (
+              <li key={to}><Link to={to}>{label}</Link></li>
+            ))}
+          </ul>
+        </nav>
 
-          <div className="footer-column">
-            <h4>Theo dõi</h4>
-            <div className="social-icons">
-              <a
-                href="https://web.facebook.com/oanvietanhspike/?locale=vi_VN"
-                target="_blank"
-                rel="noreferrer"
-                className="social-icon"
-              >
-                <i className="bi bi-facebook"></i>
-              </a>
-            </div>
-          </div>
-        </div>
+        <nav className="site-footer__column" aria-label="Hỗ trợ">
+          <h2 className="site-footer__heading">Hỗ trợ</h2>
+          <ul>
+            <li><Link to="/contact">Liên hệ</Link></li>
+          </ul>
+        </nav>
       </div>
 
-      <div className="footer-bottom">
-        <p>
-          © 2026 RIPT Rental - Hệ thống Thuê Phòng Trực Tuyến. Thiết kế bởi Sinh viên
-          Học viện.
-        </p>
+      <div className="site-footer__bottom">
+        <p>© {new Date().getFullYear()} RIPT Rental. Bảo lưu mọi quyền.</p>
+        <p className="site-footer__bottom-note">Tìm nơi ở phù hợp, an tâm bắt đầu.</p>
       </div>
-    </footer>
-  );
-};
+    </div>
+  </footer>
+);
