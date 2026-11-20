@@ -1,6 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const { ContactInquiry } = require("../src/models/contactInquiry.model");
+const { Room } = require("../src/models/room.model");
 const { RepairRequest } = require("../src/models/repairRequest.model");
 const { Contract } = require("../src/models/contract.model");
 const contacts = require("../src/controllers/contact.controller");
@@ -39,6 +40,50 @@ test("contact message is validated before database write", async () => {
   const res = await invoke(contacts.createContactInquiry, { body: { roomId: idA, name: "A", phone: "1", message: "x" } });
   assert.equal(res.statusCode, 400);
   assert.equal(created, false);
+});
+
+test("guest inquiry derives landlordId from the selected room and ignores a supplied landlordId", async () => {
+  const landlordId = "bbbbbbbbbbbbbbbbbbbbbbbb";
+  let createdInquiry;
+  replace(Room, "findById", async () => ({ _id: idA, ownerId: landlordId, status: "available" }));
+  replace(ContactInquiry, "create", async (payload) => {
+    createdInquiry = payload;
+    return { _id: "cccccccccccccccccccccccc", ...payload };
+  });
+
+  const res = await invoke(contacts.createContactInquiry, {
+    body: {
+      roomId: idA,
+      landlordId: "aaaaaaaaaaaaaaaaaaaaaaaa",
+      name: "Nguyễn Minh Khoa",
+      phone: "0987654321",
+      email: "khoa@example.test",
+      message: "Tôi muốn hỏi lịch xem phòng.",
+    },
+  });
+
+  assert.equal(res.statusCode, 201);
+  assert.equal(createdInquiry.roomId, idA);
+  assert.equal(createdInquiry.landlordId, landlordId);
+  assert.notEqual(createdInquiry.landlordId, "aaaaaaaaaaaaaaaaaaaaaaaa");
+});
+
+test("landlord inquiry list is scoped to that landlord for the management page", async () => {
+  const landlordId = "bbbbbbbbbbbbbbbbbbbbbbbb";
+  const inquiries = [{ _id: "cccccccccccccccccccccccc", landlordId, roomId: idA }];
+  let querySeen;
+  replace(ContactInquiry, "find", (query) => {
+    querySeen = query;
+    return { populate: () => ({ sort: async () => inquiries }) };
+  });
+
+  const res = await invoke(contacts.getContactInquiries, {
+    user: { _id: landlordId, role: "landlord" },
+    query: {},
+  });
+
+  assert.deepEqual(querySeen, { landlordId });
+  assert.deepEqual(res.body.data.inquiries, inquiries);
 });
 
 test("tenant cannot create repair request for a room without their active contract", async () => {

@@ -191,6 +191,47 @@
     border: 1px solid #f0f0f0;
 }
 
+/* Room-specific guest inquiry card, scoped to the detail-page sidebar. */
+.room-guest-contact .card {
+    width: 100%;
+    border: 1px solid #D7E7F3 !important;
+    border-top: 3px solid #1769AA !important;
+    border-radius: 16px !important;
+    background: #fff;
+    box-shadow: 0 6px 22px rgba(11, 41, 66, .08) !important;
+}
+
+.room-guest-contact h4 {
+    color: #0B2942;
+    font-size: 1.08rem;
+    line-height: 1.4;
+}
+
+.room-guest-contact h4 i {
+    color: #1769AA !important;
+}
+
+.room-guest-contact .form-control {
+    min-width: 0;
+    border-color: #D7E2EC;
+    border-radius: 8px;
+}
+
+.room-guest-contact .form-control:focus {
+    border-color: #1769AA;
+    box-shadow: 0 0 0 3px rgba(23, 105, 170, .14);
+}
+
+.room-guest-contact .btn-success {
+    border-color: #1769AA !important;
+    background: #1769AA !important;
+}
+
+.room-guest-contact .btn-success:hover:not(:disabled) {
+    border-color: #12558A !important;
+    background: #12558A !important;
+}
+
 .contact-header {
     display: flex;
     align-items: center;
