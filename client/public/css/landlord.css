@@ -1660,9 +1660,102 @@ textarea.form-control {
     background: var(--landlord-sidebar);
 }
 
+.dashboard-body .landlord-sidebar .dashboard-brand {
+    min-width: 0;
+    gap: 0;
+    color: #fff;
+    font-size: inherit;
+}
+
+.dashboard-body .landlord-sidebar .dashboard-brand:hover,
+.dashboard-body .landlord-sidebar .dashboard-brand:focus-visible {
+    color: #fff;
+}
+
+.landlord-brand-logo {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    line-height: 1.1;
+}
+
+.landlord-brand-logo__mark {
+    display: block;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    overflow: visible;
+}
+
+.landlord-brand-logo__house {
+    fill: #A8F0C6;
+    stroke: #A8F0C6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+}
+
+.landlord-brand-logo__roof,
+.landlord-brand-logo__chimney {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3.1;
+}
+
+.landlord-brand-logo__window {
+    fill: #0F5A3A;
+}
+
+.landlord-brand-logo__checklist {
+    fill: #fff;
+    stroke: #0F5A3A;
+    stroke-width: 1.5;
+}
+
+.landlord-brand-logo__check {
+    fill: none;
+    stroke: #37B978;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.landlord-brand-logo__lines {
+    fill: none;
+    stroke: #0F5A3A;
+    stroke-linecap: round;
+    stroke-width: 1.7;
+}
+
+.landlord-brand-logo__name {
+    overflow: hidden;
+    color: #fff;
+    font-size: 21px;
+    font-weight: 750;
+    letter-spacing: -0.035em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+    .landlord-brand-logo { gap: 9px; }
+    .landlord-brand-logo__mark { width: 36px; height: 36px; flex-basis: 36px; }
+    .landlord-brand-logo__name { font-size: 20px; }
+}
+
 .dashboard-body .landlord-sidebar .sidebar-nav a {
     color: rgba(255, 255, 255, .86);
     transition: background-color .18s ease, color .18s ease;
+}
+
+/* The landlord sidebar currently has no collapsed mode; keep labels text-only. */
+.dashboard-body .landlord-sidebar .sidebar-nav a > i,
+.dashboard-body .landlord-sidebar > .btn-outline-light > i {
+    display: none;
 }
 
 .dashboard-body .landlord-sidebar .sidebar-nav a:hover {

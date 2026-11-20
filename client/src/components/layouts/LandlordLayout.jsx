@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { LandlordBrandLogo } from "../common/LandlordBrandLogo";
 
 // Nested Route Layout cho Chủ trọ có sử dụng <Outlet /> và NavLink active, giống hệt 100% landlord.html
 export const LandlordLayout = () => {
@@ -17,8 +18,7 @@ export const LandlordLayout = () => {
       <div className="dashboard-shell">
         <aside className="dashboard-sidebar landlord-sidebar">
           <Link to="/" className="dashboard-brand">
-            <i className="bi bi-buildings"></i>
-            <span>Thuê Phòng</span>
+            <LandlordBrandLogo />
           </Link>
 
           <div className="sidebar-label">Chủ trọ</div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
+import { BrandLogo } from "./BrandLogo";
 
 export const Header = ({ onToggleChat }) => {
   const { user, isAuthenticated, openAuthModal, logout } = useAuth();
@@ -58,14 +59,7 @@ export const Header = ({ onToggleChat }) => {
   return (
     <header>
       <div className="navbar navbar-expand-lg app-navbar">
-        <Link to="/" className="logo navbar-brand d-flex align-items-center gap-2">
-          <img
-            src="/images/logo.jpg"
-            alt="Logo"
-            style={{ height: "40px", width: "auto", borderRadius: "4px" }}
-          />
-          <span style={{ fontWeight: 600 }}>RIPT Rental</span>
-        </Link>
+        <BrandLogo variant="light" className="navbar-brand" />
 
         <ul className="nav-links navbar-nav">
           <li className="nav-item">
@@ -108,7 +102,7 @@ export const Header = ({ onToggleChat }) => {
           </li>
           <li className="nav-item">
             <NavLink to="/blog" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-              Blog
+              Cẩm nang
             </NavLink>
           </li>
           <li className="nav-item">
