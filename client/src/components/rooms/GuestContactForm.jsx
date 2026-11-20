@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { apiRequest } from "../../api/apiClient";
 
 // Chức năng bắt buộc Đề 4 cho Khách (không đăng nhập): Để lại thông tin liên hệ
@@ -13,6 +13,7 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
   const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [serverError, setServerError] = useState("");
+  const submittingRef = useRef(false);
 
   const validate = () => {
     const errs = {};
@@ -41,11 +42,13 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submittingRef.current) return;
     setSuccessMsg("");
     setServerError("");
 
     if (!validate()) return;
 
+    submittingRef.current = true;
     setSubmitting(true);
     try {
       const res = await apiRequest("/contacts", {
@@ -65,6 +68,7 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
     } catch (err) {
       setServerError(err.message || "Có lỗi xảy ra khi gửi thông tin liên hệ");
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };

@@ -5,6 +5,7 @@ import { fetchRoomsThunk } from "../store/slices/roomSlice";
 import { apiRequest } from "../api/apiClient";
 import { useAuth } from "../contexts/AuthContext";
 import { createContractFromBooking } from "../utils/tenantContractHelper";
+import { GuestContactForm } from "../components/rooms/GuestContactForm";
 
 const formatVND = (amount) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
@@ -804,6 +805,15 @@ export const RoomDetailPage = () => {
                 <i className="bi bi-file-earmark-text me-1"></i> Xem mẫu Hợp đồng &amp; Bảng phí
               </button>
             </div>
+
+            {!isAuthenticated && room.status === "available" && (
+              <div className="room-guest-contact">
+                <GuestContactForm
+                  roomId={room._id || room.id || id}
+                  roomTitle={room.title}
+                />
+              </div>
+            )}
 
             <div className="features-box">
               <h4 className="features-title">
