@@ -7,12 +7,17 @@ export const LandlordRepairsPage = () => {
   const [loading, setLoading] = useState(true);
   const [notesById, setNotesById] = useState({});
   const [feedback, setFeedback] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [updatingId, setUpdatingId] = useState(null);
 
   const loadRepairs = async () => {
     setLoading(true);
+    setErrorMsg("");
     try {
       const res = await apiRequest("/repair-requests");
       setRequests(res.data?.requests || []);
+    } catch (err) {
+      setErrorMsg(err.message || "Không thể tải danh sách yêu cầu sửa chữa.");
     } finally {
       setLoading(false);
     }
@@ -22,22 +27,38 @@ export const LandlordRepairsPage = () => {
     loadRepairs();
   }, []);
 
-  const handleUpdateStatus = async (reqItem, newStatus, updateRoomStatus = false) => {
-    const res = await apiRequest(`/repair-requests/${reqItem._id}/status`, {
-      method: "PATCH",
-      body: {
-        status: newStatus,
-        landlordNote:
-          notesById[reqItem._id] !== undefined
-            ? notesById[reqItem._id]
-            : reqItem.landlordNote,
-        updateRoomStatus,
-      },
-    });
-    setFeedback(res.message || "Đã cập nhật trạng thái sửa chữa!");
-    setRequests((prev) =>
-      prev.map((item) => (item._id === reqItem._id ? res.data.request : item))
-    );
+  const handleUpdateStatus = async (
+    reqItem,
+    newStatus,
+    updateRoomStatus = false,
+  ) => {
+    if (updatingId === reqItem._id) return;
+    setUpdatingId(reqItem._id);
+    setFeedback("");
+    setErrorMsg("");
+    try {
+      const res = await apiRequest(`/repair-requests/${reqItem._id}/status`, {
+        method: "PATCH",
+        body: {
+          status: newStatus,
+          landlordNote:
+            notesById[reqItem._id] !== undefined
+              ? notesById[reqItem._id]
+              : reqItem.landlordNote,
+          updateRoomStatus,
+        },
+      });
+      setFeedback(res.message || "Đã cập nhật trạng thái sửa chữa!");
+      setRequests((prev) =>
+        prev.map((item) =>
+          item._id === reqItem._id ? res.data.request : item,
+        ),
+      );
+    } catch (err) {
+      setErrorMsg(err.message || "Không thể cập nhật trạng thái sửa chữa.");
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   return (
@@ -63,9 +84,27 @@ export const LandlordRepairsPage = () => {
         </div>
       )}
 
+      {errorMsg && (
+        <div
+          className="alert alert-danger alert-dismissible fade show py-2 small"
+          role="alert"
+        >
+          {errorMsg}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setErrorMsg("")}
+          />
+        </div>
+      )}
+
       {loading ? (
         <div className="text-center py-5">
           <div className="spinner-border text-primary" />
+        </div>
+      ) : requests.length === 0 ? (
+        <div className="card border-0 shadow-sm rounded-4 p-5 text-center text-muted">
+          Chưa có yêu cầu sửa chữa nào từ người thuê.
         </div>
       ) : (
         <div className="row g-3">
@@ -76,15 +115,17 @@ export const LandlordRepairsPage = () => {
                   <div>
                     <h5 className="fw-bold mb-1">{reqItem.title}</h5>
                     <small className="text-muted">
-                      Phòng: <strong>{reqItem.roomId?.title}</strong> · Người gửi:{" "}
-                      <strong>{reqItem.tenantId?.name}</strong> (
+                      Phòng: <strong>{reqItem.roomId?.title}</strong> · Người
+                      gửi: <strong>{reqItem.tenantId?.name}</strong> (
                       {formatDateVN(reqItem.createdAt)})
                     </small>
                   </div>
                   <StatusBadge type="repair" status={reqItem.status} />
                 </div>
 
-                <p className="small text-secondary mb-2">{reqItem.description}</p>
+                <p className="small text-secondary mb-2">
+                  {reqItem.description}
+                </p>
 
                 {reqItem.images && reqItem.images.length > 0 && (
                   <div className="d-flex gap-2 mb-3">
@@ -138,6 +179,7 @@ export const LandlordRepairsPage = () => {
                         ? "btn-info"
                         : "btn-outline-secondary"
                     }`}
+                    disabled={updatingId === reqItem._id}
                     onClick={() => handleUpdateStatus(reqItem, "new")}
                   >
                     1. Mới
@@ -149,6 +191,7 @@ export const LandlordRepairsPage = () => {
                         ? "btn-warning text-dark"
                         : "btn-outline-warning text-dark"
                     }`}
+                    disabled={updatingId === reqItem._id}
                     onClick={() =>
                       handleUpdateStatus(reqItem, "in_progress", true)
                     }
@@ -162,6 +205,7 @@ export const LandlordRepairsPage = () => {
                         ? "btn-success"
                         : "btn-outline-success"
                     }`}
+                    disabled={updatingId === reqItem._id}
                     onClick={() => handleUpdateStatus(reqItem, "resolved", true)}
                   >
                     3. Xong (Hoàn tất)
