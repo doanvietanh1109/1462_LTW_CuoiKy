@@ -17,15 +17,21 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
 
   const validate = () => {
     const errs = {};
-    if (!form.name.trim()) {
+    const trimmedName = form.name.trim();
+    const trimmedPhone = form.phone.trim();
+    const trimmedEmail = form.email.trim();
+
+    if (!trimmedName) {
       errs.name = "Vui lòng nhập họ và tên của bạn";
+    } else if (trimmedName.length < 2 || trimmedName.length > 100) {
+      errs.name = "Họ và tên phải từ 2 đến 100 ký tự";
     }
-    if (!form.phone.trim()) {
+    if (!trimmedPhone) {
       errs.phone = "Vui lòng nhập số điện thoại liên hệ";
-    } else if (!/^(0|\+84)[0-9]{8,10}$/.test(form.phone.trim())) {
+    } else if (!/^(0|\+84)[0-9]{8,10}$/.test(trimmedPhone)) {
       errs.phone = "Số điện thoại không hợp lệ (9-11 chữ số)";
     }
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       errs.email = "Email không đúng định dạng";
     }
     setErrors(errs);
@@ -55,7 +61,10 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
         method: "POST",
         body: {
           roomId,
-          ...form,
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim(),
+          message: form.message.trim(),
         },
       });
       setSuccessMsg(res.message || "Đã gửi thông tin liên hệ thành công!");

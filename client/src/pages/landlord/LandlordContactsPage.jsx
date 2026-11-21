@@ -4,12 +4,17 @@ import { apiRequest, formatDateVN } from "../../api/apiClient";
 export const LandlordContactsPage = () => {
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [updatingId, setUpdatingId] = useState(null);
 
   const loadInquiries = async () => {
     setLoading(true);
+    setErrorMsg("");
     try {
       const res = await apiRequest("/contacts");
       setInquiries(res.data?.inquiries || []);
+    } catch (err) {
+      setErrorMsg(err.message || "Không thể tải danh sách khách liên hệ.");
     } finally {
       setLoading(false);
     }
@@ -20,14 +25,23 @@ export const LandlordContactsPage = () => {
   }, []);
 
   const toggleStatus = async (item) => {
-    const nextStatus = item.status === "contacted" ? "new" : "contacted";
-    const res = await apiRequest(`/contacts/${item._id}/status`, {
-      method: "PATCH",
-      body: { status: nextStatus },
-    });
-    setInquiries((prev) =>
-      prev.map((inq) => (inq._id === item._id ? res.data.inquiry : inq))
-    );
+    if (updatingId === item._id) return;
+    setUpdatingId(item._id);
+    setErrorMsg("");
+    try {
+      const nextStatus = item.status === "contacted" ? "new" : "contacted";
+      const res = await apiRequest(`/contacts/${item._id}/status`, {
+        method: "PATCH",
+        body: { status: nextStatus },
+      });
+      setInquiries((prev) =>
+        prev.map((inq) => (inq._id === item._id ? res.data.inquiry : inq))
+      );
+    } catch (err) {
+      setErrorMsg(err.message || "Không thể cập nhật trạng thái liên hệ.");
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   return (
@@ -41,6 +55,17 @@ export const LandlordContactsPage = () => {
           Thông tin khách vãng lai (không đăng nhập) gửi từ trang Chi tiết phòng trống
         </p>
       </div>
+      
+      {errorMsg && (
+        <div className="alert alert-danger alert-dismissible fade show py-2 small" role="alert">
+          {errorMsg}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setErrorMsg("")}
+          />
+        </div>
+      )}
 
       {loading ? (
         <div className="text-center py-5">
@@ -99,6 +124,7 @@ export const LandlordContactsPage = () => {
                         <button
                           type="button"
                           className="btn btn-sm btn-outline-primary"
+                          disabled={updatingId === item._id}
                           onClick={() => toggleStatus(item)}
                         >
                           {item.status === "contacted"
