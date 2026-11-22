@@ -1,5 +1,9 @@
 import React, { useRef, useState } from "react";
 import { apiRequest } from "../../api/apiClient";
+import {
+  buildGuestContactPayload,
+  validateGuestContactForm,
+} from "../../utils/guestContact";
 
 // Chức năng bắt buộc Đề 4 cho Khách (không đăng nhập): Để lại thông tin liên hệ
 export const GuestContactForm = ({ roomId, roomTitle }) => {
@@ -16,24 +20,7 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
   const submittingRef = useRef(false);
 
   const validate = () => {
-    const errs = {};
-    const trimmedName = form.name.trim();
-    const trimmedPhone = form.phone.trim();
-    const trimmedEmail = form.email.trim();
-
-    if (!trimmedName) {
-      errs.name = "Vui lòng nhập họ và tên của bạn";
-    } else if (trimmedName.length < 2 || trimmedName.length > 100) {
-      errs.name = "Họ và tên phải từ 2 đến 100 ký tự";
-    }
-    if (!trimmedPhone) {
-      errs.phone = "Vui lòng nhập số điện thoại liên hệ";
-    } else if (!/^(0|\+84)[0-9]{8,10}$/.test(trimmedPhone)) {
-      errs.phone = "Số điện thoại không hợp lệ (9-11 chữ số)";
-    }
-    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      errs.email = "Email không đúng định dạng";
-    }
+    const errs = validateGuestContactForm(form);
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -59,13 +46,7 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
     try {
       const res = await apiRequest("/contacts", {
         method: "POST",
-        body: {
-          roomId,
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          email: form.email.trim(),
-          message: form.message.trim(),
-        },
+        body: buildGuestContactPayload(roomId, form),
       });
       setSuccessMsg(res.message || "Đã gửi thông tin liên hệ thành công!");
       setForm({
@@ -111,6 +92,7 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
             id="guest-name"
             name="name"
             type="text"
+            maxLength={100}
             className={`form-control ${errors.name ? "is-invalid" : ""}`}
             placeholder="VD: Nguyễn Minh Khoa"
             value={form.name}
@@ -143,6 +125,7 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
             id="guest-email"
             name="email"
             type="email"
+            maxLength={254}
             className={`form-control ${errors.email ? "is-invalid" : ""}`}
             placeholder="VD: khoa@gmail.com"
             value={form.email}
@@ -159,11 +142,13 @@ export const GuestContactForm = ({ roomId, roomTitle }) => {
             id="guest-message"
             name="message"
             rows="3"
-            className="form-control"
+            maxLength={2000}
+            className={`form-control ${errors.message ? "is-invalid" : ""}`}
             value={form.message}
             onChange={handleChange}
             placeholder="Nhập thời gian bạn muốn đến xem phòng..."
           />
+          {errors.message && <div className="invalid-feedback">{errors.message}</div>}
         </div>
 
         <button

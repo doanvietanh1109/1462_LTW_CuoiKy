@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // Khách không đăng nhập để lại thông tin liên hệ
 const createContactInquiry = async (req, res, next) => {
   try {
-    const { roomId, name, phone, email, message } = req.body;
+    const { roomId, name, phone, email, message } = req.body || {};
 
     if (
       !roomId ||
@@ -122,7 +122,7 @@ const updateContactStatus = async (req, res, next) => {
       );
     }
 
-    if (!["new", "contacted"].includes(req.body.status)) {
+    if (!["new", "contacted"].includes(req.body?.status)) {
       return sendError(res, "Trạng thái liên hệ không hợp lệ", null, 400);
     }
 
