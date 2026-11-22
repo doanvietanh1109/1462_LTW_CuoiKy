@@ -13,6 +13,7 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef(null);
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     const urls = imageFiles.map((file) => URL.createObjectURL(file));
@@ -62,7 +63,9 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submittingRef.current) return;
     if (!validate()) return;
+    submittingRef.current = true;
     setSubmitting(true);
     setSubmitError("");
     try {
@@ -78,6 +81,7 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
     } catch (error) {
       setSubmitError(error.message || "Không thể gửi yêu cầu sửa chữa.");
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };

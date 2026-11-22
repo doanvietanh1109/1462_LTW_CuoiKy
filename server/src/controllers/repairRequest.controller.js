@@ -50,7 +50,7 @@ const getRepairRequests = async (req, res, next) => {
 
 const createRepairRequest = async (req, res, next) => {
   try {
-    const { roomId, title, description, priority } = req.body;
+    const { roomId, title, description, priority } = req.body || {};
     if (req.user.role !== "user")
       return sendError(
         res,
@@ -176,7 +176,7 @@ const createRepairRequest = async (req, res, next) => {
 // Chủ trọ cập nhật trạng thái: Mới (new) -> Đang xử lý (in_progress) -> Xong (resolved)
 const updateRepairStatus = async (req, res, next) => {
   try {
-    const { status, landlordNote, updateRoomStatus } = req.body;
+    const { status, landlordNote, updateRoomStatus } = req.body || {};
 
     if (!status || !["new", "in_progress", "resolved"].includes(status)) {
       return sendError(

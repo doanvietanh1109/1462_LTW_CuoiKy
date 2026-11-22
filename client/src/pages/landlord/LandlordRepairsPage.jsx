@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { apiRequest, formatDateVN } from "../../api/apiClient";
 import { StatusBadge } from "../../components/common/StatusBadge";
+import { createAsyncActionLock } from "../../utils/asyncActionLock";
 
 export const LandlordRepairsPage = () => {
   const [requests, setRequests] = useState([]);
@@ -8,7 +9,8 @@ export const LandlordRepairsPage = () => {
   const [notesById, setNotesById] = useState({});
   const [feedback, setFeedback] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const [updatingId, setUpdatingId] = useState(null);
+  const [updatingIds, setUpdatingIds] = useState(() => new Set());
+  const updateLockRef = useRef(createAsyncActionLock());
 
   const loadRepairs = async () => {
     setLoading(true);
@@ -32,8 +34,8 @@ export const LandlordRepairsPage = () => {
     newStatus,
     updateRoomStatus = false,
   ) => {
-    if (updatingId === reqItem._id) return;
-    setUpdatingId(reqItem._id);
+    if (!updateLockRef.current.acquire(reqItem._id)) return;
+    setUpdatingIds(updateLockRef.current.snapshot());
     setFeedback("");
     setErrorMsg("");
     try {
@@ -57,7 +59,8 @@ export const LandlordRepairsPage = () => {
     } catch (err) {
       setErrorMsg(err.message || "Không thể cập nhật trạng thái sửa chữa.");
     } finally {
-      setUpdatingId(null);
+      updateLockRef.current.release(reqItem._id);
+      setUpdatingIds(updateLockRef.current.snapshot());
     }
   };
 
@@ -179,7 +182,7 @@ export const LandlordRepairsPage = () => {
                         ? "btn-info"
                         : "btn-outline-secondary"
                     }`}
-                    disabled={updatingId === reqItem._id}
+                    disabled={updatingIds.has(reqItem._id)}
                     onClick={() => handleUpdateStatus(reqItem, "new")}
                   >
                     1. Mới
@@ -191,7 +194,7 @@ export const LandlordRepairsPage = () => {
                         ? "btn-warning text-dark"
                         : "btn-outline-warning text-dark"
                     }`}
-                    disabled={updatingId === reqItem._id}
+                    disabled={updatingIds.has(reqItem._id)}
                     onClick={() =>
                       handleUpdateStatus(reqItem, "in_progress", true)
                     }
@@ -205,7 +208,7 @@ export const LandlordRepairsPage = () => {
                         ? "btn-success"
                         : "btn-outline-success"
                     }`}
-                    disabled={updatingId === reqItem._id}
+                    disabled={updatingIds.has(reqItem._id)}
                     onClick={() => handleUpdateStatus(reqItem, "resolved", true)}
                   >
                     3. Xong (Hoàn tất)

@@ -42,6 +42,52 @@ test("contact message is validated before database write", async () => {
   assert.equal(created, false);
 });
 
+test("contact endpoints return validation errors for null or missing JSON bodies", async () => {
+  const guestRes = await invoke(contacts.createContactInquiry, { body: null });
+  assert.equal(guestRes.statusCode, 400);
+
+  replace(ContactInquiry, "findById", async () => ({ landlordId: idA, status: "new" }));
+  const updateRes = await invoke(contacts.updateContactStatus, {
+    params: { id: idB },
+    body: null,
+    user: { _id: idA, role: "landlord" },
+  });
+  assert.equal(updateRes.statusCode, 400);
+});
+
+test("contact email and message limits are enforced after trimming", async () => {
+  let created = false;
+  let roomRead = false;
+  replace(ContactInquiry, "create", async () => { created = true; });
+  replace(Room, "findById", async () => { roomRead = true; return { _id: idA, status: "available" }; });
+  const valid = {
+    roomId: idA,
+    name: " Nguyễn Minh Khoa ",
+    phone: " 0987654321 ",
+    email: `${"a".repeat(247)}@b.test`, // exactly 254 after trim
+    message: ` ${"m".repeat(2000)} `, // exactly 2,000 after trim
+  };
+
+  const boundaryRes = await invoke(contacts.createContactInquiry, { body: valid });
+  assert.equal(boundaryRes.statusCode, 201);
+  assert.equal(created, true);
+
+  created = false;
+  roomRead = false;
+  const emailRes = await invoke(contacts.createContactInquiry, {
+    body: { ...valid, email: ` ${"a".repeat(248)}@b.test ` },
+  });
+  assert.equal(emailRes.statusCode, 400);
+  assert.equal(roomRead, false);
+  assert.equal(created, false);
+
+  const messageRes = await invoke(contacts.createContactInquiry, {
+    body: { ...valid, message: ` ${"m".repeat(2001)} ` },
+  });
+  assert.equal(messageRes.statusCode, 400);
+  assert.equal(created, false);
+});
+
 test("guest inquiry derives landlordId from the selected room and ignores a supplied landlordId", async () => {
   const landlordId = "bbbbbbbbbbbbbbbbbbbbbbbb";
   let createdInquiry;
@@ -95,6 +141,23 @@ test("tenant cannot create repair request for a room without their active contra
     user: { _id: idA, email: "a@example.test", role: "user" },
   });
   assert.equal(res.statusCode, 403);
+});
+
+test("repair endpoints return validation errors for null JSON bodies", async () => {
+  const createRes = await invoke(repairs.createRepairRequest, {
+    body: null,
+    files: [],
+    user: { _id: idA, email: "a@example.test", role: "user" },
+  });
+  assert.equal(createRes.statusCode, 400);
+
+  replace(RepairRequest, "findById", async () => ({ landlordId: idA, status: "new" }));
+  const updateRes = await invoke(repairs.updateRepairStatus, {
+    params: { id: idB },
+    body: null,
+    user: { _id: idA, role: "landlord" },
+  });
+  assert.equal(updateRes.statusCode, 400);
 });
 
 test("landlord cannot change a repair request owned by another landlord", async () => {
