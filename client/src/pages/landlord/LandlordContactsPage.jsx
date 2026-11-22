@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { apiRequest, formatDateVN } from "../../api/apiClient";
+import { createAsyncActionLock } from "../../utils/asyncActionLock";
 
 export const LandlordContactsPage = () => {
   const [inquiries, setInquiries] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [updatingIds, setUpdatingIds] = useState(() => new Set());
+  const updateLockRef = useRef(createAsyncActionLock());
 
   const loadInquiries = async () => {
     setLoading(true);
+    setErrorMsg("");
     try {
       const res = await apiRequest("/contacts");
       setInquiries(res.data?.inquiries || []);
+    } catch (err) {
+      setErrorMsg(err.message || "Không thể tải danh sách khách liên hệ.");
     } finally {
       setLoading(false);
     }
@@ -20,14 +27,24 @@ export const LandlordContactsPage = () => {
   }, []);
 
   const toggleStatus = async (item) => {
-    const nextStatus = item.status === "contacted" ? "new" : "contacted";
-    const res = await apiRequest(`/contacts/${item._id}/status`, {
-      method: "PATCH",
-      body: { status: nextStatus },
-    });
-    setInquiries((prev) =>
-      prev.map((inq) => (inq._id === item._id ? res.data.inquiry : inq))
-    );
+    if (!updateLockRef.current.acquire(item._id)) return;
+    setUpdatingIds(updateLockRef.current.snapshot());
+    setErrorMsg("");
+    try {
+      const nextStatus = item.status === "contacted" ? "new" : "contacted";
+      const res = await apiRequest(`/contacts/${item._id}/status`, {
+        method: "PATCH",
+        body: { status: nextStatus },
+      });
+      setInquiries((prev) =>
+        prev.map((inq) => (inq._id === item._id ? res.data.inquiry : inq))
+      );
+    } catch (err) {
+      setErrorMsg(err.message || "Không thể cập nhật trạng thái liên hệ.");
+    } finally {
+      updateLockRef.current.release(item._id);
+      setUpdatingIds(updateLockRef.current.snapshot());
+    }
   };
 
   return (
@@ -41,6 +58,17 @@ export const LandlordContactsPage = () => {
           Thông tin khách vãng lai (không đăng nhập) gửi từ trang Chi tiết phòng trống
         </p>
       </div>
+
+      {errorMsg && (
+        <div className="alert alert-danger alert-dismissible fade show py-2 small" role="alert">
+          {errorMsg}
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setErrorMsg("")}
+          />
+        </div>
+      )}
 
       {loading ? (
         <div className="text-center py-5">
@@ -99,6 +127,7 @@ export const LandlordContactsPage = () => {
                         <button
                           type="button"
                           className="btn btn-sm btn-outline-primary"
+                          disabled={updatingIds.has(item._id)}
                           onClick={() => toggleStatus(item)}
                         >
                           {item.status === "contacted"

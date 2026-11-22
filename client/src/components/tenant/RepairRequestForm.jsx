@@ -13,6 +13,7 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef(null);
+  const submittingRef = useRef(false);
 
   useEffect(() => {
     const urls = imageFiles.map((file) => URL.createObjectURL(file));
@@ -22,9 +23,21 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
 
   const validate = () => {
     const errs = {};
-    if (!form.title.trim()) errs.title = "Vui lòng nhập tiêu đề sự cố cần sửa chữa";
-    if (!form.description.trim())
+    const title = form.title.trim();
+    const description = form.description.trim();
+
+    if (!title) {
+      errs.title = "Vui lòng nhập tiêu đề sự cố cần sửa chữa";
+    } else if (title.length < 3 || title.length > 120) {
+      errs.title = "Tiêu đề phải từ 3 đến 120 ký tự";
+    }
+
+    if (!description) {
       errs.description = "Vui lòng mô tả chi tiết tình trạng hư hỏng";
+    } else if (description.length < 5 || description.length > 3000) {
+      errs.description = "Mô tả chi tiết phải từ 5 đến 3000 ký tự";
+    }
+
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -50,14 +63,16 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (submittingRef.current) return;
     if (!validate()) return;
+    submittingRef.current = true;
     setSubmitting(true);
     setSubmitError("");
     try {
       await onSubmitted({
         roomId,
-        title: form.title,
-        description: form.description,
+        title: form.title.trim(),
+        description: form.description.trim(),
         priority: form.priority,
         images: imageFiles,
       });
@@ -66,6 +81,7 @@ export const RepairRequestForm = ({ roomId, onSubmitted }) => {
     } catch (error) {
       setSubmitError(error.message || "Không thể gửi yêu cầu sửa chữa.");
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };
