@@ -6,7 +6,8 @@ import { apiRequest, formatVND, formatDateVN } from "../api/apiClient";
 import { useAuth } from "../contexts/AuthContext";
 import { StatusBadge } from "../components/common/StatusBadge";
 import { RepairRequestForm } from "../components/tenant/RepairRequestForm";
-import { resolveRoomImageUrl } from "../components/rooms/RoomCard";
+import { RoomImage } from "../components/rooms/RoomImage";
+import { getRoomCoverImage } from "../utils/roomImages";
 import { getInvoicePaymentLines, getPaymentResponseData } from "../utils/paymentPresentation";
 import {
   createContractFromBooking,
@@ -279,7 +280,7 @@ export const TenantPortalPage = () => {
   }
 
   const roomInfo = contract?.roomId || {};
-  const roomImage = resolveRoomImageUrl(roomInfo.image || roomInfo.img);
+  const roomImage = getRoomCoverImage(roomInfo);
   const electricCounter = roomInfo.currentElectricity ?? contract?.initialElectricity;
   const waterCounter = roomInfo.currentWater ?? contract?.initialWater;
   const amenitiesList =
@@ -598,13 +599,12 @@ export const TenantPortalPage = () => {
                       return (
                         <div className="col-md-4" key={rId}>
                           <div className="card h-100 border rounded-4 overflow-hidden shadow-sm">
-                            <img
-                              src={resolveRoomImageUrl(r.image || r.img)}
+                            <RoomImage
+                              room={r}
                               alt={r.title}
                               style={{ height: 160, objectFit: "cover" }}
-                              onError={(e) => {
-                                e.currentTarget.src = "/images/room1.jpg";
-                              }}
+                              loading="lazy"
+                              decoding="async"
                             />
                             <div className="card-body d-flex flex-column">
                               <span className="badge bg-success-subtle text-success align-self-start mb-2">
@@ -650,16 +650,14 @@ export const TenantPortalPage = () => {
               <div className="col-lg-5">
                 <div className="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                   <div style={{ position: "relative", height: 230 }}>
-                    <img
+                    <RoomImage
+                      room={roomInfo}
                       src={roomImage}
                       alt={roomInfo.title || "Phòng đang thuê"}
                       style={{
                         width: "100%",
                         height: "100%",
                         objectFit: "cover",
-                      }}
-                      onError={(e) => {
-                        e.currentTarget.src = "/images/room1.jpg";
                       }}
                     />
                     <div

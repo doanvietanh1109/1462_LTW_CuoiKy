@@ -6,27 +6,13 @@ import { apiRequest } from "../api/apiClient";
 import { useAuth } from "../contexts/AuthContext";
 import { createContractFromBooking } from "../utils/tenantContractHelper";
 import { GuestContactForm } from "../components/rooms/GuestContactForm";
+import { RoomImage } from "../components/rooms/RoomImage";
+import { getRoomGalleryImages } from "../utils/roomImages";
 
 const formatVND = (amount) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
     Number(amount) || 0
   );
-
-const resolveImageUrl = (src) => {
-  if (!src) return "/images/room1.jpg";
-  if (
-    src.startsWith("http://") ||
-    src.startsWith("https://") ||
-    src.startsWith("data:") ||
-    src.startsWith("/")
-  ) {
-    return src;
-  }
-  if (!src.startsWith("images/")) {
-    return `/images/${src}`;
-  }
-  return `/${src}`;
-};
 
 const getAmenityIcon = (amenity = "") => {
   const iconMap = {
@@ -161,12 +147,7 @@ export const RoomDetailPage = () => {
   }, [id, rooms, isAuthenticated]);
 
   const images = useMemo(() => {
-    if (!room) return ["/images/room1.jpg"];
-    if (Array.isArray(room.images) && room.images.length > 0) {
-      return room.images.map(resolveImageUrl);
-    }
-    const primary = room.image || room.img;
-    return [resolveImageUrl(primary)];
+    return getRoomGalleryImages(room);
   }, [room]);
 
   const toggleBookmarkDetail = async () => {
@@ -461,14 +442,12 @@ export const RoomDetailPage = () => {
         <div className="detail-grid" id="detail-content">
           <div className="main-info">
             <div className="image-gallery-wrapper">
-              <img
+              <RoomImage
+                room={room}
                 id="room-img"
                 src={images[currentImageIdx]}
                 className="main-img img-fluid"
                 alt={room.title}
-                onError={(e) => {
-                  e.currentTarget.src = "/images/room1.jpg";
-                }}
               />
               <div className="image-counter">
                 <i className="bi bi-camera-fill"></i>
@@ -521,12 +500,10 @@ export const RoomDetailPage = () => {
                     }`}
                     onClick={() => setCurrentImageIdx(idx)}
                   >
-                    <img
+                    <RoomImage
+                      room={room}
                       src={img}
                       alt={`Ảnh ${idx + 1}`}
-                      onError={(e) => {
-                        e.currentTarget.src = "/images/room1.jpg";
-                      }}
                     />
                   </div>
                 ))}

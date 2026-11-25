@@ -15,7 +15,8 @@ import {
 } from "../../store/slices/roomSlice";
 import { apiRequest, formatVND } from "../../api/apiClient";
 import { RevenueChart } from "../../components/landlord/RevenueChart";
-import { resolveRoomImageUrl } from "../../components/rooms/RoomCard";
+import { RoomImage } from "../../components/rooms/RoomImage";
+import { getRoomGalleryImages } from "../../utils/roomImages";
 
 const AMENITIES_OPTIONS = [
   { value: "Giường", icon: "bi-lamp-fill", label: "Giường" },
@@ -398,21 +399,20 @@ export const LandlordDashboardPage = () => {
                 Boolean(room.isRented) || room.status === "rented";
               const isAvailable =
                 room.isAvailable !== false && room.status !== "maintenance";
-              const imageSrc = resolveRoomImageUrl(room.image || room.img);
-              const imageCount = Array.isArray(room.images)
-                ? room.images.length
-                : 1;
+              const roomImages = getRoomGalleryImages(room);
+              const imageSrc = roomImages[0];
+              const imageCount = roomImages.length;
               const tenantObj = room.currentTenant || room.tenant;
 
               return (
                 <article key={roomId} className="landlord-room-card">
                   <div className="room-image-wrapper">
-                    <img
+                    <RoomImage
+                      room={room}
                       src={imageSrc}
                       alt={room.title}
-                      onError={(e) => {
-                        e.currentTarget.src = "/images/room1.jpg";
-                      }}
+                      loading="lazy"
+                      decoding="async"
                     />
                     {imageCount > 1 && (
                       <span className="image-count-badge">

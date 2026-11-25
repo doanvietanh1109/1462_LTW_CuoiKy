@@ -2,7 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchRoomsThunk } from "../store/slices/roomSlice";
-import { resolveRoomImageUrl } from "../components/rooms/RoomCard";
+import { RoomImage } from "../components/rooms/RoomImage";
+import { getRoomCoverImage } from "../utils/roomImages";
 
 const formatVND = (amount) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
@@ -74,7 +75,7 @@ export const ComparePage = () => {
     }
 
     const roomId = String(room._id || room.id);
-    const imagePath = resolveRoomImageUrl(room.image || room.img);
+    const imagePath = getRoomCoverImage(room);
     const priceFormatted = formatVND(room.price);
     const area = Number(room.area) || 25;
     const bedrooms = Number(room.bedrooms) || 1;
@@ -110,13 +111,13 @@ export const ComparePage = () => {
         style={{ display: "block" }}
       >
         <div className="room-header">
-          <img
+          <RoomImage
+            room={room}
             src={imagePath}
             alt={room.title}
             className="room-image"
-            onError={(e) => {
-              e.currentTarget.src = "/images/room1.jpg";
-            }}
+            loading="lazy"
+            decoding="async"
           />
           <button
             type="button"
@@ -290,7 +291,7 @@ export const ComparePage = () => {
             ) : (
               modalFilteredRooms.map((r) => {
                 const rId = String(r._id || r.id);
-                const imagePath = resolveRoomImageUrl(r.image || r.img);
+                const imagePath = getRoomCoverImage(r);
                 const priceFormatted = formatVND(r.price);
                 return (
                   <div
@@ -298,13 +299,13 @@ export const ComparePage = () => {
                     className="room-list-item"
                     onClick={() => selectRoom(r)}
                   >
-                    <img
+                    <RoomImage
+                      room={r}
                       src={imagePath}
                       alt={r.title}
                       className="room-list-item-image"
-                      onError={(e) => {
-                        e.currentTarget.src = "/images/room1.jpg";
-                      }}
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="room-list-item-info">
                       <div className="room-list-item-title">{r.title}</div>
