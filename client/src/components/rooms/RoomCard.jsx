@@ -2,27 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { apiRequest } from "../../api/apiClient";
+import { RoomImage } from "./RoomImage";
+import { getRoomGalleryImages } from "../../utils/roomImages";
+
+export { resolveRoomImageUrl } from "../../utils/roomImages";
 
 const formatVND = (amount) =>
   new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(
     Number(amount) || 0
   );
-
-export const resolveRoomImageUrl = (src) => {
-  if (!src) return "/images/room1.jpg";
-  if (
-    src.startsWith("http://") ||
-    src.startsWith("https://") ||
-    src.startsWith("data:") ||
-    src.startsWith("/")
-  ) {
-    return src;
-  }
-  if (!src.startsWith("images/")) {
-    return `/images/${src}`;
-  }
-  return `/${src}`;
-};
 
 export const getSavedRoomsFromStorage = (userEmail) => {
   if (!userEmail) return [];
@@ -49,11 +37,7 @@ export const RoomCard = ({
   const { user, isAuthenticated, openAuthModal } = useAuth();
   const roomId = String(room._id || room.id);
 
-  const primaryImage = room.image || room.img;
-  const images =
-    Array.isArray(room.images) && room.images.length > 0
-      ? room.images.map(resolveRoomImageUrl)
-      : [resolveRoomImageUrl(primaryImage)];
+  const images = getRoomGalleryImages(room);
 
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
 
@@ -133,14 +117,14 @@ export const RoomCard = ({
           <i className="bi bi-patch-check-fill"></i>
           Tin đáng chất lượng
         </div>
-        <img
+        <RoomImage
+          room={room}
           src={images[currentImageIdx]}
           alt={room.title}
           className="room-card-image"
+          loading="lazy"
+          decoding="async"
           onClick={() => navigate(`/rooms/${roomId}`)}
-          onError={(e) => {
-            e.currentTarget.src = "/images/room1.jpg";
-          }}
         />
         <div className="room-card-image-counter">
           <i className="bi bi-camera-fill"></i>
