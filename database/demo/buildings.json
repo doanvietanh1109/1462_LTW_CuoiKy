@@ -1,0 +1,402 @@
+[
+  {
+    "_id": {
+      "$oid": "e18e20288959975dc87d9979"
+    },
+    "ownerId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "name": "Khu trọ A1 - Cầu Giấy",
+    "address": "Khu vực Cầu Giấy, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3200,
+    "waterRate": 25000,
+    "serviceFee": 120000,
+    "createdAt": {
+      "$date": "2025-05-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c96fdfbda814bf15817662c5"
+    },
+    "ownerId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "name": "Khu trọ B1 - Thanh Xuân",
+    "address": "Khu vực Thanh Xuân, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3500,
+    "waterRate": 15000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-05-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "987bbbe4b8f75626d14a8fd3"
+    },
+    "ownerId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "name": "Khu trọ C1 - Hà Đông",
+    "address": "Khu vực Hà Đông, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3800,
+    "waterRate": 20000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-05-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "64a49ca42005b62d556560b3"
+    },
+    "ownerId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "name": "Khu trọ D1 - Nam Từ Liêm",
+    "address": "Khu vực Nam Từ Liêm, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 25000,
+    "serviceFee": 150000,
+    "createdAt": {
+      "$date": "2025-05-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4c3c101bb6410bf99a477196"
+    },
+    "ownerId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "name": "Khu trọ E1 - Bắc Từ Liêm",
+    "address": "Khu vực Bắc Từ Liêm, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 20000,
+    "serviceFee": 180000,
+    "createdAt": {
+      "$date": "2025-05-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "28ee8c284042c9fec97e09e0"
+    },
+    "ownerId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "name": "Khu trọ F1 - Đống Đa",
+    "address": "Khu vực Đống Đa, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3800,
+    "waterRate": 25000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-05-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-21T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "84f31bbc03d56678b19df334"
+    },
+    "ownerId": {
+      "$oid": "d7d9d80d410e2bcb9f62713b"
+    },
+    "name": "Khu trọ G1 - Hai Bà Trưng",
+    "address": "Khu vực Hai Bà Trưng, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3800,
+    "waterRate": 18000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-05-25T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-25T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c512c721cc0e6548b2c2c8a0"
+    },
+    "ownerId": {
+      "$oid": "132f24dfc146df5c31ab3d17"
+    },
+    "name": "Khu trọ H1 - Hoàng Mai",
+    "address": "Khu vực Hoàng Mai, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 18000,
+    "serviceFee": 150000,
+    "createdAt": {
+      "$date": "2025-05-29T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-29T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4525cbc580aa02335eb09aa9"
+    },
+    "ownerId": {
+      "$oid": "d09367e4d0b468f200ba1bd1"
+    },
+    "name": "Khu trọ I1 - Long Biên",
+    "address": "Khu vực Long Biên, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 22000,
+    "serviceFee": 70000,
+    "createdAt": {
+      "$date": "2025-06-02T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-02T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "55bd5675947fd2cd2ecc1755"
+    },
+    "ownerId": {
+      "$oid": "228b42a2a0b258e86d113423"
+    },
+    "name": "Khu trọ J1 - Gia Lâm",
+    "address": "Khu vực Gia Lâm, Hà Nội (địa chỉ mô phỏng)",
+    "electricityRate": 3200,
+    "waterRate": 15000,
+    "serviceFee": 150000,
+    "createdAt": {
+      "$date": "2025-06-06T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "79572d2206e4a10f05a21911"
+    },
+    "ownerId": {
+      "$oid": "bb307c7c38d3d2826b4507ea"
+    },
+    "name": "Khu trọ K1 - Bình Thạnh",
+    "address": "Khu vực Bình Thạnh, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3800,
+    "waterRate": 22000,
+    "serviceFee": 120000,
+    "createdAt": {
+      "$date": "2025-06-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7092f53f5049ee6cb5e4cf5b"
+    },
+    "ownerId": {
+      "$oid": "1044c02eca01bce4fb7d317e"
+    },
+    "name": "Khu trọ L1 - Gò Vấp",
+    "address": "Khu vực Gò Vấp, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 22000,
+    "serviceFee": 70000,
+    "createdAt": {
+      "$date": "2025-06-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "da5ed326f79f02c3a4aa1543"
+    },
+    "ownerId": {
+      "$oid": "083e60b61c9286bd7fdba10c"
+    },
+    "name": "Khu trọ M1 - Tân Bình",
+    "address": "Khu vực Tân Bình, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3200,
+    "waterRate": 22000,
+    "serviceFee": 150000,
+    "createdAt": {
+      "$date": "2025-06-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d65f87ed30274d1f6a797307"
+    },
+    "ownerId": {
+      "$oid": "491232f6478c4ab137f5f1d3"
+    },
+    "name": "Khu trọ N1 - Quận 7",
+    "address": "Khu vực Quận 7, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3500,
+    "waterRate": 25000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-06-22T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "04a5bda45f026a75278835af"
+    },
+    "ownerId": {
+      "$oid": "83afbc0f7b19e946f3a5dcd2"
+    },
+    "name": "Khu trọ O1 - Thủ Đức",
+    "address": "Khu vực Thủ Đức, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 20000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-06-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-26T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b5ed93525f7083169e3d3156"
+    },
+    "ownerId": {
+      "$oid": "d1ecc5dcef85120fde3ed704"
+    },
+    "name": "Khu trọ P1 - Bình Tân",
+    "address": "Khu vực Bình Tân, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 20000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-06-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-30T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "70a141cb1a14c6518e11fd84"
+    },
+    "ownerId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "name": "Khu trọ Q1 - Tân Phú",
+    "address": "Khu vực Tân Phú, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3200,
+    "waterRate": 15000,
+    "serviceFee": 70000,
+    "createdAt": {
+      "$date": "2025-07-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4657608a1b45425b38b7ce93"
+    },
+    "ownerId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "name": "Khu trọ R1 - Quận 12",
+    "address": "Khu vực Quận 12, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3800,
+    "waterRate": 25000,
+    "serviceFee": 120000,
+    "createdAt": {
+      "$date": "2025-07-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "12b3a70b0e55df7e7893f2ea"
+    },
+    "ownerId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "name": "Khu trọ S1 - Nhà Bè",
+    "address": "Khu vực Nhà Bè, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3800,
+    "waterRate": 25000,
+    "serviceFee": 100000,
+    "createdAt": {
+      "$date": "2025-07-12T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-12T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3cb51aec36c3ef063e6c7674"
+    },
+    "ownerId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "name": "Khu trọ T1 - Hóc Môn",
+    "address": "Khu vực Hóc Môn, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "electricityRate": 3000,
+    "waterRate": 25000,
+    "serviceFee": 120000,
+    "createdAt": {
+      "$date": "2025-07-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-16T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]

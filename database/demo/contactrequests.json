@@ -1,0 +1,954 @@
+[
+  {
+    "_id": {
+      "$oid": "0d71b7a195ba9f0c8f37c442"
+    },
+    "name": "Phan Minh Minh",
+    "email": "nguoithue016@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-07-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-21T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2ad31c2e0582bd9342b47e8c"
+    },
+    "name": "Đặng Quốc Linh",
+    "email": "nguoithue025@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-06-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "47331c16b9649c6d81cb7ebd"
+    },
+    "name": "Hồ Hữu Khánh",
+    "email": "nguoithue034@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-03-02T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-02T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "dac987bca545e7ea45ac816e"
+    },
+    "name": "Đinh Gia Huy",
+    "email": "nguoithue043@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-03-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-15T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8256088fc790724786f643ae"
+    },
+    "name": "Lý Trọng Hải",
+    "email": "nguoithue052@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-09-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-21T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7179c56c7982829eb9028194"
+    },
+    "name": "Nguyễn Thị Dũng",
+    "email": "nguoithue061@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-03-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f9233037623c0e9e57a34126"
+    },
+    "name": "Phạm Thanh Anh",
+    "email": "nguoithue070@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-06-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fd426fa03c5c3eaf579f73de"
+    },
+    "name": "Vũ Khánh Tuấn",
+    "email": "nguoithue079@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-04-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4c73beb3e6f3e797f0d5ee9f"
+    },
+    "name": "Bùi Đức Trinh",
+    "email": "nguoithue088@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-03-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bd45ce9ddfb6637f026962b4"
+    },
+    "name": "Ngô Phương Thiện",
+    "email": "nguoithue097@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-03-25T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-25T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e5b08948369a77b8715d44ce"
+    },
+    "name": "Trịnh Văn Sơn",
+    "email": "nguoithue106@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-06-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0129499e46af744cfbbefdc8"
+    },
+    "name": "Cao Ngọc Phương",
+    "email": "nguoithue115@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-07-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-26T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "099d8699a3883b60f022d680"
+    },
+    "name": "Trần Anh Nhung",
+    "email": "nguoithue124@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-06-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-21T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "42e7aaec2245f13dcdbee9b0"
+    },
+    "name": "Hoàng Thu Nam",
+    "email": "nguoithue133@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-06-22T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d727d89f9d8b08f1fa487130"
+    },
+    "name": "Võ Hoài Long",
+    "email": "nguoithue142@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-11-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b3a7529f6cf450c43b87acce"
+    },
+    "name": "Đỗ Tú Lâm",
+    "email": "nguoithue151@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-03-28T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-28T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3d5fa54a87f75c1e7927082d"
+    },
+    "name": "Dương Minh Hương",
+    "email": "nguoithue160@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-03-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a4c3f5900b26e910ddaee708"
+    },
+    "name": "Mai Quốc Hiếu",
+    "email": "nguoithue169@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-02-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "40248aadcb20868ffac87389"
+    },
+    "name": "Hà Hữu Giang",
+    "email": "nguoithue178@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-09-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-16T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ca703104d4cb6fd95a68233f"
+    },
+    "name": "Lê Gia Bình",
+    "email": "nguoithue187@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-04-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8ef4385d2fc2092c63d14d6c"
+    },
+    "name": "Phan Trọng Vy",
+    "email": "nguoithue196@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-03-20T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-20T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "89c897492876d027f0c70a8e"
+    },
+    "name": "Đặng Thị Trung",
+    "email": "nguoithue205@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-09-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6360d08bbb8cfbec4bc0b511"
+    },
+    "name": "Hồ Thanh Thu",
+    "email": "nguoithue214@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-06-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-30T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "92cd13452c420f4004fe5d01"
+    },
+    "name": "Đinh Khánh Thảo",
+    "email": "nguoithue223@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-07-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8ca7671dad186805c647b892"
+    },
+    "name": "Lý Đức Quân",
+    "email": "nguoithue232@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-05-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5858a45e1d9d189134b30eb3"
+    },
+    "name": "Nguyễn Phương Phong",
+    "email": "nguoithue241@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-09-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a20b207485814f8a9a22360b"
+    },
+    "name": "Phạm Văn Ngân",
+    "email": "nguoithue250@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-03-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "76069e239ccd0e835118dc46"
+    },
+    "name": "Vũ Ngọc Mai",
+    "email": "nguoithue259@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-02-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "616cb9e0e1351381875c1697"
+    },
+    "name": "Bùi Anh Lan",
+    "email": "nguoithue268@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-02-20T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-20T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d8d671faeabb10da741726b4"
+    },
+    "name": "Ngô Thu Khang",
+    "email": "nguoithue277@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-11-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fa096b0b7691f3d5e8c0897c"
+    },
+    "name": "Đinh Ngọc Huy",
+    "email": "nguoithue003@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-05-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3dff2c1c88b1a08c157458f0"
+    },
+    "name": "Lý Anh Hải",
+    "email": "nguoithue012@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-05-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b0be3fc97d34f979df0355a9"
+    },
+    "name": "Nguyễn Thu Dũng",
+    "email": "nguoithue021@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-10-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b0829566cbc773926d558cc3"
+    },
+    "name": "Phạm Hoài Anh",
+    "email": "nguoithue030@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-04-24T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-24T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b1e256791bd0c4ed758c773c"
+    },
+    "name": "Vũ Tú Tuấn",
+    "email": "nguoithue039@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-10-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-30T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8d8f5a510ca2a25f781e54af"
+    },
+    "name": "Bùi Minh Trinh",
+    "email": "nguoithue048@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-07-28T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-28T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "039e5a389cbe39ff42880220"
+    },
+    "name": "Ngô Quốc Thiện",
+    "email": "nguoithue057@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-10-20T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-20T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0506f097c9d271e7728767f6"
+    },
+    "name": "Trịnh Hữu Sơn",
+    "email": "nguoithue066@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-07-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3d20d18e34a6112f97a2e23e"
+    },
+    "name": "Cao Gia Phương",
+    "email": "nguoithue075@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-09-24T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-24T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cae1d1ca7b290ab1d372e576"
+    },
+    "name": "Trần Trọng Nhung",
+    "email": "nguoithue084@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-03-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-15T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bfa3d21a7326c9fa0d7823e9"
+    },
+    "name": "Hoàng Thị Nam",
+    "email": "nguoithue093@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-11-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fe5cb807cf57093937ddbb6b"
+    },
+    "name": "Võ Thanh Long",
+    "email": "nguoithue102@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-08-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2fef0d613685541129d920c3"
+    },
+    "name": "Đỗ Khánh Lâm",
+    "email": "nguoithue111@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-05-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "25fd21f8752fd9a97c5eb372"
+    },
+    "name": "Dương Đức Hương",
+    "email": "nguoithue120@ript.example",
+    "subject": "Hỏi về điều kiện thuê phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-08-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2ca0266f780506c04ff83bb5"
+    },
+    "name": "Mai Phương Hiếu",
+    "email": "nguoithue129@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-04-25T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-25T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9a3aeff7f46f917860059f2a"
+    },
+    "name": "Hà Văn Giang",
+    "email": "nguoithue138@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-11-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-16T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c28e989ae4ffe793b356ff3f"
+    },
+    "name": "Lê Ngọc Bình",
+    "email": "nguoithue147@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-06-12T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-12T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0f7521ee6c63573944cf6060"
+    },
+    "name": "Phan Anh Vy",
+    "email": "nguoithue156@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-08-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-15T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5a383b18bb1532536a02d0a4"
+    },
+    "name": "Đặng Thu Trung",
+    "email": "nguoithue165@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-02-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f13b37af921463161785e98b"
+    },
+    "name": "Hồ Hoài Thu",
+    "email": "nguoithue174@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-11-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c3652baf737dce3ef1d3641c"
+    },
+    "name": "Đinh Tú Thảo",
+    "email": "nguoithue183@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-08-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "980c09be82067326bbeb156a"
+    },
+    "name": "Lý Minh Quân",
+    "email": "nguoithue192@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-07-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "98b3757de2447b60e105adb0"
+    },
+    "name": "Nguyễn Quốc Phong",
+    "email": "nguoithue201@ript.example",
+    "subject": "Tư vấn thanh toán",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "closed",
+    "createdAt": {
+      "$date": "2026-02-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "937041b871e35afc070fcccb"
+    },
+    "name": "Phạm Hữu Ngân",
+    "email": "nguoithue210@ript.example",
+    "subject": "Góp ý tìm kiếm phòng",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-03-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "142f3abfd93e359a4dba4866"
+    },
+    "name": "Vũ Gia Mai",
+    "email": "nguoithue219@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "new",
+    "createdAt": {
+      "$date": "2026-07-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "13191549d97300365cc774ad"
+    },
+    "name": "Bùi Trọng Lan",
+    "email": "nguoithue228@ript.example",
+    "subject": "Cần hỗ trợ tài khoản",
+    "message": "Tôi cần thêm thông tin về quy trình sử dụng nền tảng RIPT Rental (nội dung mô phỏng).",
+    "status": "in_progress",
+    "createdAt": {
+      "$date": "2026-07-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-14T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]

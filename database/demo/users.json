@@ -1,0 +1,7171 @@
+[
+  {
+    "_id": {
+      "$oid": "2cc899c487b2b19884bcc01b"
+    },
+    "name": "Quản trị hệ thống (mô phỏng)",
+    "email": "admin@ript.example",
+    "password": "$2b$08$E/NmZPgn9r3LbXSXytVheeWVosYVzSmzkdxeqszRpAeASy6EWqnaK",
+    "role": "admin",
+    "phone": "0900000000",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "name": "Đặng Phương Linh",
+    "email": "chutro01@ript.example",
+    "password": "$2b$08$RI3TDpR00ezgGxBISrhbx.hYi0nJmZDACfdpf1g0IQvVF6K24Wteq",
+    "role": "landlord",
+    "phone": "0900000001",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-03-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "name": "Trịnh Hữu Sơn",
+    "email": "chutro02@ript.example",
+    "password": "$2b$08$PgWUe5TeMBA9u8k9kzvXM.xVsZrQaxHvX1628hs4nt.bGWVizZBQ.",
+    "role": "landlord",
+    "phone": "0900000002",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "name": "Lê Ngọc Bình",
+    "email": "chutro03@ript.example",
+    "password": "$2b$08$0NYp.r29T3o4hpsAdd4eaOUq9lTyNW0Y91An2QTysUgwwl9zqri1m",
+    "role": "landlord",
+    "phone": "0900000003",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "name": "Bùi Trọng Lan",
+    "email": "chutro04@ript.example",
+    "password": "$2b$08$WQ9anUpRDHqyQ01XDAySCOcx.wiEW7ANUXcFv1REJJa0HRsBazmCy",
+    "role": "landlord",
+    "phone": "0900000004",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "name": "Mai Thu Quỳnh",
+    "email": "chutro05@ript.example",
+    "password": "$2b$08$CnP30N/twBseF57q6mt.Ieqt/W584y5NKXu9ZCJCpT9M3umL.QI.m",
+    "role": "landlord",
+    "phone": "0900000005",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "name": "Phạm Thanh Anh",
+    "email": "chutro06@ript.example",
+    "password": "$2b$08$s6Uc9AuVyZMuFDyMI/yQz.PVkCzWVuQgvz4Dv2XiiTGGD.Ik648wi",
+    "role": "landlord",
+    "phone": "0900000006",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d7d9d80d410e2bcb9f62713b"
+    },
+    "name": "Đỗ Tú Lâm",
+    "email": "chutro07@ript.example",
+    "password": "$2b$08$dSGuZahnO/Kb61ShniKu/.I0E7MP/mvWqRtBVEgOyP0Ub5d/vuXOG",
+    "role": "landlord",
+    "phone": "0900000007",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-23T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "132f24dfc146df5c31ab3d17"
+    },
+    "name": "Lý Đức Quân",
+    "email": "chutro08@ript.example",
+    "password": "$2b$08$ddUazI3lTAqnoHSi2eopheORoV/3JDybcT9ktEY7Y.H1gC9FbcKAa",
+    "role": "landlord",
+    "phone": "0900000008",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-04-27T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d09367e4d0b468f200ba1bd1"
+    },
+    "name": "Hoàng Quốc An",
+    "email": "chutro09@ript.example",
+    "password": "$2b$08$id7lLvdgpixGygmmgHp/9OcJchhp8nvFHVQxQ6PcxZALxMV1xYBMC",
+    "role": "landlord",
+    "phone": "0900000009",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "228b42a2a0b258e86d113423"
+    },
+    "name": "Hồ Văn Khánh",
+    "email": "chutro10@ript.example",
+    "password": "$2b$08$pWTtsdyD1syGVAJgiLKL4OhDr/Z8ba8cv8/rguXihaQyNnBAB4Q3K",
+    "role": "landlord",
+    "phone": "0900000010",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bb307c7c38d3d2826b4507ea"
+    },
+    "name": "Cao Gia Phương",
+    "email": "chutro11@ript.example",
+    "password": "$2b$08$1qw7Ob3kOVfCmwb9eB9tr.hZrPfzmdrEB4dIHL.Q7nmPhgLuvrRfi",
+    "role": "landlord",
+    "phone": "0900000011",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1044c02eca01bce4fb7d317e"
+    },
+    "name": "Phan Anh Vy",
+    "email": "chutro12@ript.example",
+    "password": "$2b$08$XbpHHAAYpeOcSlr0yq9b0ebTRhriix6IiLKj785LZbehugrxrq.8G",
+    "role": "landlord",
+    "phone": "0900000012",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "083e60b61c9286bd7fdba10c"
+    },
+    "name": "Ngô Thị Khang",
+    "email": "chutro13@ript.example",
+    "password": "$2b$08$bPaTJACA6gPIwX9wDDwxdu3p0DAIKhG5IcLt0wT2XlKMgZXJb4uNq",
+    "role": "landlord",
+    "phone": "0900000013",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "491232f6478c4ab137f5f1d3"
+    },
+    "name": "Hà Hoài Phúc",
+    "email": "chutro14@ript.example",
+    "password": "$2b$08$jbvitp9z01Sve86nmUKLleB3zFk6fFjS80/STwg8jI2WPP8ZiY9Xi",
+    "role": "landlord",
+    "phone": "0900000014",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "83afbc0f7b19e946f3a5dcd2"
+    },
+    "name": "Vũ Khánh Tuấn",
+    "email": "chutro15@ript.example",
+    "password": "$2b$08$eDiHEWQ97ARaafg9FMtNPuTWzq7b/2KLj2sYvIJHWywt7C/KdXg7u",
+    "role": "landlord",
+    "phone": "0900000015",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-25T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d1ecc5dcef85120fde3ed704"
+    },
+    "name": "Dương Minh Hương",
+    "email": "chutro16@ript.example",
+    "password": "$2b$08$oDDcLgczaNO6IouP8fkCveOsgNrhICKeixr5f2s.tQtXTQwkfjNr.",
+    "role": "landlord",
+    "phone": "0900000016",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-05-29T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c0b25978b1175c0e76f0e8dd"
+    },
+    "name": "Nguyễn Phương Phong",
+    "email": "nguoithue001@ript.example",
+    "password": "$2b$08$.2XoA87leHnhpS9er3Ay4eDrCM71zIQ/ZKA8jl/mex7qck6INhwsC",
+    "role": "user",
+    "phone": "0900000017",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "88db70a7f010d6c2a4d8ffe0"
+    },
+    "name": "Võ Hữu Tú",
+    "email": "nguoithue002@ript.example",
+    "password": "$2b$08$2q2OQd1w4riLwXpOwcjzpOcaC69kda/AKUqP8pa.pzf2idjYE6FNC",
+    "role": "user",
+    "phone": "0900000018",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e080ed56e7829337d470b7c3"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "38c601680a2d58716d79e69f"
+    },
+    "name": "Đinh Ngọc Huy",
+    "email": "nguoithue003@ript.example",
+    "password": "$2b$08$TACyIe8jLByu7s5mJvGz4OhMqVbgKBXghvHe008Vuf8GBFqHN/WfK",
+    "role": "user",
+    "phone": "0900000019",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e18cd00d4e5e08c865029103"
+      },
+      {
+        "$oid": "3ff8ffb3ec85fd73413c3a58"
+      },
+      {
+        "$oid": "058c48e8bf116447238e3256"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c71eb881f4f5ae638a7e1434"
+    },
+    "name": "Trần Trọng Nhung",
+    "email": "nguoithue004@ript.example",
+    "password": "$2b$08$c0T0KF6EekSbaJtiQ9Jo7eJIoVr1xfXftnAViT3cqnXfK21NGUn2i",
+    "role": "user",
+    "phone": "0900000020",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "33f16115012ccf284fe52549"
+    },
+    "name": "Đặng Thu Trung",
+    "email": "nguoithue005@ript.example",
+    "password": "$2b$08$EDFGkQcXEpXiSIgrcLe6ke1qbzSCEq2N8gqwgQIDzA//qFvXlPdUm",
+    "role": "user",
+    "phone": "0900000021",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "befc49db20dd63f35c3e0b11"
+    },
+    "name": "Trịnh Thanh Hoàng",
+    "email": "nguoithue006@ript.example",
+    "password": "$2b$08$zpr.dazPo0x.8ELg6gt/MedaZFYo8E42OQ1OxBgs4M9rbb6ZBRhQq",
+    "role": "user",
+    "phone": "0900000022",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "848e84d593f7bb4405402690"
+      },
+      {
+        "$oid": "e18cd00d4e5e08c865029103"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "36ab0bfa140c14c272a215dd"
+    },
+    "name": "Lê Tú Ngọc",
+    "email": "nguoithue007@ript.example",
+    "password": "$2b$08$6TtomSXGacWU0RlLOBgUk.GRYAXtlUabvn6uq2GN2RFzl5yj75826",
+    "role": "user",
+    "phone": "0900000023",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cf2e8407504e066002a46fea"
+      },
+      {
+        "$oid": "1ad4f0050cc80eda27329dd0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6fd805f0c11c2c38a5a7209c"
+    },
+    "name": "Bùi Đức Trinh",
+    "email": "nguoithue008@ript.example",
+    "password": "$2b$08$7dTQ5qlyOgUjC4NfP4bzb.zKUUCC8GAffWhPol1R5XjUzP/JVOn0K",
+    "role": "user",
+    "phone": "0900000024",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "370415ddf75699f131fa95f4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2bbd24f6744e5d70fd6ecb63"
+    },
+    "name": "Mai Quốc Hiếu",
+    "email": "nguoithue009@ript.example",
+    "password": "$2b$08$Ddldk/43g75dLTW9S/skBecivJ5TLoCyq5Y6EBqKKO/7or626OckO",
+    "role": "user",
+    "phone": "0900000025",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4fad43e08cc985a3e56570bb"
+    },
+    "name": "Phạm Văn Ngân",
+    "email": "nguoithue010@ript.example",
+    "password": "$2b$08$/Lq1URt1KdYtejuUu7Rpeelizy7dqMF3BZwxEhSr8dsZxKCD4YlHe",
+    "role": "user",
+    "phone": "0900000026",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a0df33e51af5e368cb1966d6"
+      },
+      {
+        "$oid": "3c8acc7d46b465a63681cb3a"
+      },
+      {
+        "$oid": "949c45be52c5cc37c5c6790d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "592d0bc76b858517867e5f25"
+    },
+    "name": "Đỗ Gia Trang",
+    "email": "nguoithue011@ript.example",
+    "password": "$2b$08$2816SjvCR4LC5BFq1F2eBu3V2HVq77qHPGrr7503LYQXohxVev9mO",
+    "role": "user",
+    "phone": "0900000027",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cbb69cde37734e69435012fe"
+      },
+      {
+        "$oid": "49a9f115cc603b994d9849b5"
+      },
+      {
+        "$oid": "85a767152e054b7644f55fac"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3c8045ffe8de992a3081eb0f"
+    },
+    "name": "Lý Anh Hải",
+    "email": "nguoithue012@ript.example",
+    "password": "$2b$08$2fYD7qjXfEohbMNNtSOpfOw2VFY67HsZnZ10xRIMNXoJ4fHg8sx7u",
+    "role": "user",
+    "phone": "0900000028",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4ca398b5a5ead94aea50ddc0"
+      },
+      {
+        "$oid": "083368d9073272cc41821323"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "49c6f85396d505703ecfc1fd"
+    },
+    "name": "Hoàng Thị Nam",
+    "email": "nguoithue013@ript.example",
+    "password": "$2b$08$XJNi4YFyWYYEjGbZJL/xPu2w3TFunc0vDUkpnE7LWdVwsLNT5BTY6",
+    "role": "user",
+    "phone": "0900000029",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "329b61307ff49c5ec77c47b8"
+    },
+    "name": "Hồ Hoài Thu",
+    "email": "nguoithue014@ript.example",
+    "password": "$2b$08$LbXVBq9sbQYwcNHdG6nfIu.0OlF747lOqx0xtpH6L4z9NWaoBEayu",
+    "role": "user",
+    "phone": "0900000030",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "41ff36e262f9eeb0bddf15f4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d514cd4af88fee745635d038"
+    },
+    "name": "Cao Khánh Hà",
+    "email": "nguoithue015@ript.example",
+    "password": "$2b$08$rSSnxGaU7QfK3O4CwcRpxuMXmKT79fGS5N1dnvdGl.0WudZJSiXaK",
+    "role": "user",
+    "phone": "0900000031",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f4312b1abe855f8ca0aec3a3"
+      },
+      {
+        "$oid": "c67af6e09130ef1921a975c4"
+      },
+      {
+        "$oid": "8d18d7e55df5c8c05fced929"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1c215bd9b0303582b11e29f9"
+    },
+    "name": "Phan Minh Minh",
+    "email": "nguoithue016@ript.example",
+    "password": "$2b$08$hyb7X3KLl1Nv6KkG6tprIuSdjr5kzjX.2tAv/fNqgUzRIGjo.e1fa",
+    "role": "user",
+    "phone": "0900000032",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "d97ca6b7fc756825a33518ca"
+      },
+      {
+        "$oid": "00477c9d5f2c2fa2949f2f03"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f1e3d9eaea5c5e4dd9e41962"
+    },
+    "name": "Ngô Phương Thiện",
+    "email": "nguoithue017@ript.example",
+    "password": "$2b$08$jSXc8BGLeaEQ7taB2wCNnOm1xmhAWah.UkkWLmwwkMUJP/odKogX6",
+    "role": "user",
+    "phone": "0900000033",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "761fedf6d5f12c9568907013"
+    },
+    "name": "Hà Hữu Giang",
+    "email": "nguoithue018@ript.example",
+    "password": "$2b$08$EetbxAKtIXmItvqWL6Z/ieDFcwHCNHfMqr8IWqk06R0ks1F53CbvC",
+    "role": "user",
+    "phone": "0900000034",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5956b9817cd1c8023c427ab6"
+      },
+      {
+        "$oid": "9ecc236c4495c9f897829406"
+      },
+      {
+        "$oid": "8602f3c91af3c0c7adc873f4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6f47d1e9a27ca064c9d410c2"
+    },
+    "name": "Vũ Ngọc Mai",
+    "email": "nguoithue019@ript.example",
+    "password": "$2b$08$tTNDMxizJH1hdafY86qRzeZpVRVc.r/fPKrdU8Q4ReXVvfg1SwkT2",
+    "role": "user",
+    "phone": "0900000035",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "888b00b3c975faf133a8df8b"
+      },
+      {
+        "$oid": "1907e7536da95df569c18305"
+      },
+      {
+        "$oid": "f744c47175bd021c9851dd6d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9171d7af47db4240218d2b89"
+    },
+    "name": "Dương Trọng Thành",
+    "email": "nguoithue020@ript.example",
+    "password": "$2b$08$Oaa.l64Er2rZPh/9OMulfuQbx2ohmT7DH6NEjtUfLfylYQxnmYuUC",
+    "role": "user",
+    "phone": "0900000036",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1227a1e97188cdfeff1f1f11"
+    },
+    "name": "Nguyễn Thu Dũng",
+    "email": "nguoithue021@ript.example",
+    "password": "$2b$08$RPu99g85dAY0ZBTPeOYz5OFBpwIazMde/ABFKASeozFAQXP9jKG7.",
+    "role": "user",
+    "phone": "0900000037",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c821666af1f2f2f9310d343e"
+    },
+    "name": "Võ Thanh Long",
+    "email": "nguoithue022@ript.example",
+    "password": "$2b$08$zpO2.RvFbFAB21fMhH3xoOU5IeyuX3GwNfo/sDMNlYi3niM136IGW",
+    "role": "user",
+    "phone": "0900000038",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f60cbd64137cb63c8a9ea1e4"
+      },
+      {
+        "$oid": "9b0714cf93f8c738023e3a31"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1ccd037cb5067e466466fae2"
+    },
+    "name": "Đinh Tú Thảo",
+    "email": "nguoithue023@ript.example",
+    "password": "$2b$08$ts98P9trZtCo2tGE811Sp.rDy9dwcLmQaSsUrQUtJ5V9rl1Omu/U6",
+    "role": "user",
+    "phone": "0900000039",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "db2035b76fdbab2f70a28c45"
+      },
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      },
+      {
+        "$oid": "4e7d0674b8342e4052d18367"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4caa073b01cdbf81366292d0"
+    },
+    "name": "Trần Đức Chi",
+    "email": "nguoithue024@ript.example",
+    "password": "$2b$08$Yj1PoeGduVbJ9/uXlbQCHuDOkh9eRigVq8wd4JOE71QsEDi0oJc4C",
+    "role": "user",
+    "phone": "0900000040",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "902bc4347243dd7d0e732b84"
+      },
+      {
+        "$oid": "f5cd8b44ee4383384437cbc9"
+      },
+      {
+        "$oid": "5e7798e7ca90ef2546dc2dcd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a7f177d95f4a26e541a19a79"
+    },
+    "name": "Đặng Quốc Linh",
+    "email": "nguoithue025@ript.example",
+    "password": "$2b$08$gfVVZEOo0l6Tw4pihwdTCeq99RIRO6XVXxpdazH8u8RPU8GB4WLc6",
+    "role": "user",
+    "phone": "0900000041",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c816847a1f91740635498c96"
+    },
+    "name": "Trịnh Văn Sơn",
+    "email": "nguoithue026@ript.example",
+    "password": "$2b$08$ScgVOmuXhLHd.eFafrV5f./Ig5eKexKNdIxj5vsb2pB85d2qgO6Ee",
+    "role": "user",
+    "phone": "0900000042",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5d40e94d5463d462dba96350"
+      },
+      {
+        "$oid": "7cfc844098e329a8cf7aa6d0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ba21fffed2a783ffea31740a"
+    },
+    "name": "Lê Gia Bình",
+    "email": "nguoithue027@ript.example",
+    "password": "$2b$08$5Y1maIfEfSGLjr5WphOtZ.zoFuYFA1Vx34YZqN0ICCPJh8Y5vMCJ6",
+    "role": "user",
+    "phone": "0900000043",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "9b0714cf93f8c738023e3a31"
+      },
+      {
+        "$oid": "32b9371a1c234557e898a032"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ad883af3a5635e16e85a7b89"
+    },
+    "name": "Bùi Anh Lan",
+    "email": "nguoithue028@ript.example",
+    "password": "$2b$08$WZN.3UM2Ja19.c6wba3VDOYKKjFwQsnmeIiB/su2YZp5WPvsCvpzu",
+    "role": "user",
+    "phone": "0900000044",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "85f528f78c1a5bc852e2bda4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "83c9bb7521178c1d546e646e"
+    },
+    "name": "Mai Thị Quỳnh",
+    "email": "nguoithue029@ript.example",
+    "password": "$2b$08$4sYPa/5R0kjJNAKIwXEAVOVXsuA.1EN3zunZYBfFF4/hhNU7I0WTC",
+    "role": "user",
+    "phone": "0900000045",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "478f143867afa1ee0b52817e"
+    },
+    "name": "Phạm Hoài Anh",
+    "email": "nguoithue030@ript.example",
+    "password": "$2b$08$cbxBqvb0nRDvXClUYuEJCOL2Jf2j4g7FOty23.4nuxIH2JJu7ibVi",
+    "role": "user",
+    "phone": "0900000046",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "fa46fc0a5a11c7b8b9c6925a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "361a49fbf315492a4ca10f64"
+    },
+    "name": "Đỗ Khánh Lâm",
+    "email": "nguoithue031@ript.example",
+    "password": "$2b$08$77d.XHPNw16Ww89T5xLf2uC08o6F9JfslfkIkagXderwCGHOIOEpe",
+    "role": "user",
+    "phone": "0900000047",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "0c0333472d55e3b249be7e95"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "28baf628ad52ed3d1ea00165"
+    },
+    "name": "Lý Minh Quân",
+    "email": "nguoithue032@ript.example",
+    "password": "$2b$08$YpcI2Rzy81mAdxBBeT1eA.IEKu.1PdqGcmmkZxdnHbaxYDSSUh2JC",
+    "role": "user",
+    "phone": "0900000048",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "dd747b49ce08aaa047e11c31"
+      },
+      {
+        "$oid": "c8a24fed9405193114364523"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2ffcd115d2a29c97dcce3b41"
+    },
+    "name": "Hoàng Phương An",
+    "email": "nguoithue033@ript.example",
+    "password": "$2b$08$Zzm1WSyBw9BkGq78eSWmYunFttJ5cq4HOpv7IErhmNNnjRyd3DHcO",
+    "role": "user",
+    "phone": "0900000049",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "571caa96ae6b227cb0e8c056"
+    },
+    "name": "Hồ Hữu Khánh",
+    "email": "nguoithue034@ript.example",
+    "password": "$2b$08$z9tu5EGm6Cr6goGo1.28w.ALM6LClhwtktemqqwnDw4849.SI/ifi",
+    "role": "user",
+    "phone": "0900000050",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "3ff8ffb3ec85fd73413c3a58"
+      },
+      {
+        "$oid": "8db7f9f4bf099a4d9270f15f"
+      },
+      {
+        "$oid": "cbb69cde37734e69435012fe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "64635c0d0059a3435b4d7930"
+    },
+    "name": "Cao Ngọc Phương",
+    "email": "nguoithue035@ript.example",
+    "password": "$2b$08$MOyh7M1T1SeP0QOo9XoTl.fyS5gTr52QWzXGdqkfMuPutd5spxLO6",
+    "role": "user",
+    "phone": "0900000051",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a04e645af559b95cdae7bee7"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7c12044decf566dd390dc7ff"
+    },
+    "name": "Phan Trọng Vy",
+    "email": "nguoithue036@ript.example",
+    "password": "$2b$08$tOuOgur/nvDMIpkJ4obXNuBgenCo11mNUyqA0EzPIb1K7E47IWxge",
+    "role": "user",
+    "phone": "0900000052",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "6a5cf58899c1c1dac23263eb"
+      },
+      {
+        "$oid": "f6e23d404ec0ecc82a209f07"
+      },
+      {
+        "$oid": "278a27ade10d7515a6535b01"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b267e82385e2a6c7e64ff26d"
+    },
+    "name": "Ngô Thu Khang",
+    "email": "nguoithue037@ript.example",
+    "password": "$2b$08$c74rKa54rQAPygQ90FYZ3eZOth2cHEjn6jWHQ8IRO2ZzWXPbN8dYa",
+    "role": "user",
+    "phone": "0900000053",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fa318cb79e2d8b0dbd3e36d"
+    },
+    "name": "Hà Thanh Phúc",
+    "email": "nguoithue038@ript.example",
+    "password": "$2b$08$gDAZao2WlFFXYsqAum2cguXdBtchlLumwvyrzKud2TkG5L5DR5ppC",
+    "role": "user",
+    "phone": "0900000054",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "0505981f70857bb1e15e202b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c3d6a42b4911491c274d70dc"
+    },
+    "name": "Vũ Tú Tuấn",
+    "email": "nguoithue039@ript.example",
+    "password": "$2b$08$6kU7IkKKkLMYze9GulBHuekHw7H7nFr2p4QAq4NwRAvPMRI1LNtsu",
+    "role": "user",
+    "phone": "0900000055",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "bc16195839385c42bbb55aae"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4091373139b5e709bd857354"
+    },
+    "name": "Dương Đức Hương",
+    "email": "nguoithue040@ript.example",
+    "password": "$2b$08$G76ygqa.xle11./eTQLuE.IXEUvp71fqaHSXR9L/vTURGokrS3TuK",
+    "role": "user",
+    "phone": "0900000056",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4d69bf1f721fb8dfd8937446"
+      },
+      {
+        "$oid": "adcf43f771a788df7efef408"
+      },
+      {
+        "$oid": "e51993c13f5c6760b08cc9c1"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "74d50f16db051c56dc71ebd5"
+    },
+    "name": "Nguyễn Quốc Phong",
+    "email": "nguoithue041@ript.example",
+    "password": "$2b$08$7SLsQzzGn5VTDwZ2eCSva.PNtj1eyhG6Q9FVs.bDEkp0/Osh.eNnG",
+    "role": "user",
+    "phone": "0900000057",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "323185d682636bea2e1d384d"
+    },
+    "name": "Võ Văn Tú",
+    "email": "nguoithue042@ript.example",
+    "password": "$2b$08$.lXunDuftM4r2MHo7.Glq.z5FW8KM29ytjSbrlMeRmrWJcLQpIXbO",
+    "role": "user",
+    "phone": "0900000058",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "51230dfe76168863b8776540"
+      },
+      {
+        "$oid": "e35ae617d1eddf142267911c"
+      },
+      {
+        "$oid": "399f6dd23ab32208e884a0fb"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7230043febda021465265c40"
+    },
+    "name": "Đinh Gia Huy",
+    "email": "nguoithue043@ript.example",
+    "password": "$2b$08$cRdG0724OQdjurnxnfNOieXN01r8Fs4v0wMOaYVxTMKH8xG4WxH86",
+    "role": "user",
+    "phone": "0900000059",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f744c47175bd021c9851dd6d"
+      },
+      {
+        "$oid": "370415ddf75699f131fa95f4"
+      },
+      {
+        "$oid": "afe57e0a2999a1585b24ec9e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e99ace87547b4686152274ea"
+    },
+    "name": "Trần Anh Nhung",
+    "email": "nguoithue044@ript.example",
+    "password": "$2b$08$b5i.Gs8htfvY6XmPigWrBOH93zRs.yE6fJMIDH0YrfbdxsETr0LeG",
+    "role": "user",
+    "phone": "0900000060",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4773a6dc3df0a8fc76b53017"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "67e33db60677d9f3d2152ac6"
+    },
+    "name": "Đặng Thị Trung",
+    "email": "nguoithue045@ript.example",
+    "password": "$2b$08$wmFPE.LbXuFowWmXnlMtkeRGBYIVI5HoE2JXEupNPWFvGTxvOFunK",
+    "role": "user",
+    "phone": "0900000061",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1b085112cd99f68f642c6917"
+    },
+    "name": "Trịnh Hoài Hoàng",
+    "email": "nguoithue046@ript.example",
+    "password": "$2b$08$udbMlkPxlAoTmzoIec7HFuFzZknJ.2dkKZmBXPM5ZV6yloCiLbGGq",
+    "role": "user",
+    "phone": "0900000062",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "29c5c12575c4b0a66d4dca5d"
+      },
+      {
+        "$oid": "3b92391bafa5660384fa3fb9"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a983c58b23391b2cf7a9cce9"
+    },
+    "name": "Lê Khánh Ngọc",
+    "email": "nguoithue047@ript.example",
+    "password": "$2b$08$Dvh0Y5rS79uWQudAItIkVu2ELX2mZCKa.4UY7LMTSUi3hSlv/.g1K",
+    "role": "user",
+    "phone": "0900000063",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "bab5ee79cafa42cbef1be138"
+      },
+      {
+        "$oid": "6bd79fac951c0c69f2ce4f97"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "620ddc715afb41cf35137917"
+    },
+    "name": "Bùi Minh Trinh",
+    "email": "nguoithue048@ript.example",
+    "password": "$2b$08$gIAlq.hPoTJE3JKVlJeWZeuRfNBFUkGcYirYID.Pe.fAGuIdfjQ92",
+    "role": "user",
+    "phone": "0900000064",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "8e124c89070da6a97bd33a0c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4983c159af07625060f3e132"
+    },
+    "name": "Mai Phương Hiếu",
+    "email": "nguoithue049@ript.example",
+    "password": "$2b$08$SHUWNQcTGww1B.eIlvDpxOeLDkM80zluZ1BRzP8cmtjW8LpOktV/K",
+    "role": "user",
+    "phone": "0900000065",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "241227e389f0eafe5949701e"
+    },
+    "name": "Phạm Hữu Ngân",
+    "email": "nguoithue050@ript.example",
+    "password": "$2b$08$mISSrOMmh08yX39i1cyfJeHf.3tyTUTUinpFOpelPD8YvxcXoP8Su",
+    "role": "user",
+    "phone": "0900000066",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "fe40a1fbb1ad9ca051e8519a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b5f3970aa1b501d3207fb307"
+    },
+    "name": "Đỗ Ngọc Trang",
+    "email": "nguoithue051@ript.example",
+    "password": "$2b$08$sMZdXsjdpOQNaUpmLGDlFulVfrRbDE5OhlmCk8MUV0AT.nZ21w0pm",
+    "role": "user",
+    "phone": "0900000067",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "d09c3d2ecd59980b0397bf83"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6ec35635cc25c09212e3073d"
+    },
+    "name": "Lý Trọng Hải",
+    "email": "nguoithue052@ript.example",
+    "password": "$2b$08$RUpdGrZC2wWW3bQu5PPyoum5TDPyS6iiEx9Z2xo1gS.F08tjAdIwW",
+    "role": "user",
+    "phone": "0900000068",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f2a4d5b8c4c7fcab38d51166"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9cfc7e185e5a1e3023d0b1cb"
+    },
+    "name": "Hoàng Thu Nam",
+    "email": "nguoithue053@ript.example",
+    "password": "$2b$08$N7QrTkev7aEcUOGuiMsZ9uSKNSBjheXSIA0hgLq8T81msGdsiamxu",
+    "role": "user",
+    "phone": "0900000069",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fcfbfc79af559cf7bbb09e87"
+    },
+    "name": "Hồ Thanh Thu",
+    "email": "nguoithue054@ript.example",
+    "password": "$2b$08$XFbF1vByKh7S0u01KvlZueeoi.0w6J0gPX2r8wRnoZaTd.3Z6sSk6",
+    "role": "user",
+    "phone": "0900000070",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "6ae9f31551b159331f387ab0"
+      },
+      {
+        "$oid": "f8e79972695163618af6d6ca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "87764c2d09e91e78a4b49eed"
+    },
+    "name": "Cao Tú Hà",
+    "email": "nguoithue055@ript.example",
+    "password": "$2b$08$QN.aTbDjG84tu9PLSBpq7uKB9s1sEk2tFSsQZN2ieFyuqTANssjj2",
+    "role": "user",
+    "phone": "0900000071",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5056c71fd9aa02f5cb5c459c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f18a51234d8d753f13e78bd3"
+    },
+    "name": "Phan Đức Minh",
+    "email": "nguoithue056@ript.example",
+    "password": "$2b$08$vAs2U0gqxsnT554imyeZz.ljsu2Fxko72BaGYKVJWYsyhWmxxPAle",
+    "role": "user",
+    "phone": "0900000072",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "ea44a59f792515034303cea9"
+      },
+      {
+        "$oid": "b020835fc48609899c08f849"
+      },
+      {
+        "$oid": "bab5ee79cafa42cbef1be138"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "83503434dc403bf71621879b"
+    },
+    "name": "Ngô Quốc Thiện",
+    "email": "nguoithue057@ript.example",
+    "password": "$2b$08$AvvPEhd9fjpzauwEB/zEUuMjGMb/IvXXk/.MQu3Huv/FQEBdx77/S",
+    "role": "user",
+    "phone": "0900000073",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0003a305aa1b321126686f55"
+    },
+    "name": "Hà Văn Giang",
+    "email": "nguoithue058@ript.example",
+    "password": "$2b$08$ptVh1WSXKWdHb/7P.2rJ6e.E80LLpxtGUiGCojQ92h7.YO9VMF9UC",
+    "role": "user",
+    "phone": "0900000074",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "018614ff01640a0a81ff439a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4cd394f27198edfae4f0964a"
+    },
+    "name": "Vũ Gia Mai",
+    "email": "nguoithue059@ript.example",
+    "password": "$2b$08$scx3LfIVj3HmISSGB/rlYuAHbpCfmbpDryYuEIN6hRatdBjjAmz5S",
+    "role": "user",
+    "phone": "0900000075",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "d09c3d2ecd59980b0397bf83"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "689fa3df430cc248f1f032d7"
+    },
+    "name": "Dương Anh Thành",
+    "email": "nguoithue060@ript.example",
+    "password": "$2b$08$u6p5.nPgROVKSkFM3Zfy5OYufFHpB6xNzeNJaniwWDnW4vFzNk/iG",
+    "role": "user",
+    "phone": "0900000076",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "083368d9073272cc41821323"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "09771777489aca4fd52c1f2b"
+    },
+    "name": "Nguyễn Thị Dũng",
+    "email": "nguoithue061@ript.example",
+    "password": "$2b$08$c3MuTXu7.TfOnB6zAsph.OqGBdhQ8TeSgw4/f63YAnx3s/wpjTU7K",
+    "role": "user",
+    "phone": "0900000077",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e3fbe93d72780f8843969c09"
+    },
+    "name": "Võ Hoài Long",
+    "email": "nguoithue062@ript.example",
+    "password": "$2b$08$Frsu.MejJbZHqK2WIq6XGOsHlDbyxqPSQz7T1u42LHrk1Hb3XIgf2",
+    "role": "user",
+    "phone": "0900000078",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "624669a64885d76ea53acc3b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fa604064a21d968ff1e34d23"
+    },
+    "name": "Đinh Khánh Thảo",
+    "email": "nguoithue063@ript.example",
+    "password": "$2b$08$zVrnifsL1goSZMHkZvBN1OITW6I0i5dbc3juG.T4BQmOErid0QCTe",
+    "role": "user",
+    "phone": "0900000079",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b12e2f71329a8a85978a804d"
+      },
+      {
+        "$oid": "1503d9614ccf0fdcfab50c86"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a53cd5af166be3e5600b0316"
+    },
+    "name": "Trần Minh Chi",
+    "email": "nguoithue064@ript.example",
+    "password": "$2b$08$N9Visz4M7WSgVxhzHRnIA.f3hhMsj.XOYUmUBXCQ1OJ8tFFuqwUIi",
+    "role": "user",
+    "phone": "0900000080",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "837f711c26bc16969cae8fd7"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "38f9ad1afbc8a8a9ea9c1738"
+    },
+    "name": "Đặng Phương Linh",
+    "email": "nguoithue065@ript.example",
+    "password": "$2b$08$qUDIIvhMfaVzIhvgoq9n7u2yIfWa0kxWFpD/Ck.6czhnV.scM1hW2",
+    "role": "user",
+    "phone": "0900000081",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cef10765b5f9904a56580ecf"
+    },
+    "name": "Trịnh Hữu Sơn",
+    "email": "nguoithue066@ript.example",
+    "password": "$2b$08$TtI7WcgEMCjEd.onpTabFul9a9Gqc2S9q/7nfivSqe5klhNRdF8oa",
+    "role": "user",
+    "phone": "0900000082",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "902bc4347243dd7d0e732b84"
+      },
+      {
+        "$oid": "8d768932de4cc62eee74a063"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b0ebd87c13679d9476920a57"
+    },
+    "name": "Lê Ngọc Bình",
+    "email": "nguoithue067@ript.example",
+    "password": "$2b$08$.hcvsSdVvdWs6ETRSBQCSuRbGO.Sc5oYXfyhWlmfsAZW3c3RHQQ4S",
+    "role": "user",
+    "phone": "0900000083",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a0df33e51af5e368cb1966d6"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fb584792adbbd109647c85ff"
+    },
+    "name": "Bùi Trọng Lan",
+    "email": "nguoithue068@ript.example",
+    "password": "$2b$08$c9xv3lk7f4c13tsmrvx2seszFDd7eEkTtzcuFGpqiX6v7HGMtQKjS",
+    "role": "user",
+    "phone": "0900000084",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f496d5ff094cbb78ef06905d"
+      },
+      {
+        "$oid": "4ce6734ff14541656757188e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c1e68d7eda48f8c7ba4698b9"
+    },
+    "name": "Mai Thu Quỳnh",
+    "email": "nguoithue069@ript.example",
+    "password": "$2b$08$Incl8s64TP/gyUe9JwIz6u5aWOkKELcoyd6SdA8qQ0hC5xH1oRG2y",
+    "role": "user",
+    "phone": "0900000085",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3a0ab2dfb6f2b8e376fd70c4"
+    },
+    "name": "Phạm Thanh Anh",
+    "email": "nguoithue070@ript.example",
+    "password": "$2b$08$lZ4vXjFQL6meI6JHR6.HQuSEvIUfUhU.EWQUTg4pzX/E/khWvsy82",
+    "role": "user",
+    "phone": "0900000086",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5fb790b284abc649cb881dac"
+      },
+      {
+        "$oid": "3c5eaab6b1d6384c1d137819"
+      },
+      {
+        "$oid": "ae53ca0fd236f5bde6ce4623"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ea9c56b3a4b1224ff4979cd5"
+    },
+    "name": "Đỗ Tú Lâm",
+    "email": "nguoithue071@ript.example",
+    "password": "$2b$08$hTjKCphoDjK07llq/01OVex7I6NuIFh2H5y8qp6eHog62XKpEfxze",
+    "role": "user",
+    "phone": "0900000087",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "9db65b0107df5d821efe4e63"
+      },
+      {
+        "$oid": "e18cd00d4e5e08c865029103"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "eb66bd0525aec929ac5b2a6f"
+    },
+    "name": "Lý Đức Quân",
+    "email": "nguoithue072@ript.example",
+    "password": "$2b$08$JjuEV1W6OJuZOt/iXOzi9OcvIcuuvqvlEvmt3fQNhkJ/UT.Mb1MrS",
+    "role": "user",
+    "phone": "0900000088",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "ef12cdba976d9f5086c93ac0"
+      },
+      {
+        "$oid": "88d3aa59923273c65016515f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d7860626626900b9352eb689"
+    },
+    "name": "Hoàng Quốc An",
+    "email": "nguoithue073@ript.example",
+    "password": "$2b$08$rqpo3YrV1JdTw98VV0HizuQAkWBk3O7qLu2LlotB2BFXlPAUVzu52",
+    "role": "user",
+    "phone": "0900000089",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f4cd0ed5705d0afd1a729da7"
+    },
+    "name": "Hồ Văn Khánh",
+    "email": "nguoithue074@ript.example",
+    "password": "$2b$08$OML8WWj/wZwDsi0hG.k8j.6DtZttOm8i0q05C6AcgijvOwJ.XWQqi",
+    "role": "user",
+    "phone": "0900000090",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "34501eb94dcc7ab292cb30a1"
+      },
+      {
+        "$oid": "75f55aad9bdf8a92add86cfe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8889c6edbce2b56acfa81191"
+    },
+    "name": "Cao Gia Phương",
+    "email": "nguoithue075@ript.example",
+    "password": "$2b$08$htckpXHf4PzXVzyjvaIua.Iyyn42Hd8/zHHc2NqrKJBrxH4HMpTbm",
+    "role": "user",
+    "phone": "0900000091",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cea1e82470532cc0c3b80e23"
+      },
+      {
+        "$oid": "5bae36466048f51808eb6581"
+      },
+      {
+        "$oid": "c4e2e649a39a6e798e4cd805"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a432da075ea5001a49ea7274"
+    },
+    "name": "Phan Anh Vy",
+    "email": "nguoithue076@ript.example",
+    "password": "$2b$08$bc8Py2Iqp2jpKTfAq9PFRuF1FyBdvX7qpbKnkqH1AQDy9gSpS4TEm",
+    "role": "user",
+    "phone": "0900000092",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "00477c9d5f2c2fa2949f2f03"
+      },
+      {
+        "$oid": "bd0f267ce17d5c743246edfa"
+      },
+      {
+        "$oid": "cbb69cde37734e69435012fe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c9e638cb2b189162224bd5e6"
+    },
+    "name": "Ngô Thị Khang",
+    "email": "nguoithue077@ript.example",
+    "password": "$2b$08$4euaR2vwm9ea5RHF1rTnLeriDWP2uVaBYjgPjR4tLrUsoWroefQfu",
+    "role": "user",
+    "phone": "0900000093",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8c0597cc0b81bbe758e0e72b"
+    },
+    "name": "Hà Hoài Phúc",
+    "email": "nguoithue078@ript.example",
+    "password": "$2b$08$WTIPqxXDfOvLjh0TL4n4dOsUAf/2/EbtEB6TReOdhAoEvFs.1HFpy",
+    "role": "user",
+    "phone": "0900000094",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5e03aca9a1448ee61b5ecd06"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "95d165e4640f5d485ecc5f3e"
+    },
+    "name": "Vũ Khánh Tuấn",
+    "email": "nguoithue079@ript.example",
+    "password": "$2b$08$abvnqkoMuneUJu4zYp4A2Ogqi1P4zInhKUL/z.BLg4CRrHlU4JqCq",
+    "role": "user",
+    "phone": "0900000095",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "2e809430f9892d67d1c23a9d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "821ac83307dab1a6ccfc3bcd"
+    },
+    "name": "Dương Minh Hương",
+    "email": "nguoithue080@ript.example",
+    "password": "$2b$08$.7xZGiiwP2HYBpLJFApJO.J.AzlWrC/Bxd4MIcjeCLMjuwf2jaM6i",
+    "role": "user",
+    "phone": "0900000096",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f5cd8b44ee4383384437cbc9"
+      },
+      {
+        "$oid": "c0a091529fe799ece66cc2cd"
+      },
+      {
+        "$oid": "7055627003b4de41ca426ecf"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fde35eb62805529d20ec47fa"
+    },
+    "name": "Nguyễn Phương Phong",
+    "email": "nguoithue081@ript.example",
+    "password": "$2b$08$fnNLE5Br/.ZWqJFOlbQJvONKyZ0OoDsNgzHAOQjluaF1TxoOdD4me",
+    "role": "user",
+    "phone": "0900000097",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b85397b46ee53aa9de8fd976"
+    },
+    "name": "Võ Hữu Tú",
+    "email": "nguoithue082@ript.example",
+    "password": "$2b$08$zlsPgEq0imzsA2FWNMIawOH8/RQE17lxYLFFXrvo/1nLuSn1EHz.O",
+    "role": "user",
+    "phone": "0900000098",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      },
+      {
+        "$oid": "058a2f703f4a18ec5971fc54"
+      },
+      {
+        "$oid": "49a9f115cc603b994d9849b5"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8999b7114195468fa6dff0f2"
+    },
+    "name": "Đinh Ngọc Huy",
+    "email": "nguoithue083@ript.example",
+    "password": "$2b$08$6KxPDnfxGtXeozSse.xZxO7HCytbmH3Adh9qW83NIVRoJqHJyRejK",
+    "role": "user",
+    "phone": "0900000099",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e26d1592f82ed4516ac26d02"
+      },
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0a04e80f1a60ed633f1d999b"
+    },
+    "name": "Trần Trọng Nhung",
+    "email": "nguoithue084@ript.example",
+    "password": "$2b$08$2TbwczkPGheCCqQqgot/0OXijRbA2R/cdbuxldicIR3zS8aMY5UVa",
+    "role": "user",
+    "phone": "0900000100",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f572ff989d20a5fcf4dadccb"
+      },
+      {
+        "$oid": "5b6ec49c8d8f3bb0c3cce801"
+      },
+      {
+        "$oid": "07d700ef623004287ebbf200"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "50ee2f1c49b49c0ec33ded48"
+    },
+    "name": "Đặng Thu Trung",
+    "email": "nguoithue085@ript.example",
+    "password": "$2b$08$CfJEc9RjTQfIqPOajIccGeAStXyFCPNLLtiQJie54P0CIDOG20ouO",
+    "role": "user",
+    "phone": "0900000101",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9e5414e104cd4d79e7a8e5ad"
+    },
+    "name": "Trịnh Thanh Hoàng",
+    "email": "nguoithue086@ript.example",
+    "password": "$2b$08$K//jUm7d8XxQY3FO1w2vyub1icvle88c2iFKoNQkGn274gmRCamw.",
+    "role": "user",
+    "phone": "0900000102",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "c8a24fed9405193114364523"
+      },
+      {
+        "$oid": "4ce6734ff14541656757188e"
+      },
+      {
+        "$oid": "27e4502ab1dbd4106476b8ae"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5c213262e583ed9f6c31f94c"
+    },
+    "name": "Lê Tú Ngọc",
+    "email": "nguoithue087@ript.example",
+    "password": "$2b$08$K88cZVQSZWfWn2d59QRXbe0shINV/ocKxcc6Ye41PGZ5u9T1uiGPW",
+    "role": "user",
+    "phone": "0900000103",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5b2ff62452df5b1b01e39514"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c3398ed92d88eb46168e6526"
+    },
+    "name": "Bùi Đức Trinh",
+    "email": "nguoithue088@ript.example",
+    "password": "$2b$08$wkvWR1RwWUnHP3pMUy/56OxcDQbbQM.BnNR7aPWK340G96uc4hnwO",
+    "role": "user",
+    "phone": "0900000104",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "848e84d593f7bb4405402690"
+      },
+      {
+        "$oid": "874c10b08484dd4b231c972c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "54a6472ff04d00f7065e58bc"
+    },
+    "name": "Mai Quốc Hiếu",
+    "email": "nguoithue089@ript.example",
+    "password": "$2b$08$khHZomSfPNn271hvQCmaEOc1.CPvxaC22S3NJ9E.1NkjYPSZPR2uy",
+    "role": "user",
+    "phone": "0900000105",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3571cc5fdfc143180f2e475d"
+    },
+    "name": "Phạm Văn Ngân",
+    "email": "nguoithue090@ript.example",
+    "password": "$2b$08$gLp3bYRrM5y.1wxdrOgpHOJcdpz69130fzmol2pLOpe2TYNLZRw4W",
+    "role": "user",
+    "phone": "0900000106",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e7b2e646e0cedb1d0d13ca69"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "03df091a1d246c9ee2ac7630"
+    },
+    "name": "Đỗ Gia Trang",
+    "email": "nguoithue091@ript.example",
+    "password": "$2b$08$v99qWc6.BNhgFqwhTZVSIedRNyYRW61J2C3.39nSVJhg3GjCe5uUe",
+    "role": "user",
+    "phone": "0900000107",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "8fdf4896a2e5cb7a2a5d9cd0"
+      },
+      {
+        "$oid": "8d768932de4cc62eee74a063"
+      },
+      {
+        "$oid": "5eb393ce107f4e0857b866c4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0579e3c4212dcc12ec17483d"
+    },
+    "name": "Lý Anh Hải",
+    "email": "nguoithue092@ript.example",
+    "password": "$2b$08$pJx1S18tLO/QEaREsvk9ne6to1763v.JmRY/qGgfftFWr8DyYBxDe",
+    "role": "user",
+    "phone": "0900000108",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "3f9aea04530926e7fec5f3af"
+      },
+      {
+        "$oid": "8da6def2628586e9eff72932"
+      },
+      {
+        "$oid": "063215b51c7d46d392346d94"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "641fa10318b262752037a502"
+    },
+    "name": "Hoàng Thị Nam",
+    "email": "nguoithue093@ript.example",
+    "password": "$2b$08$I2n/OH1lT1QVqKB3kwOA8OLTx4jsOJo2U3sBy2L6kgzwV45I979LG",
+    "role": "user",
+    "phone": "0900000109",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "530fe3a188939d0248e79854"
+    },
+    "name": "Hồ Hoài Thu",
+    "email": "nguoithue094@ript.example",
+    "password": "$2b$08$E7Ns86SsgeB7EVxa9/CCB./J.4GfYxE6ADnlIB4m2zt97SKmWVN62",
+    "role": "user",
+    "phone": "0900000110",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b12e2f71329a8a85978a804d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "71e9a06f161c07e2e2ebdf7d"
+    },
+    "name": "Cao Khánh Hà",
+    "email": "nguoithue095@ript.example",
+    "password": "$2b$08$6uiXpFEaL.4iSpEraMjmn.HRwu4.nXZazmb46WMHEVKSWTT3fVxum",
+    "role": "user",
+    "phone": "0900000111",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a04e645af559b95cdae7bee7"
+      },
+      {
+        "$oid": "6ae9f31551b159331f387ab0"
+      },
+      {
+        "$oid": "8d0374b45519b754f79618e0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63d19ba4b07207092cce235e"
+    },
+    "name": "Phan Minh Minh",
+    "email": "nguoithue096@ript.example",
+    "password": "$2b$08$PtVFizVCAD4V/IqHnfIfA.vmYaWMkmxrlBY/.gk1jkttwt9zQTJTq",
+    "role": "user",
+    "phone": "0900000112",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "751dce46031973916e58d8cc"
+      },
+      {
+        "$oid": "f5b1015f53917da305ae1e36"
+      },
+      {
+        "$oid": "d010441b7a2b9cd5aa1b814a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a539615b6a9f210b14beb846"
+    },
+    "name": "Ngô Phương Thiện",
+    "email": "nguoithue097@ript.example",
+    "password": "$2b$08$wM3u3L2iJAIv1hUtCcVo8uU.09S1MDzq9ZJTCpXEwGyY5lIiPgnZ6",
+    "role": "user",
+    "phone": "0900000113",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "51a622aca44a5cb15043796f"
+    },
+    "name": "Hà Hữu Giang",
+    "email": "nguoithue098@ript.example",
+    "password": "$2b$08$nxw9qndu/uG/iWG.74T5Cugw5qeGXZz7mBqx.0GwxNzEoEQVBdp4u",
+    "role": "user",
+    "phone": "0900000114",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "719811829c5e232b95a52dd2"
+      },
+      {
+        "$oid": "f5b1015f53917da305ae1e36"
+      },
+      {
+        "$oid": "956ccd27fa5e813e79f12b03"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9b2c743d4279f1cd73a6cd78"
+    },
+    "name": "Vũ Ngọc Mai",
+    "email": "nguoithue099@ript.example",
+    "password": "$2b$08$44PY.7u/gN5CGBnHn/.BC.vkHxrg26ekDclDTTZB8s9.YsQCS8ap6",
+    "role": "user",
+    "phone": "0900000115",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cf2e8407504e066002a46fea"
+      },
+      {
+        "$oid": "f43e5f6eec13f30d1996650f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "08731b1833f2844d581d7ab6"
+    },
+    "name": "Dương Trọng Thành",
+    "email": "nguoithue100@ript.example",
+    "password": "$2b$08$6sIVHUG/.YR9aY9SoHKV6eR8KPJe6prwO0pjRAwatyVUwqO1ptEyO",
+    "role": "user",
+    "phone": "0900000116",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "874c10b08484dd4b231c972c"
+      },
+      {
+        "$oid": "fa46fc0a5a11c7b8b9c6925a"
+      },
+      {
+        "$oid": "3ff8ffb3ec85fd73413c3a58"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5a7f06ca76a36c50af3bdd65"
+    },
+    "name": "Nguyễn Thu Dũng",
+    "email": "nguoithue101@ript.example",
+    "password": "$2b$08$R6U/HDoJiTsq20ISbHoBweorMMXrMfaZ2NseCeVDEnuvheZ906Jse",
+    "role": "user",
+    "phone": "0900000117",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "208f0973eec99bcaff162163"
+    },
+    "name": "Võ Thanh Long",
+    "email": "nguoithue102@ript.example",
+    "password": "$2b$08$FSDdrMuYJ2hxwvpbUV18EOruXQL7o.qC.zF2W6j0i33GjkO1qRBpm",
+    "role": "user",
+    "phone": "0900000118",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "c67af6e09130ef1921a975c4"
+      },
+      {
+        "$oid": "727ef9c3f37d98835267065b"
+      },
+      {
+        "$oid": "cbb69cde37734e69435012fe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a71bc1f52667ce4b9b21328a"
+    },
+    "name": "Đinh Tú Thảo",
+    "email": "nguoithue103@ript.example",
+    "password": "$2b$08$udg5suWfrI1LJ3sMK8FFjeFJ1X6hDLh2rJW4H3v9AUHVK7dNS7Zq6",
+    "role": "user",
+    "phone": "0900000119",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4d69bf1f721fb8dfd8937446"
+      },
+      {
+        "$oid": "ccfbdad5f12b9bda97a8de7e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "efe2256cbe00dae18be608c8"
+    },
+    "name": "Trần Đức Chi",
+    "email": "nguoithue104@ript.example",
+    "password": "$2b$08$eCWdqT4xq2yQvLBE4kfZOeKhlV0jRXKANrkr9PxPm/vDNogwq1YgS",
+    "role": "user",
+    "phone": "0900000120",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e72a08591691e71d267972a5"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3657926ee4816b4ac48b0ed3"
+    },
+    "name": "Đặng Quốc Linh",
+    "email": "nguoithue105@ript.example",
+    "password": "$2b$08$TlNYqcWh5g0294tyQZ.ktO2aexJcT4UDR5GDt7BP3paErzOYDAT/6",
+    "role": "user",
+    "phone": "0900000121",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e8df340c989ca1d20202aa4e"
+    },
+    "name": "Trịnh Văn Sơn",
+    "email": "nguoithue106@ript.example",
+    "password": "$2b$08$plxwCShlDJuN3FVKsCzoCOggoE39VY/27f3.nBly9Y780w2sbigc2",
+    "role": "user",
+    "phone": "0900000122",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "578c3b3f15fa7713b22b44d0"
+      },
+      {
+        "$oid": "00477c9d5f2c2fa2949f2f03"
+      },
+      {
+        "$oid": "c67af6e09130ef1921a975c4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "06dd98b20c32383df9cddcf1"
+    },
+    "name": "Lê Gia Bình",
+    "email": "nguoithue107@ript.example",
+    "password": "$2b$08$pZj/KekwDw1DaCIgnYnTIeE/faelf1oehDbms.yuVqehc2cG3GFH2",
+    "role": "user",
+    "phone": "0900000123",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1ad4f0050cc80eda27329dd0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ba33e74480a12bafe365950"
+    },
+    "name": "Bùi Anh Lan",
+    "email": "nguoithue108@ript.example",
+    "password": "$2b$08$c6G6SKC.3GwvkZRiruUMjOweWHH75ErLz072ngEQOEDbDAlhzSN6G",
+    "role": "user",
+    "phone": "0900000124",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "70c005b520bbd09c2d9fc661"
+      },
+      {
+        "$oid": "4d69bf1f721fb8dfd8937446"
+      },
+      {
+        "$oid": "ec030aa054879abd2956a56b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d579efadd7d5fb0a03166a81"
+    },
+    "name": "Mai Thị Quỳnh",
+    "email": "nguoithue109@ript.example",
+    "password": "$2b$08$oBUphn8Stxco977XVgzgG.Q1JgTfMerQRD9knwMFWXbthOnA6fA9e",
+    "role": "user",
+    "phone": "0900000125",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "07680f88cdf2f7ce078c1f47"
+    },
+    "name": "Phạm Hoài Anh",
+    "email": "nguoithue110@ript.example",
+    "password": "$2b$08$xE4y3K6PrxOHojMw2WWi9urvoGPFzw9XfY1zc7s/9U.JdrVhT6R/2",
+    "role": "user",
+    "phone": "0900000126",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "058c48e8bf116447238e3256"
+      },
+      {
+        "$oid": "a271a165eda942de2587f2b7"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f4e052d736e2de5cc18c703"
+    },
+    "name": "Đỗ Khánh Lâm",
+    "email": "nguoithue111@ript.example",
+    "password": "$2b$08$mydB661msW8cG07rBr86L.bL9/11ph70pvjbOQb9SeFzTovBhBoQO",
+    "role": "user",
+    "phone": "0900000127",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "c06dd0519fd10a57a4a23b6c"
+      },
+      {
+        "$oid": "638c8a3d937f10bd8008d16b"
+      },
+      {
+        "$oid": "888b00b3c975faf133a8df8b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ce7227f961fd237730174822"
+    },
+    "name": "Lý Minh Quân",
+    "email": "nguoithue112@ript.example",
+    "password": "$2b$08$NAIjQR.DlJxlwhDjvclilePkbOVaTISOzcBsgYjwwgg64y.4BdeD6",
+    "role": "user",
+    "phone": "0900000128",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1a20ecb1bbe4b9cde74835e4"
+      },
+      {
+        "$oid": "9db65b0107df5d821efe4e63"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cb917e7abb850285f147d1b2"
+    },
+    "name": "Hoàng Phương An",
+    "email": "nguoithue113@ript.example",
+    "password": "$2b$08$rsQySonblTYy5RQuEsigouZsQsL73SpdpUKVTgGHMn2mlaevOxUVm",
+    "role": "user",
+    "phone": "0900000129",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "032b5bc37084c27f6691c2d2"
+    },
+    "name": "Hồ Hữu Khánh",
+    "email": "nguoithue114@ript.example",
+    "password": "$2b$08$o.f4Pylv9HB1TVzvdeNVaukxf2tGWWo7InSKCHCGhArU89yXacFAy",
+    "role": "user",
+    "phone": "0900000130",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "ca347f8237de42067bfd0a9e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3b48a9e3a881f2b41958cb85"
+    },
+    "name": "Cao Ngọc Phương",
+    "email": "nguoithue115@ript.example",
+    "password": "$2b$08$sS0xef7dYsNuuFI7pGRO.OJ/RhlAac7wrYpv3PjIPmjscnEPN3WwG",
+    "role": "user",
+    "phone": "0900000131",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "75f55aad9bdf8a92add86cfe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "045550fd568979dec614890e"
+    },
+    "name": "Phan Trọng Vy",
+    "email": "nguoithue116@ript.example",
+    "password": "$2b$08$dOSViEySPCbZcEgpQhBzb.b6/Yg/AaLJkUt.CTbyW.Vb8UzfCpD.K",
+    "role": "user",
+    "phone": "0900000132",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1e8454ce41e63f33b311d8d3"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6246160e5245c9a42ae56e5e"
+    },
+    "name": "Ngô Thu Khang",
+    "email": "nguoithue117@ript.example",
+    "password": "$2b$08$sj0lzr.5oHbUgDoZ8NF2tuaAM5txJPsemXNBztUasPYawleq3iwRK",
+    "role": "user",
+    "phone": "0900000133",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "72c7a064e8f7a87b11fea40c"
+    },
+    "name": "Hà Thanh Phúc",
+    "email": "nguoithue118@ript.example",
+    "password": "$2b$08$NMfy7hLFroSt8hni8OtfoOdgTj.Fgv0nhFZ1UZSC3vK.GTtWzO3hq",
+    "role": "user",
+    "phone": "0900000134",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "458b49a0472d073bb20ae51b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e029dab56113de80aabca2a2"
+    },
+    "name": "Vũ Tú Tuấn",
+    "email": "nguoithue119@ript.example",
+    "password": "$2b$08$Z0lzRcVr90lA6QICpM0aUeY6b3tXUoqXpXu/GDFe.XBNNK4KR2fIu",
+    "role": "user",
+    "phone": "0900000135",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1907e7536da95df569c18305"
+      },
+      {
+        "$oid": "681635df9aebdd700cc3a545"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c8ec0bae56f5cc6a84762d39"
+    },
+    "name": "Dương Đức Hương",
+    "email": "nguoithue120@ript.example",
+    "password": "$2b$08$jJBt1gyfZ75D3YrPXqT9TumRyQwEnr7iLqwWcWpUOcHmgBZCmrYXu",
+    "role": "user",
+    "phone": "0900000136",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "90443379e75bf072f14fa792"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "aad30d7676df06a28627e20a"
+    },
+    "name": "Nguyễn Quốc Phong",
+    "email": "nguoithue121@ript.example",
+    "password": "$2b$08$72a5pio//TdDJRzsRCP5JeK0vNB58CjMkBIJ.RG5Y5M2QDMCGvrA2",
+    "role": "user",
+    "phone": "0900000137",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d57a2f42d1d703474ff87f01"
+    },
+    "name": "Võ Văn Tú",
+    "email": "nguoithue122@ript.example",
+    "password": "$2b$08$J5s/ynYfQCFCrBNl.tY.fujgrCLuxPAl8bHjFXasDCkSRzfDoHVnC",
+    "role": "user",
+    "phone": "0900000138",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "edd0bbcc39f62c5991168aeb"
+      },
+      {
+        "$oid": "1ef60bc9447a1483f9eca986"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "768f845c541f86c99d64f912"
+    },
+    "name": "Đinh Gia Huy",
+    "email": "nguoithue123@ript.example",
+    "password": "$2b$08$29rwF9oho6h4hAIXc3elROH5hIOlu4xreJEYJztEYhH6t9t9NjTVS",
+    "role": "user",
+    "phone": "0900000139",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "3b92391bafa5660384fa3fb9"
+      },
+      {
+        "$oid": "13fdb97b6bd2326065103782"
+      },
+      {
+        "$oid": "832f5c30dfd8e22e4a236628"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a4df57b1339bddb8d16c5695"
+    },
+    "name": "Trần Anh Nhung",
+    "email": "nguoithue124@ript.example",
+    "password": "$2b$08$0o/SmrIH6ZVsB2.UOjlJw.JJPue6w8eyyX.V7gzwBoCSwPTikSa4.",
+    "role": "user",
+    "phone": "0900000140",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "34501eb94dcc7ab292cb30a1"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "553984857d8f9311a2ff31f7"
+    },
+    "name": "Đặng Thị Trung",
+    "email": "nguoithue125@ript.example",
+    "password": "$2b$08$zQGYwUpnR6wcmYPvW3D8nO96v4ORpv0GYbK3ED5lrDv/KA8BfsCDa",
+    "role": "user",
+    "phone": "0900000141",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "aead2cf01aa7cb03c8c80618"
+    },
+    "name": "Trịnh Hoài Hoàng",
+    "email": "nguoithue126@ript.example",
+    "password": "$2b$08$YE0CfpSHuwdfeKDioZl/TOx6hZkhpBrvion79yI7qwv1lhbq/hRZu",
+    "role": "user",
+    "phone": "0900000142",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "399f6dd23ab32208e884a0fb"
+      },
+      {
+        "$oid": "f95ceac447dcdab28deea1c1"
+      },
+      {
+        "$oid": "c0a091529fe799ece66cc2cd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "06d5d152e8dd5377efe5ec79"
+    },
+    "name": "Lê Khánh Ngọc",
+    "email": "nguoithue127@ript.example",
+    "password": "$2b$08$fYgC0Mq8l3VYvMPlfun49u9TOLA4hNWIbV9VEkkNeBdLJjL.kmLKy",
+    "role": "user",
+    "phone": "0900000143",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4d69bf1f721fb8dfd8937446"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "dd18613402c755a98766dcc8"
+    },
+    "name": "Bùi Minh Trinh",
+    "email": "nguoithue128@ript.example",
+    "password": "$2b$08$vO.7JmsTd/6mZbYRVb.zhu8ZOSBcr1RCQnd0Rzs/SzVlIE4OSR8KW",
+    "role": "user",
+    "phone": "0900000144",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1cfe081afc19de97b99f37c3"
+      },
+      {
+        "$oid": "fe40a1fbb1ad9ca051e8519a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "77ffa581f06d94a77f0e3525"
+    },
+    "name": "Mai Phương Hiếu",
+    "email": "nguoithue129@ript.example",
+    "password": "$2b$08$pZ1ywv4AinBO.BsfeOr0w.LRvVnPKONyYOu4xCsHoAIE7GQK762i.",
+    "role": "user",
+    "phone": "0900000145",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "507df55f0af17ddbd3e52aee"
+    },
+    "name": "Phạm Hữu Ngân",
+    "email": "nguoithue130@ript.example",
+    "password": "$2b$08$IFTa2pwzZLQnzVDK0ZKub.aVKnPtC0nhmiCTKu0zF2zZVBYJzpTG6",
+    "role": "user",
+    "phone": "0900000146",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b0ab95a85964d1e0509f5475"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c95276f7e38cc0ba1e63ccb2"
+    },
+    "name": "Đỗ Ngọc Trang",
+    "email": "nguoithue131@ript.example",
+    "password": "$2b$08$cQWeelW45ATgbi2ZRFNXtuEXyqLf7FjZBEjVFrs587TuGLF9dnU1q",
+    "role": "user",
+    "phone": "0900000147",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "083f421ef926a17628824b82"
+      },
+      {
+        "$oid": "533820eaea21520144497fdf"
+      },
+      {
+        "$oid": "e328793602a710833e7b8aa2"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6d589bc59af3b343e7c8532e"
+    },
+    "name": "Lý Trọng Hải",
+    "email": "nguoithue132@ript.example",
+    "password": "$2b$08$RjuI8v.ZfXUZ3H90wjZUHOULU7n2kvEi8vH8MQN01wmGXF6rhkUOC",
+    "role": "user",
+    "phone": "0900000148",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "70ee936bea11fbe28a160cca"
+      },
+      {
+        "$oid": "370415ddf75699f131fa95f4"
+      },
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9d4a8d2ace8474cfc9115ff0"
+    },
+    "name": "Hoàng Thu Nam",
+    "email": "nguoithue133@ript.example",
+    "password": "$2b$08$yBsI26FW9fIDS0Kac5.9A.1qyjh4DFjG6V9xl9tO/JsVcKRXHMMYu",
+    "role": "user",
+    "phone": "0900000149",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0e42c578ad1a26267f54e327"
+    },
+    "name": "Hồ Thanh Thu",
+    "email": "nguoithue134@ript.example",
+    "password": "$2b$08$jXuwCMf6nqrG9KbODvpn.ufbqlGHvTJ2KTV.W/.2QG1bTS4jy1B36",
+    "role": "user",
+    "phone": "0900000150",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f86f808650638afe1776a2a6"
+      },
+      {
+        "$oid": "578c3b3f15fa7713b22b44d0"
+      },
+      {
+        "$oid": "2421d2431216eb0b720db4b9"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9b4bcf3751b26dfd02ba02ee"
+    },
+    "name": "Cao Tú Hà",
+    "email": "nguoithue135@ript.example",
+    "password": "$2b$08$dsihwju8X7mYYglpdV9jRuHC/xJZZ0y3.A0a1zW1QrOkSitefe51e",
+    "role": "user",
+    "phone": "0900000151",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "3c8acc7d46b465a63681cb3a"
+      },
+      {
+        "$oid": "ef12cdba976d9f5086c93ac0"
+      },
+      {
+        "$oid": "bd0f267ce17d5c743246edfa"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bf7410f023cc8ac12e4a26cd"
+    },
+    "name": "Phan Đức Minh",
+    "email": "nguoithue136@ript.example",
+    "password": "$2b$08$qOkjSfQJ.mNBkEJOPMC7k.hAcob47hfktjER8SOpqryyt11p2NQ/C",
+    "role": "user",
+    "phone": "0900000152",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "71a5f06bed96efb91aba2887"
+      },
+      {
+        "$oid": "076bc49b917ad7bca3bb37a2"
+      },
+      {
+        "$oid": "c0a091529fe799ece66cc2cd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bd7c23970b3602a9978c3029"
+    },
+    "name": "Ngô Quốc Thiện",
+    "email": "nguoithue137@ript.example",
+    "password": "$2b$08$IeZxQrFWJpel.SjzO20GR.WqgQ3X84IMt5maBSDKoJJAIXVCfcvLC",
+    "role": "user",
+    "phone": "0900000153",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "54a261cea56709525a944b30"
+    },
+    "name": "Hà Văn Giang",
+    "email": "nguoithue138@ript.example",
+    "password": "$2b$08$83hGugPTc2kNbDr418b2X.Fg0Tik/v3pXqTy2wXw.2NvKSsAfP7ma",
+    "role": "user",
+    "phone": "0900000154",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b36e9810457d2ff6d920dfa6"
+      },
+      {
+        "$oid": "5e03aca9a1448ee61b5ecd06"
+      },
+      {
+        "$oid": "130bbbdcec7814c43661959e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1e5cbf34227e69f59047ad80"
+    },
+    "name": "Vũ Gia Mai",
+    "email": "nguoithue139@ript.example",
+    "password": "$2b$08$5kw2CvxyvMxo48iMfFKiK.keyhFZ7VlNu3B4BdV2QBvoV3Ho6K3ji",
+    "role": "user",
+    "phone": "0900000155",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4a008b923f48d791cf9bbbfc"
+      },
+      {
+        "$oid": "ff5eb37300d425613900e95f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b96cee66feded80c0df65bfe"
+    },
+    "name": "Dương Anh Thành",
+    "email": "nguoithue140@ript.example",
+    "password": "$2b$08$2HzR5MtiB1zZ3GquUQPIveEmUQziwxIKV/ZIxxh4Ex4.bZTGurWg.",
+    "role": "user",
+    "phone": "0900000156",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "3c5eaab6b1d6384c1d137819"
+      },
+      {
+        "$oid": "c9ff9c0b44b37237537c4a23"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "86528e87b931bf21c262f4bb"
+    },
+    "name": "Nguyễn Thị Dũng",
+    "email": "nguoithue141@ript.example",
+    "password": "$2b$08$upFwwrPZf/cM6f4DP.KMoeUO.6qXJQH8hBlK34HMz9YZKIwj/Yqaa",
+    "role": "user",
+    "phone": "0900000157",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8ee0580bbdaee4996deec5b9"
+    },
+    "name": "Võ Hoài Long",
+    "email": "nguoithue142@ript.example",
+    "password": "$2b$08$Wx/IZauUZvzifNuHLZXzg.gC/vAVlqrxly/ZK3pU7x033xcYE928y",
+    "role": "user",
+    "phone": "0900000158",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e26d1592f82ed4516ac26d02"
+      },
+      {
+        "$oid": "183927cc0682b6a9ab306255"
+      },
+      {
+        "$oid": "956ccd27fa5e813e79f12b03"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5c26fbf95d8ed88b637418e9"
+    },
+    "name": "Đinh Khánh Thảo",
+    "email": "nguoithue143@ript.example",
+    "password": "$2b$08$CPyHJg4NHkQrpOyDya25uePCma.hoolc.SuSMxf5/X7jLXigXH9Qu",
+    "role": "user",
+    "phone": "0900000159",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "492119ee528b86d2cb70e935"
+      },
+      {
+        "$oid": "4a1f4cc9753e09bec5535ede"
+      },
+      {
+        "$oid": "2e5cb4f25498aad96a38107f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ad62efbb8d1e4b10496f137"
+    },
+    "name": "Trần Minh Chi",
+    "email": "nguoithue144@ript.example",
+    "password": "$2b$08$TdKeUnUnOX9k1Omt4AIZsO9szewoLi5JnbD0FXAd2oYM7Zy8XJyt.",
+    "role": "user",
+    "phone": "0900000160",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e72a08591691e71d267972a5"
+      },
+      {
+        "$oid": "71cc9b2b9bb7f215ff51c67f"
+      },
+      {
+        "$oid": "d92753d6c6a492a2eea1f69b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "70f9e524d094853be9275b0e"
+    },
+    "name": "Đặng Phương Linh",
+    "email": "nguoithue145@ript.example",
+    "password": "$2b$08$qfntqtj0u3nYTL0FlnomD.WWly3gxOUehPJRh7XylXXgL/zRT5IIy",
+    "role": "user",
+    "phone": "0900000161",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ffa00bd80ce8161fead619a1"
+    },
+    "name": "Trịnh Hữu Sơn",
+    "email": "nguoithue146@ript.example",
+    "password": "$2b$08$UFhKljSH6jQnY0cxmdS8Iuuw.UnI8h6kQML5OCigaRaCABKPwFuUK",
+    "role": "user",
+    "phone": "0900000162",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "8d768932de4cc62eee74a063"
+      },
+      {
+        "$oid": "5e7798e7ca90ef2546dc2dcd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4b250b84eff59ca1f6afd5ec"
+    },
+    "name": "Lê Ngọc Bình",
+    "email": "nguoithue147@ript.example",
+    "password": "$2b$08$6uAyVAOOE5i2zTV50.CXm.WANs4k119X0oAl3jkBFcZ7dcOfaFxse",
+    "role": "user",
+    "phone": "0900000163",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "083368d9073272cc41821323"
+      },
+      {
+        "$oid": "abbc4bd780c92f726984296b"
+      },
+      {
+        "$oid": "49f087aa535129db3911c5fd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "380c8cae539d13537560a72b"
+    },
+    "name": "Bùi Trọng Lan",
+    "email": "nguoithue148@ript.example",
+    "password": "$2b$08$X7hciRa.OkHrozNL2INFr.zEIJR4UJDMlIHxPTcTyuguX8GlbeDFW",
+    "role": "user",
+    "phone": "0900000164",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a39d7a5550bf046fe46aaa67"
+      },
+      {
+        "$oid": "cf00b3b280f4be63fa3854ca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "32de2414165330d079e6d414"
+    },
+    "name": "Mai Thu Quỳnh",
+    "email": "nguoithue149@ript.example",
+    "password": "$2b$08$4yzZ.loRUAzrs9aR2JsM3OdJ2lmiVcbfH0EZKrLXE9E2qN7BKRpIe",
+    "role": "user",
+    "phone": "0900000165",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "edef1e6e5930f912f6cc81ad"
+    },
+    "name": "Phạm Thanh Anh",
+    "email": "nguoithue150@ript.example",
+    "password": "$2b$08$BVWXaEXUyQPVsLAvawzbTuG8gfdAWCjWxilwrO4KTibbQKRtrlvhK",
+    "role": "user",
+    "phone": "0900000166",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "956ccd27fa5e813e79f12b03"
+      },
+      {
+        "$oid": "063215b51c7d46d392346d94"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f2613ec3d00a0b3a188159aa"
+    },
+    "name": "Đỗ Tú Lâm",
+    "email": "nguoithue151@ript.example",
+    "password": "$2b$08$9enrhKOLDHqpIvFjncezWenz2xWS.tasCE5tZ6iX2nDSa5iNBZbJq",
+    "role": "user",
+    "phone": "0900000167",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "278a27ade10d7515a6535b01"
+      },
+      {
+        "$oid": "f5b1015f53917da305ae1e36"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fdb758499605966abba70deb"
+    },
+    "name": "Lý Đức Quân",
+    "email": "nguoithue152@ript.example",
+    "password": "$2b$08$XMjOE8zqi7wATckAK2rd5.tZXOqNjxZHi7T3rL1eBc.m7bkAc793q",
+    "role": "user",
+    "phone": "0900000168",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "41ff36e262f9eeb0bddf15f4"
+      },
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "81a35a3df9f7e0f261c71ada"
+    },
+    "name": "Hoàng Quốc An",
+    "email": "nguoithue153@ript.example",
+    "password": "$2b$08$nEpfICdkIO4iMSsC4/sEXOtAElLPP15okw/eP4z1Z9.maXG6WJywK",
+    "role": "user",
+    "phone": "0900000169",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b13298bb467b55999f86683a"
+    },
+    "name": "Hồ Văn Khánh",
+    "email": "nguoithue154@ript.example",
+    "password": "$2b$08$U2I7hdUmIjqsD/3T9g9CX.py31AKVk5OMmooq0ppY4JFetpf3m5F.",
+    "role": "user",
+    "phone": "0900000170",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f6e23d404ec0ecc82a209f07"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6b5d2a79329a1ffdb1280fa8"
+    },
+    "name": "Cao Gia Phương",
+    "email": "nguoithue155@ript.example",
+    "password": "$2b$08$icOBHU6lBnxX1LYnF.OefuwRjw9Vz8tKrgARr9DTT2hfaEkKIslji",
+    "role": "user",
+    "phone": "0900000171",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "ea44a59f792515034303cea9"
+      },
+      {
+        "$oid": "e51ff2898bc8f98d3cc700f6"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "55684403bd0479b6413722f8"
+    },
+    "name": "Phan Anh Vy",
+    "email": "nguoithue156@ript.example",
+    "password": "$2b$08$TRiEQ1w70FdcYAPxi4KS7e.DGHkBOxK8vEWIqtvNGh6gCIgxbZoxy",
+    "role": "user",
+    "phone": "0900000172",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cf6d9acfb7a6aa18d3ef8dbe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "759e98bdf9cbb7da8ff8d187"
+    },
+    "name": "Ngô Thị Khang",
+    "email": "nguoithue157@ript.example",
+    "password": "$2b$08$iT1n8AXDZ150fiWBTo7w2edFmQCniCAcVGFWy6Xo3wD4mRpX4xYvG",
+    "role": "user",
+    "phone": "0900000173",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1fda54fdd25f85fb39e6550e"
+    },
+    "name": "Hà Hoài Phúc",
+    "email": "nguoithue158@ript.example",
+    "password": "$2b$08$7oySnmfxYV0S7k7ZUtQK8.BUVAIf9Czcqv2g.9K4TKP9xeheEkgYi",
+    "role": "user",
+    "phone": "0900000174",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      },
+      {
+        "$oid": "3025f75a368c779cf7643f9a"
+      },
+      {
+        "$oid": "f86f808650638afe1776a2a6"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6dd103f081ef304e4479efec"
+    },
+    "name": "Vũ Khánh Tuấn",
+    "email": "nguoithue159@ript.example",
+    "password": "$2b$08$IMtdmDoo1g4RCcv0ip9EQ.aOOt0vVzjwqx2l0LQ0oILIB3eVW5MOC",
+    "role": "user",
+    "phone": "0900000175",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "afe57e0a2999a1585b24ec9e"
+      },
+      {
+        "$oid": "c4e2e649a39a6e798e4cd805"
+      },
+      {
+        "$oid": "41ff36e262f9eeb0bddf15f4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3a6fd28e5e45c568bc6ab885"
+    },
+    "name": "Dương Minh Hương",
+    "email": "nguoithue160@ript.example",
+    "password": "$2b$08$sDGj6GdTX75hKHRwZzWBU.3xeROtEs/eRA8CyyWTJV78jGdW5tlr2",
+    "role": "user",
+    "phone": "0900000176",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4b48624b52d08d8f339fbbc4"
+    },
+    "name": "Nguyễn Phương Phong",
+    "email": "nguoithue161@ript.example",
+    "password": "$2b$08$xkKZm.rpYOlD5wsnaqxnVOejWdbbBdrifaqslaYv4zqi/VfXnJbGq",
+    "role": "user",
+    "phone": "0900000177",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7dfc3ac923088b3ffc2f4ba9"
+    },
+    "name": "Võ Hữu Tú",
+    "email": "nguoithue162@ript.example",
+    "password": "$2b$08$ALUvNMIVu2imOowlm4/ByeArJWxh3OcUMNN0gZ34xmOcks1LVyplG",
+    "role": "user",
+    "phone": "0900000178",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1cfe081afc19de97b99f37c3"
+      },
+      {
+        "$oid": "1907e7536da95df569c18305"
+      },
+      {
+        "$oid": "14164a1b67f9bddaaaf4d39a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4d96a333ed98c7a14912c9ae"
+    },
+    "name": "Đinh Ngọc Huy",
+    "email": "nguoithue163@ript.example",
+    "password": "$2b$08$j4P7OTQuXFFmi/b6jrDlK.t6YLk1uZMGCU2jCTr76etmzA.v9aoki",
+    "role": "user",
+    "phone": "0900000179",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "49f087aa535129db3911c5fd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6d81f86e41d3c913d96798b1"
+    },
+    "name": "Trần Trọng Nhung",
+    "email": "nguoithue164@ript.example",
+    "password": "$2b$08$FuYnxDZpbGiUWUHfFRcPROtPrhWwCT4LH0HKfh2P9xxKRvK5Q9f.6",
+    "role": "user",
+    "phone": "0900000180",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cbe432723b796e65e57d7f5e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "109a074f5c2f7686d76d5681"
+    },
+    "name": "Đặng Thu Trung",
+    "email": "nguoithue165@ript.example",
+    "password": "$2b$08$RhtwPyH7L4RCmo8GWyL.oOIRKpHVbBeIc6dTS3BFWYaxJIbU5u8hW",
+    "role": "user",
+    "phone": "0900000181",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6e9dba210a3ae16afa6b824d"
+    },
+    "name": "Trịnh Thanh Hoàng",
+    "email": "nguoithue166@ript.example",
+    "password": "$2b$08$lltXFqGQwUWVSFqktf8U5OGFBiajA6wR3NfRffLpe61s7ZukPtS36",
+    "role": "user",
+    "phone": "0900000182",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "3b92391bafa5660384fa3fb9"
+      },
+      {
+        "$oid": "6e49ac0b1accda9f098685c5"
+      },
+      {
+        "$oid": "df5b21f9dfed1f1f6a724bc8"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6d25b2ff5a6009b3a45b6eea"
+    },
+    "name": "Lê Tú Ngọc",
+    "email": "nguoithue167@ript.example",
+    "password": "$2b$08$WFRKcdvuHPlDgZ6/hQiNzOmA66rUcpzpERs3Ca47ZA6Oy67p25yOi",
+    "role": "user",
+    "phone": "0900000183",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "8d0374b45519b754f79618e0"
+      },
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "860db8aa207dda4517d299d7"
+    },
+    "name": "Bùi Đức Trinh",
+    "email": "nguoithue168@ript.example",
+    "password": "$2b$08$6Ysn/QB74yEnq1YjEZQo7.XockO6hI/ofiQGnOfPzTidXRogEb96a",
+    "role": "user",
+    "phone": "0900000184",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1b6688b4d7172174a65011a7"
+      },
+      {
+        "$oid": "7cfc844098e329a8cf7aa6d0"
+      },
+      {
+        "$oid": "fe40a1fbb1ad9ca051e8519a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3ef3a99a4a3fd6c494a7a6a7"
+    },
+    "name": "Mai Quốc Hiếu",
+    "email": "nguoithue169@ript.example",
+    "password": "$2b$08$/8ih3uG4MI176JlYzKTViOZW5SnthTc6ju0eB0VcfXXz8g8fwuuiu",
+    "role": "user",
+    "phone": "0900000185",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "459a2fccfdd3a2ef7e410528"
+    },
+    "name": "Phạm Văn Ngân",
+    "email": "nguoithue170@ript.example",
+    "password": "$2b$08$qLVDOAM420dizu9RqoNjjehn/5JeQccXXSHtzPo8y6UHXclQwFXpi",
+    "role": "user",
+    "phone": "0900000186",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1c3e1da7eec4da5cffd898b3"
+      },
+      {
+        "$oid": "3ffbdd491b1066c8b70a9427"
+      },
+      {
+        "$oid": "f86f808650638afe1776a2a6"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7b5bcf50aa2ebda93602f04a"
+    },
+    "name": "Đỗ Gia Trang",
+    "email": "nguoithue171@ript.example",
+    "password": "$2b$08$gyfKM1YboRJJsBtsDIJrT.eXQ5xEVKVKcvchGqeHhTSJDIVtOZhU.",
+    "role": "user",
+    "phone": "0900000187",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "85f528f78c1a5bc852e2bda4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ad63ba1b29f0662f374a658"
+    },
+    "name": "Lý Anh Hải",
+    "email": "nguoithue172@ript.example",
+    "password": "$2b$08$yaDxkZSNB21EB.xZRRO8KuC2IsTDva2aS7QH4WA2l5E7YV8KB.dm2",
+    "role": "user",
+    "phone": "0900000188",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4584f4593ff2124f912b487f"
+      },
+      {
+        "$oid": "c9ff9c0b44b37237537c4a23"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "151c687baff641e95bef7ec7"
+    },
+    "name": "Hoàng Thị Nam",
+    "email": "nguoithue173@ript.example",
+    "password": "$2b$08$6WQHRR/Pns4DYwCWnRR83eN44otZdjJVCDHTc2jEG3fOgw48X/G/e",
+    "role": "user",
+    "phone": "0900000189",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "12207c4ef617f598e5b5a948"
+    },
+    "name": "Hồ Hoài Thu",
+    "email": "nguoithue174@ript.example",
+    "password": "$2b$08$9h96qSCiSXmzPLkktJYmReUx3NezZnJ2/ow65z8dNhYVB5jrkBrVy",
+    "role": "user",
+    "phone": "0900000190",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "002cc9285138f437ea1aa2bf"
+      },
+      {
+        "$oid": "27e4502ab1dbd4106476b8ae"
+      },
+      {
+        "$oid": "888b00b3c975faf133a8df8b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3be643e716573e2066d8c2f5"
+    },
+    "name": "Cao Khánh Hà",
+    "email": "nguoithue175@ript.example",
+    "password": "$2b$08$T08COi6eO0rmvoKvtU6dWebELwmtkjEdlm8VQF5vDHGQQ1fDcCtPm",
+    "role": "user",
+    "phone": "0900000191",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a020988f20aa364eb28f5f28"
+      },
+      {
+        "$oid": "d92753d6c6a492a2eea1f69b"
+      },
+      {
+        "$oid": "4be777cfc73ce6bd725ced58"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d093b1982e761cb7d159edc0"
+    },
+    "name": "Phan Minh Minh",
+    "email": "nguoithue176@ript.example",
+    "password": "$2b$08$VJIKzGmV3BBKZrLkJIRKfeSgIWyDrCFQnYzIMigdxlfj50wiwSZYy",
+    "role": "user",
+    "phone": "0900000192",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "058c48e8bf116447238e3256"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "95c35e9fa26aeb0168e25975"
+    },
+    "name": "Ngô Phương Thiện",
+    "email": "nguoithue177@ript.example",
+    "password": "$2b$08$M50pr0Q.6qo/5ospIOhcouNaUfkdO58DqhNxBrLj0TUqGMCfOoo9O",
+    "role": "user",
+    "phone": "0900000193",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b7af784e3144ebb221c41bc1"
+    },
+    "name": "Hà Hữu Giang",
+    "email": "nguoithue178@ript.example",
+    "password": "$2b$08$IpYlI7W7FJlzJ6cPuwp7BO5jH.d/PlzrVyb9qAFANjosPs6c6f7YK",
+    "role": "user",
+    "phone": "0900000194",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "70c005b520bbd09c2d9fc661"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5471f68d3526c9da54bfc20c"
+    },
+    "name": "Vũ Ngọc Mai",
+    "email": "nguoithue179@ript.example",
+    "password": "$2b$08$8QtcQCE4uThRLkO2UTCs0OPdfEuol8o7epMICNIZbLU3FogIIrfbq",
+    "role": "user",
+    "phone": "0900000195",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f1d9e44d46c4e2719285924a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a90ba9b6498249720d2df8d"
+    },
+    "name": "Dương Trọng Thành",
+    "email": "nguoithue180@ript.example",
+    "password": "$2b$08$JfJWdsSWBQ6I8.pYA4NXNuW7Qy69q2GqGHRkUDjmxcIVPh9lmGlie",
+    "role": "user",
+    "phone": "0900000196",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "f8e79972695163618af6d6ca"
+      },
+      {
+        "$oid": "d97ca6b7fc756825a33518ca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6b2e418968bac69897931e07"
+    },
+    "name": "Nguyễn Thu Dũng",
+    "email": "nguoithue181@ript.example",
+    "password": "$2b$08$rrqNjoco/EhTN7LapLmfHudkWamFb8tjrGjo7EZZlrLzQmt04F4GS",
+    "role": "user",
+    "phone": "0900000197",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e9d4e659a935bf7432ca2a0e"
+    },
+    "name": "Võ Thanh Long",
+    "email": "nguoithue182@ript.example",
+    "password": "$2b$08$MaKVrEpZLWc8cyEz1ADwkeuXZXvHs1n8mgvZlA7qIceHRdpXfGFE.",
+    "role": "user",
+    "phone": "0900000198",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "516f129cea0041dab2d217ba"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2949946060676fa6824bde56"
+    },
+    "name": "Đinh Tú Thảo",
+    "email": "nguoithue183@ript.example",
+    "password": "$2b$08$DBgTd/.VLFbZhsWFmt2vIOHzWQwsIsElMKpJN87hoSahCp7izosXy",
+    "role": "user",
+    "phone": "0900000199",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "9b0714cf93f8c738023e3a31"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9353f4c1f292c183adf411ab"
+    },
+    "name": "Trần Đức Chi",
+    "email": "nguoithue184@ript.example",
+    "password": "$2b$08$.KLG9cQ7C.268//XqeKJN.rKgSrKXPQ6EbgL8WYroGkMfUA4/.QEq",
+    "role": "user",
+    "phone": "0900000200",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "8fdf4896a2e5cb7a2a5d9cd0"
+      },
+      {
+        "$oid": "64902a69ceecc1e811d9c6c5"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4723259b8178c2d56cba55ba"
+    },
+    "name": "Đặng Quốc Linh",
+    "email": "nguoithue185@ript.example",
+    "password": "$2b$08$Qz0UOxqYS0pBCPgOFw8qaOFK1X24dj5nikVDeHAfQTUGG/0.ZRNm2",
+    "role": "user",
+    "phone": "0900000201",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "63e5230269b55fed662d15c3"
+    },
+    "name": "Trịnh Văn Sơn",
+    "email": "nguoithue186@ript.example",
+    "password": "$2b$08$AqlhMRkAHgPgu0Sqwtj6/.qNf6wRjjEOOIZNZ/rhsCNRqxF2zJ9ma",
+    "role": "user",
+    "phone": "0900000202",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "9af2e904c721994e408c7e3f"
+      },
+      {
+        "$oid": "492119ee528b86d2cb70e935"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f051e40894d63ec624bd80a7"
+    },
+    "name": "Lê Gia Bình",
+    "email": "nguoithue187@ript.example",
+    "password": "$2b$08$S8NzQsZAzXkRfoQFrZgK5.6M2jL2NTCuQie64NFHo4a1NLNgZmMwa",
+    "role": "user",
+    "phone": "0900000203",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "33e6a8d373669c55708d37ee"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "89225a99d3b1dc4b268c7883"
+    },
+    "name": "Bùi Anh Lan",
+    "email": "nguoithue188@ript.example",
+    "password": "$2b$08$rkQjK416vRZZX/ksuSaWeebfo1PYA8WkfGiUhMKakXVTZl9F6yjjq",
+    "role": "user",
+    "phone": "0900000204",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "10b1f01a344ac754bf3e3165"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7ce841470edc8ef5806c0251"
+    },
+    "name": "Mai Thị Quỳnh",
+    "email": "nguoithue189@ript.example",
+    "password": "$2b$08$LDZBXdtpPChElAPZFAvpYufEA4Y3oK2AzyHTfsySQdLi9qopwJglC",
+    "role": "user",
+    "phone": "0900000205",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ec531f960b5b93d5a0fd8635"
+    },
+    "name": "Phạm Hoài Anh",
+    "email": "nguoithue190@ript.example",
+    "password": "$2b$08$g1c8zuEn5aCCollwtdMFy.jGXiU/BwVBBvSVT4W4f.VxxFNfIPL06",
+    "role": "user",
+    "phone": "0900000206",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "2e962036ba14d1fd1dea01ce"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "53d7d70c5888898707d31a43"
+    },
+    "name": "Đỗ Khánh Lâm",
+    "email": "nguoithue191@ript.example",
+    "password": "$2b$08$8hbVrhdyPKTvI9Eqr.8aqOFjJIcKOGaD4rxWbu7nhnfxEoT2u40.q",
+    "role": "user",
+    "phone": "0900000207",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "2dfb1a9ffd8c9c5e250cc920"
+      },
+      {
+        "$oid": "5fc09da9aadb2a4f21b803f2"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b3e96819f256929a1567fa58"
+    },
+    "name": "Lý Minh Quân",
+    "email": "nguoithue192@ript.example",
+    "password": "$2b$08$CV/I.l8Sv1hji3f61Zkcn.ZPiUVG8rzmUYh1YrD9y4wj6EJBINGG6",
+    "role": "user",
+    "phone": "0900000208",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "399f6dd23ab32208e884a0fb"
+      },
+      {
+        "$oid": "f8e79972695163618af6d6ca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c644ba7c0b7eb95b9cf7554d"
+    },
+    "name": "Hoàng Phương An",
+    "email": "nguoithue193@ript.example",
+    "password": "$2b$08$dgHgASi9Zn8GaWUJ33hquOz2Ojc6Qcf2xypyIeIvokktBvu28s7sK",
+    "role": "user",
+    "phone": "0900000209",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e78660c7c5955f32373993f6"
+    },
+    "name": "Hồ Hữu Khánh",
+    "email": "nguoithue194@ript.example",
+    "password": "$2b$08$catbkQ3Qlmin.b2ObWvDkuTRVr5R.OA7OdyCoPBb3g7AsaavEWC7G",
+    "role": "user",
+    "phone": "0900000210",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4a1f4cc9753e09bec5535ede"
+      },
+      {
+        "$oid": "17dc0919c0cf2f9182f2f757"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6056fcc9a65f645ea4127099"
+    },
+    "name": "Cao Ngọc Phương",
+    "email": "nguoithue195@ript.example",
+    "password": "$2b$08$gmEx0SSwIbSi.qrJPWp4ieI/rcRjfcUv2bickeEDkB9UtUMe1rizC",
+    "role": "user",
+    "phone": "0900000211",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4168d70bcaeb473b2980b5a0"
+      },
+      {
+        "$oid": "66402182dd6f9de30b7e221c"
+      },
+      {
+        "$oid": "1ef60bc9447a1483f9eca986"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f35f2c78251f070a0d87c2bc"
+    },
+    "name": "Phan Trọng Vy",
+    "email": "nguoithue196@ript.example",
+    "password": "$2b$08$PxbkCFxZjtc4feg2Bq27jOq9hDouTbBw5jBbWYov/zwpZuJN6gge.",
+    "role": "user",
+    "phone": "0900000212",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "9ecc236c4495c9f897829406"
+      },
+      {
+        "$oid": "1265fee0ed945b1551c58379"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7bc3c94038666a492a816718"
+    },
+    "name": "Ngô Thu Khang",
+    "email": "nguoithue197@ript.example",
+    "password": "$2b$08$VVhkwqFlGhToJMJkaJIkuOJKgChQ3F3Iwb6lIwIwFoGOJvm.MP09K",
+    "role": "user",
+    "phone": "0900000213",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "94c3ef74c969934bce1b999c"
+    },
+    "name": "Hà Thanh Phúc",
+    "email": "nguoithue198@ript.example",
+    "password": "$2b$08$z.DzIaXtv1HOPoUOFdKIpO1VXKsXefieD3B.uv.nj0bPTLkgcfrSu",
+    "role": "user",
+    "phone": "0900000214",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "558d2b62f3e03ab4d106d73a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "aa13859060754c63d3a3a7ed"
+    },
+    "name": "Vũ Tú Tuấn",
+    "email": "nguoithue199@ript.example",
+    "password": "$2b$08$M4o7dh1Hbsge6HcPQKsYteekQ/OlJsPe26pKWYtmW53qcsQ7oQrOa",
+    "role": "user",
+    "phone": "0900000215",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "70c005b520bbd09c2d9fc661"
+      },
+      {
+        "$oid": "11ca9a16d998cc135349fb57"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "023624629c88661d6c081aed"
+    },
+    "name": "Dương Đức Hương",
+    "email": "nguoithue200@ript.example",
+    "password": "$2b$08$FwiGQAV2MkKZJnlaBZp5EuQSoT8ja9pNpQzNfSWTaw1mFwEUZiSPC",
+    "role": "user",
+    "phone": "0900000216",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4b575255e1c6c2dc324c890d"
+      },
+      {
+        "$oid": "41edd2223271317e0446251b"
+      },
+      {
+        "$oid": "17fb6ac0619b3005f6a3f613"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "95dca6b67782e38afb10e717"
+    },
+    "name": "Nguyễn Quốc Phong",
+    "email": "nguoithue201@ript.example",
+    "password": "$2b$08$5CfurnDoWWlM97h1PKsNbeo6CcroEb4jRh4bqMekdE8aMeQzDqNMm",
+    "role": "user",
+    "phone": "0900000217",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "16b40b755ba4e4288aaac35e"
+    },
+    "name": "Võ Văn Tú",
+    "email": "nguoithue202@ript.example",
+    "password": "$2b$08$aWtCwUG2U20Aa0M6Jy59NO5zxKU2w1HNyrX.Z197li28ks4lZpS7S",
+    "role": "user",
+    "phone": "0900000218",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "002cc9285138f437ea1aa2bf"
+      },
+      {
+        "$oid": "1ad4f0050cc80eda27329dd0"
+      },
+      {
+        "$oid": "1503d9614ccf0fdcfab50c86"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ab06af33d77f103399b91329"
+    },
+    "name": "Đinh Gia Huy",
+    "email": "nguoithue203@ript.example",
+    "password": "$2b$08$GigT6tKhnp6hOxBSYwi/BO4SRjF6pBZGNyzKrbQD7sgFbXt3FLWfa",
+    "role": "user",
+    "phone": "0900000219",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      },
+      {
+        "$oid": "70c005b520bbd09c2d9fc661"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d4c5c4e619cd59142f0e837b"
+    },
+    "name": "Trần Anh Nhung",
+    "email": "nguoithue204@ript.example",
+    "password": "$2b$08$J7B1VanxXdRIkXtBjClJUOcTVvp7Vsw.yxdRggrYoeM2rO8HbqrYq",
+    "role": "user",
+    "phone": "0900000220",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4b137128451efdf40012db29"
+      },
+      {
+        "$oid": "1b4db9cd6c779da10b41c258"
+      },
+      {
+        "$oid": "638c8a3d937f10bd8008d16b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2d4d292b716dafb8be96b00b"
+    },
+    "name": "Đặng Thị Trung",
+    "email": "nguoithue205@ript.example",
+    "password": "$2b$08$t5K2eziDyrKtXtPzIaVZROvFc0xqwC/93Qnokhu0Hxeo4LYtl4NkS",
+    "role": "user",
+    "phone": "0900000221",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "643387809cea7d536c358ca9"
+    },
+    "name": "Trịnh Hoài Hoàng",
+    "email": "nguoithue206@ript.example",
+    "password": "$2b$08$FOdRsxp2STamItYhrk55T.zcPmB27LZ8.2cWT6K/FcaDJmSyRdjAm",
+    "role": "user",
+    "phone": "0900000222",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "d4d6449055e0c3bb91c50131"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bac98e40f1a16e3af9a1922d"
+    },
+    "name": "Lê Khánh Ngọc",
+    "email": "nguoithue207@ript.example",
+    "password": "$2b$08$D.ctna9hSBcnWEXB/D5IfOGpU6NWcdnT1RAGh9iCK5gapA7cE7izy",
+    "role": "user",
+    "phone": "0900000223",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "753da681fa7f698aabe3857e"
+      },
+      {
+        "$oid": "ace670b96c5501627f74791a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5ba2c85a1db77fae42197fc0"
+    },
+    "name": "Bùi Minh Trinh",
+    "email": "nguoithue208@ript.example",
+    "password": "$2b$08$3JeFhYlYWoafsJ8hqMkEzezTlVZsoFpjfb8v8Na5lVsX4w827MUb2",
+    "role": "user",
+    "phone": "0900000224",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "c7b76f6fda2a0fa6f65d8f7e"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "badff44982d7a65930018c15"
+    },
+    "name": "Mai Phương Hiếu",
+    "email": "nguoithue209@ript.example",
+    "password": "$2b$08$hAZmtsykBgPqCsB9gjzW..YdUt206lmb9ylHpmC4UXKJbK3SX61D2",
+    "role": "user",
+    "phone": "0900000225",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "88a527472a7f5dcb630c2efd"
+    },
+    "name": "Phạm Hữu Ngân",
+    "email": "nguoithue210@ript.example",
+    "password": "$2b$08$APPhKPBaeXcc/pl7fQ0TYuWSqp3BUizgjhGnIxDSTk9e0qphHOvLu",
+    "role": "user",
+    "phone": "0900000226",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5e03aca9a1448ee61b5ecd06"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6038a9a7bd0596258a030240"
+    },
+    "name": "Đỗ Ngọc Trang",
+    "email": "nguoithue211@ript.example",
+    "password": "$2b$08$ybfngXPIxqlwlIgVc81vB.aXD5y5EsYJOwd1k714hXKqQK1nmGhyu",
+    "role": "user",
+    "phone": "0900000227",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "84abc83dacf92264e818b5ea"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4863d75f7565cfbb1dc6da11"
+    },
+    "name": "Lý Trọng Hải",
+    "email": "nguoithue212@ript.example",
+    "password": "$2b$08$eMt/X2MpRVRnmtyYilVkaeE1d4wOjrVuLEo/uQmd/BBWZsn2rR4yK",
+    "role": "user",
+    "phone": "0900000228",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "d6faadf77634d1c04285c27b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cc3242f056d2bd866c9f5ebf"
+    },
+    "name": "Hoàng Thu Nam",
+    "email": "nguoithue213@ript.example",
+    "password": "$2b$08$LEL8gYaPdrrpx7uG17QVX.sdyL5zMCNoB1sp1QtKCHkKiKSi7lkDS",
+    "role": "user",
+    "phone": "0900000229",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "258a7fa6663234cbbc290f3f"
+    },
+    "name": "Hồ Thanh Thu",
+    "email": "nguoithue214@ript.example",
+    "password": "$2b$08$goOM0MEDWUaiNwyIK1VU4OWXfBhl/Cf6OFYT8j6QO0/D8nVIallbC",
+    "role": "user",
+    "phone": "0900000230",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "8fdf4896a2e5cb7a2a5d9cd0"
+      },
+      {
+        "$oid": "3cc46bc39d96d839968aecca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a397c340bca4845a9bbd6992"
+    },
+    "name": "Cao Tú Hà",
+    "email": "nguoithue215@ript.example",
+    "password": "$2b$08$Rz2Sju9TLecNaV34qp.OeeQEBVXXFhDap204dOR2xaSq7BLMCyLg.",
+    "role": "user",
+    "phone": "0900000231",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "34501eb94dcc7ab292cb30a1"
+      },
+      {
+        "$oid": "f5249e946de7292961dd2c5c"
+      },
+      {
+        "$oid": "05722b129ad67648e721a0e4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cee3b134a9a9908d1a94db7d"
+    },
+    "name": "Phan Đức Minh",
+    "email": "nguoithue216@ript.example",
+    "password": "$2b$08$2cj.ZuaJ4hW47o4A/9GvX.IEtVC3V03Qryw28lTrK.mFsToK4o/bq",
+    "role": "user",
+    "phone": "0900000232",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1e8454ce41e63f33b311d8d3"
+      },
+      {
+        "$oid": "558d2b62f3e03ab4d106d73a"
+      },
+      {
+        "$oid": "3025f75a368c779cf7643f9a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "533ab1e4bfc39e0067d72b6e"
+    },
+    "name": "Ngô Quốc Thiện",
+    "email": "nguoithue217@ript.example",
+    "password": "$2b$08$uFNBExpSuJNEIZsZfHulEOTLDgqzltdDHLIzyazWtUi0YxWHPG696",
+    "role": "user",
+    "phone": "0900000233",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d9de6884e3212b1a26960119"
+    },
+    "name": "Hà Văn Giang",
+    "email": "nguoithue218@ript.example",
+    "password": "$2b$08$9z0uAiWyo8zPMSf6RE146.XTnOpEiVlhNnzimRf2ilJg6GcEMyp.O",
+    "role": "user",
+    "phone": "0900000234",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "837f711c26bc16969cae8fd7"
+      },
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c619f0ba28b92761188aceac"
+    },
+    "name": "Vũ Gia Mai",
+    "email": "nguoithue219@ript.example",
+    "password": "$2b$08$p0nCYz/Lg/LzwdaSslG6tOCLRCYzLhELMsB35NE8XFWL45oRC3M4q",
+    "role": "user",
+    "phone": "0900000235",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "c06dd0519fd10a57a4a23b6c"
+      },
+      {
+        "$oid": "3025f75a368c779cf7643f9a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "940c371587bca2eabc9e3352"
+    },
+    "name": "Dương Anh Thành",
+    "email": "nguoithue220@ript.example",
+    "password": "$2b$08$BRNbftXhljBbBVGNLsjUfukWK0qhwVWpZuW/3eBqt.wBKbfBw.85a",
+    "role": "user",
+    "phone": "0900000236",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "cf6d9acfb7a6aa18d3ef8dbe"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "aedb80826aed4144ae319caf"
+    },
+    "name": "Nguyễn Thị Dũng",
+    "email": "nguoithue221@ript.example",
+    "password": "$2b$08$4kwRYFEISXR8ET27K15iBeFfi79oN4k6tpOTvHpZb5NMqF.i6ULze",
+    "role": "user",
+    "phone": "0900000237",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2ca01212759304f44ff83d03"
+    },
+    "name": "Võ Hoài Long",
+    "email": "nguoithue222@ript.example",
+    "password": "$2b$08$zaOzHj7MfaB//mE0z/B2w.59KOt1Dr.799G1SDRPuCey1.GIzABFa",
+    "role": "user",
+    "phone": "0900000238",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a01733f4a101f6fd4587a038"
+      },
+      {
+        "$oid": "3ff8ffb3ec85fd73413c3a58"
+      },
+      {
+        "$oid": "6a744b801301b03b528a0bfd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e49a9960de2aad25916f40a2"
+    },
+    "name": "Đinh Khánh Thảo",
+    "email": "nguoithue223@ript.example",
+    "password": "$2b$08$xwBFTabk.OBAmHVZLG6Z4eWhyUebm8eupyiko3qZ3avgjunwUCqZS",
+    "role": "user",
+    "phone": "0900000239",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4e7d0674b8342e4052d18367"
+      },
+      {
+        "$oid": "8b7af0de1c6ffe8d3666a940"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c6114deb08c4c8435e65ff59"
+    },
+    "name": "Trần Minh Chi",
+    "email": "nguoithue224@ript.example",
+    "password": "$2b$08$1iPciCTHvCp91xoIDa15vezBeOoEUoiPOswXLoX0UJe4WcMcTvpcW",
+    "role": "user",
+    "phone": "0900000240",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1f13128031b9e0dc9425addd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5a095d2bdbf921658ecec32e"
+    },
+    "name": "Đặng Phương Linh",
+    "email": "nguoithue225@ript.example",
+    "password": "$2b$08$b/H8RV5vIZGplIrFpi7eiebh27qieHPKMjDhHYsmcZnd0SW2xift6",
+    "role": "user",
+    "phone": "0900000241",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e9b439c59f6ffc534230ef7c"
+    },
+    "name": "Trịnh Hữu Sơn",
+    "email": "nguoithue226@ript.example",
+    "password": "$2b$08$bBfJiZ7x9dBlLrrPweTfuOrMJ4AJo/FxaZmChK98F/v7erXRl9UeG",
+    "role": "user",
+    "phone": "0900000242",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a04e645af559b95cdae7bee7"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "542eae1d0f36fc6d04a52e9a"
+    },
+    "name": "Lê Ngọc Bình",
+    "email": "nguoithue227@ript.example",
+    "password": "$2b$08$qEM7B1XEpZ99F7GTgzSOfuXBN5ydEBGTaOzuVi2sMEDJEVJVmlOBC",
+    "role": "user",
+    "phone": "0900000243",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "57d73a7f0df1a3b1f00f4980"
+      },
+      {
+        "$oid": "31073ff8ff83cf2a532079fa"
+      },
+      {
+        "$oid": "533820eaea21520144497fdf"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "055db64677a6b9c1491a1291"
+    },
+    "name": "Bùi Trọng Lan",
+    "email": "nguoithue228@ript.example",
+    "password": "$2b$08$Dgk0ckam6vPCAlg48gWND.Vts8.jWNV2HyhjR7..Sy3IXajPemgLK",
+    "role": "user",
+    "phone": "0900000244",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "874c10b08484dd4b231c972c"
+      },
+      {
+        "$oid": "f5cd8b44ee4383384437cbc9"
+      },
+      {
+        "$oid": "4be777cfc73ce6bd725ced58"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bf6335fd5dd3c096411f27af"
+    },
+    "name": "Mai Thu Quỳnh",
+    "email": "nguoithue229@ript.example",
+    "password": "$2b$08$U6.iCatB1Xt2CgzlreEgQOKMcbZuFaSCFH.E8wHjpV0AW/c22cA96",
+    "role": "user",
+    "phone": "0900000245",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "82250dafe87919715df08d83"
+    },
+    "name": "Phạm Thanh Anh",
+    "email": "nguoithue230@ript.example",
+    "password": "$2b$08$SkEgqHphM4/rAX/wj3QR8e.ippY1.tXrCw4wMem.iVvThLWxSqdS2",
+    "role": "user",
+    "phone": "0900000246",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "dc4959cf18e668891db1cc24"
+      },
+      {
+        "$oid": "f2a4d5b8c4c7fcab38d51166"
+      },
+      {
+        "$oid": "29cdc7da55f80b4881644770"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "de8a31c697de7b1ba7a2df35"
+    },
+    "name": "Đỗ Tú Lâm",
+    "email": "nguoithue231@ript.example",
+    "password": "$2b$08$12cx565wdM/CGAdcaY87EOiq/UC1aZTS/wRQ16585e3nfxU2yOVyW",
+    "role": "user",
+    "phone": "0900000247",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "2dfb1a9ffd8c9c5e250cc920"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c6bdb76bcb15a317d1bb7e2a"
+    },
+    "name": "Lý Đức Quân",
+    "email": "nguoithue232@ript.example",
+    "password": "$2b$08$PpyWrCYZvDDDUB3W/BdUjOTCKSxZRLr/A7X6sF9d8Mnbs8ewWYFCe",
+    "role": "user",
+    "phone": "0900000248",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "183927cc0682b6a9ab306255"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "85162879ce5d8a5c8d3c70cb"
+    },
+    "name": "Hoàng Quốc An",
+    "email": "nguoithue233@ript.example",
+    "password": "$2b$08$xGRcLE6A91xPNrO5aacpBe4R3/zHhfwDbsHKoClkrq9AawpkHqrby",
+    "role": "user",
+    "phone": "0900000249",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1f5fa5f26d81ca444ad4eac2"
+    },
+    "name": "Hồ Văn Khánh",
+    "email": "nguoithue234@ript.example",
+    "password": "$2b$08$x.U.Ohkq622breJxeMt7Mur/0pJS/Pg7dB8KlpJ/.2sen44iRmBum",
+    "role": "user",
+    "phone": "0900000250",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "df5b21f9dfed1f1f6a724bc8"
+      },
+      {
+        "$oid": "253749cca134fb737174f66c"
+      },
+      {
+        "$oid": "cf2e8407504e066002a46fea"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0606af60c26fe9d5dd9efe99"
+    },
+    "name": "Cao Gia Phương",
+    "email": "nguoithue235@ript.example",
+    "password": "$2b$08$gBnfcRoo8rbnxxjOPC7w1uNuzvAB5HhFwqzOcoTD/bTNkCNnTEWpG",
+    "role": "user",
+    "phone": "0900000251",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e75d6a53476cce8e1c108f7c"
+      },
+      {
+        "$oid": "3ffbdd491b1066c8b70a9427"
+      },
+      {
+        "$oid": "f496d5ff094cbb78ef06905d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b9cf1c621f3cc6cc7e734219"
+    },
+    "name": "Phan Anh Vy",
+    "email": "nguoithue236@ript.example",
+    "password": "$2b$08$3ET/Gd1KcF8rbJN5CqnoFeLgO0kJq0LErLz8Uz7EjSdDLQmvmEH1u",
+    "role": "user",
+    "phone": "0900000252",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "ebce980d7e716cbe94a55125"
+      },
+      {
+        "$oid": "058a2f703f4a18ec5971fc54"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8c6ef2b7ebd4de3b772d023c"
+    },
+    "name": "Ngô Thị Khang",
+    "email": "nguoithue237@ript.example",
+    "password": "$2b$08$jTjWMGsBYClEb3UAMvXJ1OW4P.Lq9WEtX2qaor63PQyMu060.rgrW",
+    "role": "user",
+    "phone": "0900000253",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5e54ebc8dcb8af3553b54cbf"
+    },
+    "name": "Hà Hoài Phúc",
+    "email": "nguoithue238@ript.example",
+    "password": "$2b$08$RQRSUOD9tAjWMHal8vX77.GWh0Ba0Izl1YMfSCBKnn3lhFZrOKoOK",
+    "role": "user",
+    "phone": "0900000254",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b0ab95a85964d1e0509f5475"
+      },
+      {
+        "$oid": "b4d7307ca91f6bb3930f1506"
+      },
+      {
+        "$oid": "bab5ee79cafa42cbef1be138"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0b0a79f0b67677d8de990280"
+    },
+    "name": "Vũ Khánh Tuấn",
+    "email": "nguoithue239@ript.example",
+    "password": "$2b$08$TS75Ztl.VfVx4vCaTMM5tOnfKpreSArTfnDaKLuAFFkZn029bbMRi",
+    "role": "user",
+    "phone": "0900000255",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "80db7084891776536f470c04"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "eb7d80de23fe8f9c3ec7f6ff"
+    },
+    "name": "Dương Minh Hương",
+    "email": "nguoithue240@ript.example",
+    "password": "$2b$08$3g4AT4owvetiQZ4jvbNky.CZy64g0WHBY5gwRss5GTrDIFp1uDeM.",
+    "role": "user",
+    "phone": "0900000256",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "eb6ceeb13124a57fadc799e9"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "26d8637ac30af7a0e0e41831"
+    },
+    "name": "Nguyễn Phương Phong",
+    "email": "nguoithue241@ript.example",
+    "password": "$2b$08$K3CGOJ7gaJDy40PdNCimaORPa4jWMo5zL/pcuECTc1QtSpnzXgGnO",
+    "role": "user",
+    "phone": "0900000257",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5c85ff940e209e3f1f0996a2"
+    },
+    "name": "Võ Hữu Tú",
+    "email": "nguoithue242@ript.example",
+    "password": "$2b$08$wIHdJ9ZmBsWArHpNf/40E.Kt44Ql9pHgqTjjfLUX2IiTLmhPswX7W",
+    "role": "user",
+    "phone": "0900000258",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1ed9d28a6a88ca1d5ffbf1d1"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ae55894ab98832ddd1385252"
+    },
+    "name": "Đinh Ngọc Huy",
+    "email": "nguoithue243@ript.example",
+    "password": "$2b$08$.K2yXXGvbHwqAkO6ULhBhuqll0fe1ZL9n56FBEAuWsjP06ZHGgPlu",
+    "role": "user",
+    "phone": "0900000259",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b4d7307ca91f6bb3930f1506"
+      },
+      {
+        "$oid": "6a744b801301b03b528a0bfd"
+      },
+      {
+        "$oid": "6a5cf58899c1c1dac23263eb"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7b6d9ad4e066f51cf8a310f5"
+    },
+    "name": "Trần Trọng Nhung",
+    "email": "nguoithue244@ript.example",
+    "password": "$2b$08$ARSbdFYuWgYCa9u2cWl6zOIjHzZZgz7HxBt6Cl5hPM7bkH7intU0e",
+    "role": "user",
+    "phone": "0900000260",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "71a5f06bed96efb91aba2887"
+      },
+      {
+        "$oid": "c6d842e7dbca6fb249394f8c"
+      },
+      {
+        "$oid": "17dc0919c0cf2f9182f2f757"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e1e1b617e63ccc434c20665e"
+    },
+    "name": "Đặng Thu Trung",
+    "email": "nguoithue245@ript.example",
+    "password": "$2b$08$vICh4Q6fli0Cww1ZlJF3/O7X2iSHaPjnHV7B5nYOkPsG6vbEtZP.i",
+    "role": "user",
+    "phone": "0900000261",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f20fd949d05494d3e78d0095"
+    },
+    "name": "Trịnh Thanh Hoàng",
+    "email": "nguoithue246@ript.example",
+    "password": "$2b$08$KKiuKV/dZfOBlNleB9ee8OUebxEKWe2m6UazkQPrAFvWM3NutYz96",
+    "role": "user",
+    "phone": "0900000262",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "c4e2e649a39a6e798e4cd805"
+      },
+      {
+        "$oid": "558d2b62f3e03ab4d106d73a"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "60adfe6efcf2f6f71431e2bc"
+    },
+    "name": "Lê Tú Ngọc",
+    "email": "nguoithue247@ript.example",
+    "password": "$2b$08$jmIol6obXuAWaXTg9Hlx7.zVJILKyd4BFhzlLJplxm4fd2OyO3hbS",
+    "role": "user",
+    "phone": "0900000263",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1b6688b4d7172174a65011a7"
+      },
+      {
+        "$oid": "af46224c7c384942707fe701"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "160d2c6360132a4f8e1f97a9"
+    },
+    "name": "Bùi Đức Trinh",
+    "email": "nguoithue248@ript.example",
+    "password": "$2b$08$jiFgA3rWtC9VTkOlcWVuTuFR/spRPMwhz2iM/.E3feWOCdZKWOKYG",
+    "role": "user",
+    "phone": "0900000264",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "753da681fa7f698aabe3857e"
+      },
+      {
+        "$oid": "874c10b08484dd4b231c972c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ef2042c2b6f22c984bb5314"
+    },
+    "name": "Mai Quốc Hiếu",
+    "email": "nguoithue249@ript.example",
+    "password": "$2b$08$AgZBI4uJzAPos/bjVRmU8OFjMd6h56hwKRu1zcsYx5v39YM4fkXMi",
+    "role": "user",
+    "phone": "0900000265",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "420a9b8fea67ff83afe8b887"
+    },
+    "name": "Phạm Văn Ngân",
+    "email": "nguoithue250@ript.example",
+    "password": "$2b$08$mUvo6eKLIuJtpKGUCJxjJeJBBrsbYcQXt4Mw7M/3oXPXmWkNbQbfW",
+    "role": "user",
+    "phone": "0900000266",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5956b9817cd1c8023c427ab6"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a71c606c7c6fb63e24f5f19b"
+    },
+    "name": "Đỗ Gia Trang",
+    "email": "nguoithue251@ript.example",
+    "password": "$2b$08$/CddGTuXNsG7tm2paUfPouIj0OKweTfJxzC9FFv3SQaEltWMfNhhq",
+    "role": "user",
+    "phone": "0900000267",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "902bc4347243dd7d0e732b84"
+      },
+      {
+        "$oid": "f744c47175bd021c9851dd6d"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "da0a60ffaccc3b4cd00ab405"
+    },
+    "name": "Lý Anh Hải",
+    "email": "nguoithue252@ript.example",
+    "password": "$2b$08$fOYHO/inKs5iRL38VtLAzeG1QpfY22Gj5CCijI.cxuBwx.jAMtdiy",
+    "role": "user",
+    "phone": "0900000268",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "4d684924bbac6ab9360ae64d"
+      },
+      {
+        "$oid": "c8a24fed9405193114364523"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9b18fdc6e18324e8e8a77bc3"
+    },
+    "name": "Hoàng Thị Nam",
+    "email": "nguoithue253@ript.example",
+    "password": "$2b$08$PduHn0K7JxclmqJb3lclCutx/qnkzAg2uPOooSZ3.8H6UVUSuMhtO",
+    "role": "user",
+    "phone": "0900000269",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "aeaba3d0fd5e65498eb50f4b"
+    },
+    "name": "Hồ Hoài Thu",
+    "email": "nguoithue254@ript.example",
+    "password": "$2b$08$YNE6kysxh51T16Qdqisb/eVM564SuyrPJ3vi.V.kc6q68DFxEPxWm",
+    "role": "user",
+    "phone": "0900000270",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "bc16195839385c42bbb55aae"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c5e06abba0d9b5677d64c915"
+    },
+    "name": "Cao Khánh Hà",
+    "email": "nguoithue255@ript.example",
+    "password": "$2b$08$alozXzUqceNE8dFZOiyeAOVcVtDmhU3t9oQzdvIZ2FJ5JjSPHdtem",
+    "role": "user",
+    "phone": "0900000271",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "874c10b08484dd4b231c972c"
+      },
+      {
+        "$oid": "cbb69cde37734e69435012fe"
+      },
+      {
+        "$oid": "b81bd613dec5025c2bac672f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "24cbd8cbc735e1df250605fb"
+    },
+    "name": "Phan Minh Minh",
+    "email": "nguoithue256@ript.example",
+    "password": "$2b$08$EZtiE5CRPI1dMWep1CHQyuS5bulCo35rMR7K3i2r7VAYHGoLEnvmG",
+    "role": "user",
+    "phone": "0900000272",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "45f68d9e5d70a963cbc9a9ef"
+      },
+      {
+        "$oid": "29cdc7da55f80b4881644770"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b3e17733667f536e0aafb049"
+    },
+    "name": "Ngô Phương Thiện",
+    "email": "nguoithue257@ript.example",
+    "password": "$2b$08$/OZRa1i3WHhz1z9vBdjwG.erqSA6puz5dOvMHBUCtdnzjB6NIG7.i",
+    "role": "user",
+    "phone": "0900000273",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "80143835178d5d389f2f0818"
+    },
+    "name": "Hà Hữu Giang",
+    "email": "nguoithue258@ript.example",
+    "password": "$2b$08$iFqZcSE2szNrsnHDxLWWOOr9JSHz1FzGnKSm1GucFGh6FfvbHUgdC",
+    "role": "user",
+    "phone": "0900000274",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "0ab1c2b4561d4b4becdcd8a6"
+      },
+      {
+        "$oid": "f1d9e44d46c4e2719285924a"
+      },
+      {
+        "$oid": "1f13128031b9e0dc9425addd"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "84c6cf531eb4878c4f17729f"
+    },
+    "name": "Vũ Ngọc Mai",
+    "email": "nguoithue259@ript.example",
+    "password": "$2b$08$E.9KYYPoaqoMl5zY59CQh.fFJeVLWq/kszrm2hvjj0IYj42t.4Zfq",
+    "role": "user",
+    "phone": "0900000275",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "d1dc304e63ca2e0c6791624c"
+      },
+      {
+        "$oid": "0505981f70857bb1e15e202b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8f062511403d049efa4c8a7a"
+    },
+    "name": "Dương Trọng Thành",
+    "email": "nguoithue260@ript.example",
+    "password": "$2b$08$fWu2UXCLSvREvR.goZOLpOZW1sclOmWTkxPtdZyRYvcUSP8vUhAwS",
+    "role": "user",
+    "phone": "0900000276",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "b81bd613dec5025c2bac672f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d95458c5a24080b07d1b60da"
+    },
+    "name": "Nguyễn Thu Dũng",
+    "email": "nguoithue261@ript.example",
+    "password": "$2b$08$.WhZ5VjEotJ39ML.6GT1LeM/FS3LwffvQLKx1wwVo57bBbK4SpMze",
+    "role": "user",
+    "phone": "0900000277",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5d123199bc248d05d4b8e95f"
+    },
+    "name": "Võ Thanh Long",
+    "email": "nguoithue262@ript.example",
+    "password": "$2b$08$zvFx3FBRe61UY1nJ3kCcy.LHI5tcv53ZaXkVgddyxtaSTr8w8duB2",
+    "role": "user",
+    "phone": "0900000278",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "29c5c12575c4b0a66d4dca5d"
+      },
+      {
+        "$oid": "6b613f10d2555470458c1485"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "01f3550f3ab4b34286113f5a"
+    },
+    "name": "Đinh Tú Thảo",
+    "email": "nguoithue263@ript.example",
+    "password": "$2b$08$B0WLMwcdtldSq/VksZZV1Orh8MxQkOxV6NiRnxpjaHT8EyHc1nUQe",
+    "role": "user",
+    "phone": "0900000279",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "ddbeabb235f2c1fd8702195f"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bb80f836fc63c90e93aa98ac"
+    },
+    "name": "Trần Đức Chi",
+    "email": "nguoithue264@ript.example",
+    "password": "$2b$08$h3/cqDabC0FMYMv.fViyEOL.hoqOyX9qxfAGDAOHerMd3tWTwQyO6",
+    "role": "user",
+    "phone": "0900000280",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1ed9d28a6a88ca1d5ffbf1d1"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "85433ca9694b9afaba8964fe"
+    },
+    "name": "Đặng Quốc Linh",
+    "email": "nguoithue265@ript.example",
+    "password": "$2b$08$EYe4McMfjUWzGY8dKsnwDOb7HnSJSfjaCHa/sE2EMoa8pv9TswoIS",
+    "role": "user",
+    "phone": "0900000281",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a72d20b172a701ffaef652e1"
+    },
+    "name": "Trịnh Văn Sơn",
+    "email": "nguoithue266@ript.example",
+    "password": "$2b$08$vcJRnhinnO5unTGrt6O.n.U608A2iVeF2sGJBHKk5Pcy6s3oWwhIG",
+    "role": "user",
+    "phone": "0900000282",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "88d3aa59923273c65016515f"
+      },
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4a41bb4d279408e7a0f218be"
+    },
+    "name": "Lê Gia Bình",
+    "email": "nguoithue267@ript.example",
+    "password": "$2b$08$j3wFfHx8q9ok43XjmJmmueg.OWN3OUm51JsVxG9cDyv3gR3XeYGmy",
+    "role": "user",
+    "phone": "0900000283",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "2c02e81808cb37d823f55a81"
+      },
+      {
+        "$oid": "3cc46bc39d96d839968aecca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0f1d16e9e704239c167df340"
+    },
+    "name": "Bùi Anh Lan",
+    "email": "nguoithue268@ript.example",
+    "password": "$2b$08$lK8C0QRuKEr7Az6rrpGYQ.XOsxvf6vUcGLFtOiMTqXSCo.OB9xPkC",
+    "role": "user",
+    "phone": "0900000284",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "a01733f4a101f6fd4587a038"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fa815c5355e8875e7f1fecbb"
+    },
+    "name": "Mai Thị Quỳnh",
+    "email": "nguoithue269@ript.example",
+    "password": "$2b$08$CpZhpvv2UDIaGnNYDvAPpu3s8TZm.S3cpiY1uIuOPi..TZLd1phsi",
+    "role": "user",
+    "phone": "0900000285",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-10-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "52370c59df74dbf31c3bf922"
+    },
+    "name": "Phạm Hoài Anh",
+    "email": "nguoithue270@ript.example",
+    "password": "$2b$08$zPWnim5L0lDEqm6.HAS0b.C8vRyDxG74bxcT1/.X1GFVWRxQRizY2",
+    "role": "user",
+    "phone": "0900000286",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "30778c836e873906739054c1"
+      },
+      {
+        "$oid": "0ab1c2b4561d4b4becdcd8a6"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6ea30fa5e591881e7aab5de4"
+    },
+    "name": "Đỗ Khánh Lâm",
+    "email": "nguoithue271@ript.example",
+    "password": "$2b$08$0Pnf8gcShB1zXrb1eO81Q.ytOeHcH4KWBIYh626sa/yvb9T.0ZDDi",
+    "role": "user",
+    "phone": "0900000287",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "db2035b76fdbab2f70a28c45"
+      },
+      {
+        "$oid": "4e7d0674b8342e4052d18367"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bb5d88e065e456e9f9a11bdf"
+    },
+    "name": "Lý Minh Quân",
+    "email": "nguoithue272@ript.example",
+    "password": "$2b$08$nHcHlMTcXcdbEB1NOBUl..h4yCxwtK.iXMtFXB2gpk/0b5iPDoVey",
+    "role": "user",
+    "phone": "0900000288",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "253749cca134fb737174f66c"
+      },
+      {
+        "$oid": "476bb80b3c10040228e294f7"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6821b12b7c3983e464342992"
+    },
+    "name": "Hoàng Phương An",
+    "email": "nguoithue273@ript.example",
+    "password": "$2b$08$89uaOZqo0lueT/JyDEbm7ukfM377CILx/.8WeNes9wXjiK/Yi6N/i",
+    "role": "user",
+    "phone": "0900000289",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-08-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5132c0aa5ac5ee9d2c27de0d"
+    },
+    "name": "Hồ Hữu Khánh",
+    "email": "nguoithue274@ript.example",
+    "password": "$2b$08$xU8X8WTNztnM8D.sQBjoo.Jhj9Lbh0OAwFKmKffOcj6hyOTYVl4cS",
+    "role": "user",
+    "phone": "0900000290",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "6298ca963c63e3b488e03e9c"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ee29f85acd28326da9a54949"
+    },
+    "name": "Cao Ngọc Phương",
+    "email": "nguoithue275@ript.example",
+    "password": "$2b$08$z9nBi4zhRR8hplT5pPry7.rRfGV9eFa.Oy1eM37XxlnA13nn7/o0G",
+    "role": "user",
+    "phone": "0900000291",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "558d2b62f3e03ab4d106d73a"
+      },
+      {
+        "$oid": "083f421ef926a17628824b82"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "143b954f6afbf54ac7708e96"
+    },
+    "name": "Phan Trọng Vy",
+    "email": "nguoithue276@ript.example",
+    "password": "$2b$08$xetsFHmc7VjXEmPPY2G0VOHnNk5UghmPvyUSjL6lJ0./N5FYxDPz2",
+    "role": "user",
+    "phone": "0900000292",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1265fee0ed945b1551c58379"
+      },
+      {
+        "$oid": "1a20ecb1bbe4b9cde74835e4"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8547cee5eb320eb609119e1f"
+    },
+    "name": "Ngô Thu Khang",
+    "email": "nguoithue277@ript.example",
+    "password": "$2b$08$LnwSb3ZchJApN/TUiHM9QOI2LTz6INu9FneeGqRLEO1NdUW1uOdpS",
+    "role": "user",
+    "phone": "0900000293",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d34860bf58882d4eb454aeb3"
+    },
+    "name": "Hà Thanh Phúc",
+    "email": "nguoithue278@ript.example",
+    "password": "$2b$08$eEBMcUQMebquoN4F2yx/4eQ.cBQF6Zfv3sfTPGw6kZCeY86/1BMXi",
+    "role": "user",
+    "phone": "0900000294",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "e18cd00d4e5e08c865029103"
+      },
+      {
+        "$oid": "f74f76e0a41bc4c34f874005"
+      },
+      {
+        "$oid": "3cc46bc39d96d839968aecca"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e3f717402caaa0bfbac4bc57"
+    },
+    "name": "Vũ Tú Tuấn",
+    "email": "nguoithue279@ript.example",
+    "password": "$2b$08$bOajJO6LAznJY73oIHdS.u36GlDnPbvEBTbo9oPh1gttt4JjRY7vm",
+    "role": "user",
+    "phone": "0900000295",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "5fb790b284abc649cb881dac"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "145a2629aca59e44e6ffc4e9"
+    },
+    "name": "Dương Đức Hương",
+    "email": "nguoithue280@ript.example",
+    "password": "$2b$08$G4ypE7xKrho3hnkiBGP9OOqvnwn59820lOB2jHJXOoh7UL8Q1Yb02",
+    "role": "user",
+    "phone": "0900000296",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "1b4db9cd6c779da10b41c258"
+      },
+      {
+        "$oid": "b020835fc48609899c08f849"
+      },
+      {
+        "$oid": "f8cc1d7e349a9419aa7ed07b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a122d4f36a3cbc7a9079bba0"
+    },
+    "name": "Nguyễn Quốc Phong",
+    "email": "nguoithue281@ript.example",
+    "password": "$2b$08$zQIfh2ksP8k0AQum.pIz.e02c7qcscG8G70Z3KKkznwCDaqn37vim",
+    "role": "user",
+    "phone": "0900000297",
+    "status": "active",
+    "bookmarkedRooms": [],
+    "createdAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "58f1a7e8b54eea2835dc5194"
+    },
+    "name": "Võ Văn Tú",
+    "email": "nguoithue282@ript.example",
+    "password": "$2b$08$nb7duAOk5yUGkvXPWNWcf.ogERNu3xLwzDs3Ds4cCVq6wQVURFTD.",
+    "role": "user",
+    "phone": "0900000298",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "2e962036ba14d1fd1dea01ce"
+      },
+      {
+        "$oid": "8052d5837a734812844a4ac1"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-07-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-08-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ae0ed4be03042016cd194af7"
+    },
+    "name": "Đinh Gia Huy",
+    "email": "nguoithue283@ript.example",
+    "password": "$2b$08$4lbULac7ZNbHQnBC.3SR..c4wu39v42XqXLk6w0wuns2bZutAlFnS",
+    "role": "user",
+    "phone": "0900000299",
+    "status": "active",
+    "bookmarkedRooms": [
+      {
+        "$oid": "41edd2223271317e0446251b"
+      }
+    ],
+    "createdAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-01T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]
