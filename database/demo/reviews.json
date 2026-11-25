@@ -1,0 +1,2207 @@
+[
+  {
+    "_id": {
+      "$oid": "409801d0874aaec42f8b450e"
+    },
+    "roomId": {
+      "$oid": "f2a4d5b8c4c7fcab38d51166"
+    },
+    "userId": {
+      "$oid": "533ab1e4bfc39e0067d72b6e"
+    },
+    "userName": "Ngô Quốc Thiện",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "af183353b9c800662505a4f8"
+    },
+    "roomId": {
+      "$oid": "837f711c26bc16969cae8fd7"
+    },
+    "userId": {
+      "$oid": "d9de6884e3212b1a26960119"
+    },
+    "userName": "Hà Văn Giang",
+    "stars": 5,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ace9ef91419a14fc9c76f641"
+    },
+    "roomId": {
+      "$oid": "abbc4bd780c92f726984296b"
+    },
+    "userId": {
+      "$oid": "c619f0ba28b92761188aceac"
+    },
+    "userName": "Vũ Gia Mai",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5469f00a63990a3ab8ec2021"
+    },
+    "roomId": {
+      "$oid": "4a008b923f48d791cf9bbbfc"
+    },
+    "userId": {
+      "$oid": "940c371587bca2eabc9e3352"
+    },
+    "userName": "Dương Anh Thành",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ec9f2dc8469e9e1ba8be6bc0"
+    },
+    "roomId": {
+      "$oid": "9ecc236c4495c9f897829406"
+    },
+    "userId": {
+      "$oid": "aedb80826aed4144ae319caf"
+    },
+    "userName": "Nguyễn Thị Dũng",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d0418b235ddac161debd364d"
+    },
+    "roomId": {
+      "$oid": "88d3aa59923273c65016515f"
+    },
+    "userId": {
+      "$oid": "2ca01212759304f44ff83d03"
+    },
+    "userName": "Võ Hoài Long",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5cfbe8c9f54cd835c93c654c"
+    },
+    "roomId": {
+      "$oid": "a13c8be95f6922376765b342"
+    },
+    "userId": {
+      "$oid": "e49a9960de2aad25916f40a2"
+    },
+    "userName": "Đinh Khánh Thảo",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7e47272e2043f3a496ce0e55"
+    },
+    "roomId": {
+      "$oid": "b53caed4c0788ddc8c40b876"
+    },
+    "userId": {
+      "$oid": "c6114deb08c4c8435e65ff59"
+    },
+    "userName": "Trần Minh Chi",
+    "stars": 5,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5c684b2cecd06ba5a87d639e"
+    },
+    "roomId": {
+      "$oid": "70c005b520bbd09c2d9fc661"
+    },
+    "userId": {
+      "$oid": "5a095d2bdbf921658ecec32e"
+    },
+    "userName": "Đặng Phương Linh",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "24ac45300106646dd49aedef"
+    },
+    "roomId": {
+      "$oid": "f8e79972695163618af6d6ca"
+    },
+    "userId": {
+      "$oid": "e9b439c59f6ffc534230ef7c"
+    },
+    "userName": "Trịnh Hữu Sơn",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bcd2eb43887af2c347a6e493"
+    },
+    "roomId": {
+      "$oid": "dc4959cf18e668891db1cc24"
+    },
+    "userId": {
+      "$oid": "542eae1d0f36fc6d04a52e9a"
+    },
+    "userName": "Lê Ngọc Bình",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1bfb73f4582ccb32c6015b0c"
+    },
+    "roomId": {
+      "$oid": "1213e570cadae33980ee7be1"
+    },
+    "userId": {
+      "$oid": "055db64677a6b9c1491a1291"
+    },
+    "userName": "Bùi Trọng Lan",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d495d3014c8419416fadb2d5"
+    },
+    "roomId": {
+      "$oid": "727ef9c3f37d98835267065b"
+    },
+    "userId": {
+      "$oid": "bf6335fd5dd3c096411f27af"
+    },
+    "userName": "Mai Thu Quỳnh",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7d1f7dc5658d106d58b31ef7"
+    },
+    "roomId": {
+      "$oid": "27e4502ab1dbd4106476b8ae"
+    },
+    "userId": {
+      "$oid": "82250dafe87919715df08d83"
+    },
+    "userName": "Phạm Thanh Anh",
+    "stars": 5,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "959c0edcc62837ce5e7fb69e"
+    },
+    "roomId": {
+      "$oid": "8c44aaec7356f546771c221e"
+    },
+    "userId": {
+      "$oid": "de8a31c697de7b1ba7a2df35"
+    },
+    "userName": "Đỗ Tú Lâm",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "40a2aa1d013fa47889215fb1"
+    },
+    "roomId": {
+      "$oid": "083f421ef926a17628824b82"
+    },
+    "userId": {
+      "$oid": "c6bdb76bcb15a317d1bb7e2a"
+    },
+    "userName": "Lý Đức Quân",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d0af6b10c7eb1db46a049b7a"
+    },
+    "roomId": {
+      "$oid": "c67af6e09130ef1921a975c4"
+    },
+    "userId": {
+      "$oid": "85162879ce5d8a5c8d3c70cb"
+    },
+    "userName": "Hoàng Quốc An",
+    "stars": 2,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ebf1bd5951a85c390eaba7c1"
+    },
+    "roomId": {
+      "$oid": "cbb69cde37734e69435012fe"
+    },
+    "userId": {
+      "$oid": "1f5fa5f26d81ca444ad4eac2"
+    },
+    "userName": "Hồ Văn Khánh",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4cda6910fd8ffd1fbd0bf78b"
+    },
+    "roomId": {
+      "$oid": "a9012f3419b8fc4f24fa4081"
+    },
+    "userId": {
+      "$oid": "0606af60c26fe9d5dd9efe99"
+    },
+    "userName": "Cao Gia Phương",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "370d252f7d4e5991383d81fe"
+    },
+    "roomId": {
+      "$oid": "77adc361fcc8a58042cafbb4"
+    },
+    "userId": {
+      "$oid": "b9cf1c621f3cc6cc7e734219"
+    },
+    "userName": "Phan Anh Vy",
+    "stars": 5,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "de80d576b3cb0df3e32e0802"
+    },
+    "roomId": {
+      "$oid": "7055627003b4de41ca426ecf"
+    },
+    "userId": {
+      "$oid": "8c6ef2b7ebd4de3b772d023c"
+    },
+    "userName": "Ngô Thị Khang",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "248a523b534b2752a2036f08"
+    },
+    "roomId": {
+      "$oid": "6298ca963c63e3b488e03e9c"
+    },
+    "userId": {
+      "$oid": "5e54ebc8dcb8af3553b54cbf"
+    },
+    "userName": "Hà Hoài Phúc",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5baf40c49656d09a4ef26679"
+    },
+    "roomId": {
+      "$oid": "71cc9b2b9bb7f215ff51c67f"
+    },
+    "userId": {
+      "$oid": "0b0a79f0b67677d8de990280"
+    },
+    "userName": "Vũ Khánh Tuấn",
+    "stars": 3,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cde3fe003fa3ec3d942a578e"
+    },
+    "roomId": {
+      "$oid": "edd0bbcc39f62c5991168aeb"
+    },
+    "userId": {
+      "$oid": "eb7d80de23fe8f9c3ec7f6ff"
+    },
+    "userName": "Dương Minh Hương",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "00d1428be10b2d1a65ad831c"
+    },
+    "roomId": {
+      "$oid": "492119ee528b86d2cb70e935"
+    },
+    "userId": {
+      "$oid": "26d8637ac30af7a0e0e41831"
+    },
+    "userName": "Nguyễn Phương Phong",
+    "stars": 3,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "68ebf5ae45dc013007cbb26c"
+    },
+    "roomId": {
+      "$oid": "e72a08591691e71d267972a5"
+    },
+    "userId": {
+      "$oid": "5c85ff940e209e3f1f0996a2"
+    },
+    "userName": "Võ Hữu Tú",
+    "stars": 3,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1c82f10109ba7ca1dfd13078"
+    },
+    "roomId": {
+      "$oid": "d92753d6c6a492a2eea1f69b"
+    },
+    "userId": {
+      "$oid": "ae55894ab98832ddd1385252"
+    },
+    "userName": "Đinh Ngọc Huy",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6deb0df902c117e9ccd70472"
+    },
+    "roomId": {
+      "$oid": "ace670b96c5501627f74791a"
+    },
+    "userId": {
+      "$oid": "7b6d9ad4e066f51cf8a310f5"
+    },
+    "userName": "Trần Trọng Nhung",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c7b038d44b915958d68b9342"
+    },
+    "roomId": {
+      "$oid": "85a767152e054b7644f55fac"
+    },
+    "userId": {
+      "$oid": "e1e1b617e63ccc434c20665e"
+    },
+    "userName": "Đặng Thu Trung",
+    "stars": 5,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0384e47970e06df377f07106"
+    },
+    "roomId": {
+      "$oid": "64902a69ceecc1e811d9c6c5"
+    },
+    "userId": {
+      "$oid": "f20fd949d05494d3e78d0095"
+    },
+    "userName": "Trịnh Thanh Hoàng",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7a65efd66772b1dce3919c47"
+    },
+    "roomId": {
+      "$oid": "1250db543e97724a049c7dbb"
+    },
+    "userId": {
+      "$oid": "60adfe6efcf2f6f71431e2bc"
+    },
+    "userName": "Lê Tú Ngọc",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0a8253d67d782e1c5ea43f32"
+    },
+    "roomId": {
+      "$oid": "5e03aca9a1448ee61b5ecd06"
+    },
+    "userId": {
+      "$oid": "160d2c6360132a4f8e1f97a9"
+    },
+    "userName": "Bùi Đức Trinh",
+    "stars": 5,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "da00d9c009cfd94b10eadff2"
+    },
+    "roomId": {
+      "$oid": "f5b1015f53917da305ae1e36"
+    },
+    "userId": {
+      "$oid": "9ef2042c2b6f22c984bb5314"
+    },
+    "userName": "Mai Quốc Hiếu",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b45fe490dc162210851dd0ab"
+    },
+    "roomId": {
+      "$oid": "a0df33e51af5e368cb1966d6"
+    },
+    "userId": {
+      "$oid": "420a9b8fea67ff83afe8b887"
+    },
+    "userName": "Phạm Văn Ngân",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "960080927458e7ac65902088"
+    },
+    "roomId": {
+      "$oid": "35caa8e1be928222aaa29ffd"
+    },
+    "userId": {
+      "$oid": "a71c606c7c6fb63e24f5f19b"
+    },
+    "userName": "Đỗ Gia Trang",
+    "stars": 5,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3105481f2f34eb73c53b23c5"
+    },
+    "roomId": {
+      "$oid": "e18cd00d4e5e08c865029103"
+    },
+    "userId": {
+      "$oid": "da0a60ffaccc3b4cd00ab405"
+    },
+    "userName": "Lý Anh Hải",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "dd8b2a7eda45547b099106fc"
+    },
+    "roomId": {
+      "$oid": "70ee936bea11fbe28a160cca"
+    },
+    "userId": {
+      "$oid": "9b18fdc6e18324e8e8a77bc3"
+    },
+    "userName": "Hoàng Thị Nam",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ba2860ba439e9ee43c48e951"
+    },
+    "roomId": {
+      "$oid": "e7c39252907d58ab48dd7da2"
+    },
+    "userId": {
+      "$oid": "aeaba3d0fd5e65498eb50f4b"
+    },
+    "userName": "Hồ Hoài Thu",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2390df5bd41c1c19805b578b"
+    },
+    "roomId": {
+      "$oid": "888b00b3c975faf133a8df8b"
+    },
+    "userId": {
+      "$oid": "c5e06abba0d9b5677d64c915"
+    },
+    "userName": "Cao Khánh Hà",
+    "stars": 3,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8f15c0af0779e08b807e612f"
+    },
+    "roomId": {
+      "$oid": "5a1a15f796e306c70d21e75f"
+    },
+    "userId": {
+      "$oid": "24cbd8cbc735e1df250605fb"
+    },
+    "userName": "Phan Minh Minh",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "82e3e0a7d8d38ce9d810f24c"
+    },
+    "roomId": {
+      "$oid": "ef12cdba976d9f5086c93ac0"
+    },
+    "userId": {
+      "$oid": "b3e17733667f536e0aafb049"
+    },
+    "userName": "Ngô Phương Thiện",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "875d86f7450a59b8fc9d80a0"
+    },
+    "roomId": {
+      "$oid": "058c48e8bf116447238e3256"
+    },
+    "userId": {
+      "$oid": "80143835178d5d389f2f0818"
+    },
+    "userName": "Hà Hữu Giang",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5787e7cb97859285606ef6c5"
+    },
+    "roomId": {
+      "$oid": "bf330ae4c03c5f789b0240c7"
+    },
+    "userId": {
+      "$oid": "84c6cf531eb4878c4f17729f"
+    },
+    "userName": "Vũ Ngọc Mai",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "906517ec26d3a10e2b2a135a"
+    },
+    "roomId": {
+      "$oid": "5ce296645a3243890fcdde40"
+    },
+    "userId": {
+      "$oid": "8f062511403d049efa4c8a7a"
+    },
+    "userName": "Dương Trọng Thành",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "58c225961bfff6ff5d8a9294"
+    },
+    "roomId": {
+      "$oid": "8602f3c91af3c0c7adc873f4"
+    },
+    "userId": {
+      "$oid": "d95458c5a24080b07d1b60da"
+    },
+    "userName": "Nguyễn Thu Dũng",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "13fdc272a3a79e0e6acdf376"
+    },
+    "roomId": {
+      "$oid": "370415ddf75699f131fa95f4"
+    },
+    "userId": {
+      "$oid": "5d123199bc248d05d4b8e95f"
+    },
+    "userName": "Võ Thanh Long",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "583a532deef4bf17a61af36e"
+    },
+    "roomId": {
+      "$oid": "2a22c7349a2b4039abd43282"
+    },
+    "userId": {
+      "$oid": "01f3550f3ab4b34286113f5a"
+    },
+    "userName": "Đinh Tú Thảo",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "96d35a433738967ac3f5e3ad"
+    },
+    "roomId": {
+      "$oid": "e51993c13f5c6760b08cc9c1"
+    },
+    "userId": {
+      "$oid": "bb80f836fc63c90e93aa98ac"
+    },
+    "userName": "Trần Đức Chi",
+    "stars": 3,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ded1c20f47316f4314c08f7d"
+    },
+    "roomId": {
+      "$oid": "eb6ceeb13124a57fadc799e9"
+    },
+    "userId": {
+      "$oid": "85433ca9694b9afaba8964fe"
+    },
+    "userName": "Đặng Quốc Linh",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bd47456a45c7401dd59cd62c"
+    },
+    "roomId": {
+      "$oid": "bc16195839385c42bbb55aae"
+    },
+    "userId": {
+      "$oid": "a72d20b172a701ffaef652e1"
+    },
+    "userName": "Trịnh Văn Sơn",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "50f34a3a4a1eefe74fa033df"
+    },
+    "roomId": {
+      "$oid": "a1df2588b09eaa798c040d49"
+    },
+    "userId": {
+      "$oid": "4a41bb4d279408e7a0f218be"
+    },
+    "userName": "Lê Gia Bình",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "658fc72d9b78593dfa461ec8"
+    },
+    "roomId": {
+      "$oid": "d6faadf77634d1c04285c27b"
+    },
+    "userId": {
+      "$oid": "0f1d16e9e704239c167df340"
+    },
+    "userName": "Bùi Anh Lan",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e4f4270a8e5928eca6918ea1"
+    },
+    "roomId": {
+      "$oid": "00477c9d5f2c2fa2949f2f03"
+    },
+    "userId": {
+      "$oid": "fa815c5355e8875e7f1fecbb"
+    },
+    "userName": "Mai Thị Quỳnh",
+    "stars": 3,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "341832a4471adac7e7f4be1c"
+    },
+    "roomId": {
+      "$oid": "d1dc304e63ca2e0c6791624c"
+    },
+    "userId": {
+      "$oid": "52370c59df74dbf31c3bf922"
+    },
+    "userName": "Phạm Hoài Anh",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c4ebe5a06db8bf3d9d890422"
+    },
+    "roomId": {
+      "$oid": "9db65b0107df5d821efe4e63"
+    },
+    "userId": {
+      "$oid": "6ea30fa5e591881e7aab5de4"
+    },
+    "userName": "Đỗ Khánh Lâm",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "97ee35047bd941c184211104"
+    },
+    "roomId": {
+      "$oid": "874c10b08484dd4b231c972c"
+    },
+    "userId": {
+      "$oid": "bb5d88e065e456e9f9a11bdf"
+    },
+    "userName": "Lý Minh Quân",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b8cd1842f7e7ac7eadd12024"
+    },
+    "roomId": {
+      "$oid": "b12e2f71329a8a85978a804d"
+    },
+    "userId": {
+      "$oid": "6821b12b7c3983e464342992"
+    },
+    "userName": "Hoàng Phương An",
+    "stars": 3,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ba4cddea8cfee2002c393b0a"
+    },
+    "roomId": {
+      "$oid": "4ca398b5a5ead94aea50ddc0"
+    },
+    "userId": {
+      "$oid": "5132c0aa5ac5ee9d2c27de0d"
+    },
+    "userName": "Hồ Hữu Khánh",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d746d5d45ce1084a94d67e65"
+    },
+    "roomId": {
+      "$oid": "29c5c12575c4b0a66d4dca5d"
+    },
+    "userId": {
+      "$oid": "ee29f85acd28326da9a54949"
+    },
+    "userName": "Cao Ngọc Phương",
+    "stars": 5,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1c36527b0d91af78ea8b8beb"
+    },
+    "roomId": {
+      "$oid": "a9b12ce699f1662da3763616"
+    },
+    "userId": {
+      "$oid": "143b954f6afbf54ac7708e96"
+    },
+    "userName": "Phan Trọng Vy",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b00a0b91d2c4b5657c74a8d7"
+    },
+    "roomId": {
+      "$oid": "4e7d0674b8342e4052d18367"
+    },
+    "userId": {
+      "$oid": "8547cee5eb320eb609119e1f"
+    },
+    "userName": "Ngô Thu Khang",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "efbdf2e6b64c7c2759f91541"
+    },
+    "roomId": {
+      "$oid": "d0af047b5283008afda5720b"
+    },
+    "userId": {
+      "$oid": "d34860bf58882d4eb454aeb3"
+    },
+    "userName": "Hà Thanh Phúc",
+    "stars": 3,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e3e9dff4d8878227cd1441c0"
+    },
+    "roomId": {
+      "$oid": "5d40e94d5463d462dba96350"
+    },
+    "userId": {
+      "$oid": "e3f717402caaa0bfbac4bc57"
+    },
+    "userName": "Vũ Tú Tuấn",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c3dbbb501d802b3cb38d38f8"
+    },
+    "roomId": {
+      "$oid": "3ff8ffb3ec85fd73413c3a58"
+    },
+    "userId": {
+      "$oid": "145a2629aca59e44e6ffc4e9"
+    },
+    "userName": "Dương Đức Hương",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b15747f0084b2c7c88c44357"
+    },
+    "roomId": {
+      "$oid": "c8a24fed9405193114364523"
+    },
+    "userId": {
+      "$oid": "a122d4f36a3cbc7a9079bba0"
+    },
+    "userName": "Nguyễn Quốc Phong",
+    "stars": 3,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5d86174928e9511a4f680f64"
+    },
+    "roomId": {
+      "$oid": "3ffbdd491b1066c8b70a9427"
+    },
+    "userId": {
+      "$oid": "58f1a7e8b54eea2835dc5194"
+    },
+    "userName": "Võ Văn Tú",
+    "stars": 3,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2cfd9ce06d8483e6fb56e8ec"
+    },
+    "roomId": {
+      "$oid": "f2a4d5b8c4c7fcab38d51166"
+    },
+    "userId": {
+      "$oid": "c0b25978b1175c0e76f0e8dd"
+    },
+    "userName": "Nguyễn Phương Phong",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5ea7c1fe3ba5d2368d0f6552"
+    },
+    "roomId": {
+      "$oid": "837f711c26bc16969cae8fd7"
+    },
+    "userId": {
+      "$oid": "88db70a7f010d6c2a4d8ffe0"
+    },
+    "userName": "Võ Hữu Tú",
+    "stars": 3,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b5916ad7d081c55b8cba2838"
+    },
+    "roomId": {
+      "$oid": "abbc4bd780c92f726984296b"
+    },
+    "userId": {
+      "$oid": "38c601680a2d58716d79e69f"
+    },
+    "userName": "Đinh Ngọc Huy",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8510e6ad766e66731d1df264"
+    },
+    "roomId": {
+      "$oid": "4a008b923f48d791cf9bbbfc"
+    },
+    "userId": {
+      "$oid": "c71eb881f4f5ae638a7e1434"
+    },
+    "userName": "Trần Trọng Nhung",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2d460f3c00fe964cda8fa5dc"
+    },
+    "roomId": {
+      "$oid": "9ecc236c4495c9f897829406"
+    },
+    "userId": {
+      "$oid": "33f16115012ccf284fe52549"
+    },
+    "userName": "Đặng Thu Trung",
+    "stars": 5,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a1c4a38c19b99363657d9e11"
+    },
+    "roomId": {
+      "$oid": "88d3aa59923273c65016515f"
+    },
+    "userId": {
+      "$oid": "befc49db20dd63f35c3e0b11"
+    },
+    "userName": "Trịnh Thanh Hoàng",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6a27398de092267aba955f73"
+    },
+    "roomId": {
+      "$oid": "a13c8be95f6922376765b342"
+    },
+    "userId": {
+      "$oid": "36ab0bfa140c14c272a215dd"
+    },
+    "userName": "Lê Tú Ngọc",
+    "stars": 3,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "42e55220e50aa6c298ca50d1"
+    },
+    "roomId": {
+      "$oid": "b53caed4c0788ddc8c40b876"
+    },
+    "userId": {
+      "$oid": "6fd805f0c11c2c38a5a7209c"
+    },
+    "userName": "Bùi Đức Trinh",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d58ad97488ea17609b759d13"
+    },
+    "roomId": {
+      "$oid": "70c005b520bbd09c2d9fc661"
+    },
+    "userId": {
+      "$oid": "2bbd24f6744e5d70fd6ecb63"
+    },
+    "userName": "Mai Quốc Hiếu",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d0588399e3af29a9fd7bb6fd"
+    },
+    "roomId": {
+      "$oid": "f8e79972695163618af6d6ca"
+    },
+    "userId": {
+      "$oid": "4fad43e08cc985a3e56570bb"
+    },
+    "userName": "Phạm Văn Ngân",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "14d82ae92adc72845cc77b2b"
+    },
+    "roomId": {
+      "$oid": "dc4959cf18e668891db1cc24"
+    },
+    "userId": {
+      "$oid": "592d0bc76b858517867e5f25"
+    },
+    "userName": "Đỗ Gia Trang",
+    "stars": 5,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "45b16d4b93da6623fa21626c"
+    },
+    "roomId": {
+      "$oid": "1213e570cadae33980ee7be1"
+    },
+    "userId": {
+      "$oid": "3c8045ffe8de992a3081eb0f"
+    },
+    "userName": "Lý Anh Hải",
+    "stars": 4,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d0a7d9244868f8b32535b666"
+    },
+    "roomId": {
+      "$oid": "727ef9c3f37d98835267065b"
+    },
+    "userId": {
+      "$oid": "49c6f85396d505703ecfc1fd"
+    },
+    "userName": "Hoàng Thị Nam",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f3c5e5aac2e85d7146e331af"
+    },
+    "roomId": {
+      "$oid": "27e4502ab1dbd4106476b8ae"
+    },
+    "userId": {
+      "$oid": "329b61307ff49c5ec77c47b8"
+    },
+    "userName": "Hồ Hoài Thu",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "598d68a80e547523d27fb0c3"
+    },
+    "roomId": {
+      "$oid": "8c44aaec7356f546771c221e"
+    },
+    "userId": {
+      "$oid": "d514cd4af88fee745635d038"
+    },
+    "userName": "Cao Khánh Hà",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7489a68cc65ba76ba5a73331"
+    },
+    "roomId": {
+      "$oid": "083f421ef926a17628824b82"
+    },
+    "userId": {
+      "$oid": "1c215bd9b0303582b11e29f9"
+    },
+    "userName": "Phan Minh Minh",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "020b1cbe8eb4dedf2b9a2127"
+    },
+    "roomId": {
+      "$oid": "c67af6e09130ef1921a975c4"
+    },
+    "userId": {
+      "$oid": "f1e3d9eaea5c5e4dd9e41962"
+    },
+    "userName": "Ngô Phương Thiện",
+    "stars": 5,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1d1e661ac3efb9f3f208699f"
+    },
+    "roomId": {
+      "$oid": "cbb69cde37734e69435012fe"
+    },
+    "userId": {
+      "$oid": "761fedf6d5f12c9568907013"
+    },
+    "userName": "Hà Hữu Giang",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ebcc2702f217e332f90d0f7f"
+    },
+    "roomId": {
+      "$oid": "a9012f3419b8fc4f24fa4081"
+    },
+    "userId": {
+      "$oid": "6f47d1e9a27ca064c9d410c2"
+    },
+    "userName": "Vũ Ngọc Mai",
+    "stars": 4,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "342e263652020b7fe49caf6a"
+    },
+    "roomId": {
+      "$oid": "77adc361fcc8a58042cafbb4"
+    },
+    "userId": {
+      "$oid": "9171d7af47db4240218d2b89"
+    },
+    "userName": "Dương Trọng Thành",
+    "stars": 3,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5694ac0c69665ee736e5c6ff"
+    },
+    "roomId": {
+      "$oid": "7055627003b4de41ca426ecf"
+    },
+    "userId": {
+      "$oid": "1227a1e97188cdfeff1f1f11"
+    },
+    "userName": "Nguyễn Thu Dũng",
+    "stars": 4,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fe65af060b665a39ed50f0ab"
+    },
+    "roomId": {
+      "$oid": "6298ca963c63e3b488e03e9c"
+    },
+    "userId": {
+      "$oid": "c821666af1f2f2f9310d343e"
+    },
+    "userName": "Võ Thanh Long",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a8a6df3dbdc7ea14259da982"
+    },
+    "roomId": {
+      "$oid": "71cc9b2b9bb7f215ff51c67f"
+    },
+    "userId": {
+      "$oid": "1ccd037cb5067e466466fae2"
+    },
+    "userName": "Đinh Tú Thảo",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "03fcb1e13c663e3a38ccc6d6"
+    },
+    "roomId": {
+      "$oid": "edd0bbcc39f62c5991168aeb"
+    },
+    "userId": {
+      "$oid": "4caa073b01cdbf81366292d0"
+    },
+    "userName": "Trần Đức Chi",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f36d85b0a3eb2b78769e9b1f"
+    },
+    "roomId": {
+      "$oid": "492119ee528b86d2cb70e935"
+    },
+    "userId": {
+      "$oid": "a7f177d95f4a26e541a19a79"
+    },
+    "userName": "Đặng Quốc Linh",
+    "stars": 3,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "22a24f636c796f38765dff47"
+    },
+    "roomId": {
+      "$oid": "e72a08591691e71d267972a5"
+    },
+    "userId": {
+      "$oid": "c816847a1f91740635498c96"
+    },
+    "userName": "Trịnh Văn Sơn",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "edf2c8bd0e23b1767288ad72"
+    },
+    "roomId": {
+      "$oid": "d92753d6c6a492a2eea1f69b"
+    },
+    "userId": {
+      "$oid": "ba21fffed2a783ffea31740a"
+    },
+    "userName": "Lê Gia Bình",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2c1d1c12772fef7784108257"
+    },
+    "roomId": {
+      "$oid": "ace670b96c5501627f74791a"
+    },
+    "userId": {
+      "$oid": "ad883af3a5635e16e85a7b89"
+    },
+    "userName": "Bùi Anh Lan",
+    "stars": 4,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bed8b45df04594fa34a257d2"
+    },
+    "roomId": {
+      "$oid": "85a767152e054b7644f55fac"
+    },
+    "userId": {
+      "$oid": "83c9bb7521178c1d546e646e"
+    },
+    "userName": "Mai Thị Quỳnh",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c660472e9a729112f015da01"
+    },
+    "roomId": {
+      "$oid": "64902a69ceecc1e811d9c6c5"
+    },
+    "userId": {
+      "$oid": "478f143867afa1ee0b52817e"
+    },
+    "userName": "Phạm Hoài Anh",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d22d5196affc817ea06846bb"
+    },
+    "roomId": {
+      "$oid": "1250db543e97724a049c7dbb"
+    },
+    "userId": {
+      "$oid": "361a49fbf315492a4ca10f64"
+    },
+    "userName": "Đỗ Khánh Lâm",
+    "stars": 3,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "362398823f0f58350d2cced7"
+    },
+    "roomId": {
+      "$oid": "5e03aca9a1448ee61b5ecd06"
+    },
+    "userId": {
+      "$oid": "28baf628ad52ed3d1ea00165"
+    },
+    "userName": "Lý Minh Quân",
+    "stars": 4,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1ead99d96b99050c6682c56f"
+    },
+    "roomId": {
+      "$oid": "f5b1015f53917da305ae1e36"
+    },
+    "userId": {
+      "$oid": "2ffcd115d2a29c97dcce3b41"
+    },
+    "userName": "Hoàng Phương An",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7d4e6b5916753d25c24d625c"
+    },
+    "roomId": {
+      "$oid": "a0df33e51af5e368cb1966d6"
+    },
+    "userId": {
+      "$oid": "571caa96ae6b227cb0e8c056"
+    },
+    "userName": "Hồ Hữu Khánh",
+    "stars": 5,
+    "content": "Chỗ để xe rộng và hệ thống điện nước ổn định.",
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fb9507be49f50a6d42cd1616"
+    },
+    "roomId": {
+      "$oid": "35caa8e1be928222aaa29ffd"
+    },
+    "userId": {
+      "$oid": "64635c0d0059a3435b4d7930"
+    },
+    "userName": "Cao Ngọc Phương",
+    "stars": 4,
+    "content": "Cần cải thiện cách âm nhưng phòng và vị trí khá tốt.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "df1083bb97150d0496447f64"
+    },
+    "roomId": {
+      "$oid": "e18cd00d4e5e08c865029103"
+    },
+    "userId": {
+      "$oid": "7c12044decf566dd390dc7ff"
+    },
+    "userName": "Phan Trọng Vy",
+    "stars": 5,
+    "content": "Nội thất cơ bản đầy đủ, chủ trọ giải quyết yêu cầu nhanh.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d562f5e1a71a235a60076cdf"
+    },
+    "roomId": {
+      "$oid": "70ee936bea11fbe28a160cca"
+    },
+    "userId": {
+      "$oid": "b267e82385e2a6c7e64ff26d"
+    },
+    "userName": "Ngô Thu Khang",
+    "stars": 5,
+    "content": "Phòng sạch, tiện di chuyển, quản lý phản hồi nhanh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cc07fc355090b585d1e92cf8"
+    },
+    "roomId": {
+      "$oid": "e7c39252907d58ab48dd7da2"
+    },
+    "userId": {
+      "$oid": "5fa318cb79e2d8b0dbd3e36d"
+    },
+    "userName": "Hà Thanh Phúc",
+    "stars": 5,
+    "content": "Chi phí phù hợp, khu vực yên tĩnh và an ninh.",
+    "createdAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ba9fbb1adfba8ffca542a55"
+    },
+    "roomId": {
+      "$oid": "888b00b3c975faf133a8df8b"
+    },
+    "userId": {
+      "$oid": "c3d6a42b4911491c274d70dc"
+    },
+    "userName": "Vũ Tú Tuấn",
+    "stars": 5,
+    "content": "Phòng sáng, gần các tuyến xe buýt, sinh hoạt thuận tiện.",
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]

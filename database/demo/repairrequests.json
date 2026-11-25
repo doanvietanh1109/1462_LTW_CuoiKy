@@ -1,0 +1,3958 @@
+[
+  {
+    "_id": {
+      "$oid": "a9d8ebd048a4928855b26fb1"
+    },
+    "roomId": {
+      "$oid": "f2a4d5b8c4c7fcab38d51166"
+    },
+    "contractId": {
+      "$oid": "4d325d44af7d3111b7a9a5bc"
+    },
+    "tenantId": {
+      "$oid": "533ab1e4bfc39e0067d72b6e"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-01-18T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-01-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "59dde86b274feb236cecec59"
+    },
+    "roomId": {
+      "$oid": "837f711c26bc16969cae8fd7"
+    },
+    "contractId": {
+      "$oid": "1c4cddb51f2eb9189dfc25e4"
+    },
+    "tenantId": {
+      "$oid": "d9de6884e3212b1a26960119"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-12-12T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-12-06T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-12T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8013da1ea9af7cc658a36efd"
+    },
+    "roomId": {
+      "$oid": "abbc4bd780c92f726984296b"
+    },
+    "contractId": {
+      "$oid": "53e9407afb50b645f65531ab"
+    },
+    "tenantId": {
+      "$oid": "c619f0ba28b92761188aceac"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-11-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-03T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "46d4629c7102e37aa9e9c0dc"
+    },
+    "roomId": {
+      "$oid": "4a008b923f48d791cf9bbbfc"
+    },
+    "contractId": {
+      "$oid": "21893d825751b6330ad89e69"
+    },
+    "tenantId": {
+      "$oid": "940c371587bca2eabc9e3352"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-02T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-02T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e71c56c09e8ad9a0d19d70b3"
+    },
+    "roomId": {
+      "$oid": "9ecc236c4495c9f897829406"
+    },
+    "contractId": {
+      "$oid": "a883ed67c17a885c511cfb30"
+    },
+    "tenantId": {
+      "$oid": "aedb80826aed4144ae319caf"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-04-28T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-04-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-28T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "17bf2a4388832fd173f86de6"
+    },
+    "roomId": {
+      "$oid": "88d3aa59923273c65016515f"
+    },
+    "contractId": {
+      "$oid": "ae8918bd5b693d32197317c4"
+    },
+    "tenantId": {
+      "$oid": "2ca01212759304f44ff83d03"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-04-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b36dec32f9bb0510d05599ee"
+    },
+    "roomId": {
+      "$oid": "a13c8be95f6922376765b342"
+    },
+    "contractId": {
+      "$oid": "5039f08c9fb1e8b4dfb98e10"
+    },
+    "tenantId": {
+      "$oid": "e49a9960de2aad25916f40a2"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-01-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bee30c9cba7a0fb14a2adf90"
+    },
+    "roomId": {
+      "$oid": "b53caed4c0788ddc8c40b876"
+    },
+    "contractId": {
+      "$oid": "d9ae16b084ed49432075fd9a"
+    },
+    "tenantId": {
+      "$oid": "c6114deb08c4c8435e65ff59"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-01-22T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-01-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0d28e2dcfb763e453cae2cb1"
+    },
+    "roomId": {
+      "$oid": "70c005b520bbd09c2d9fc661"
+    },
+    "contractId": {
+      "$oid": "42f8a600a9a5f5bca219c69c"
+    },
+    "tenantId": {
+      "$oid": "5a095d2bdbf921658ecec32e"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-11-23T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ac1ee88f073e2c0081b8692f"
+    },
+    "roomId": {
+      "$oid": "f8e79972695163618af6d6ca"
+    },
+    "contractId": {
+      "$oid": "60a18b5505f14c1b1352f8bf"
+    },
+    "tenantId": {
+      "$oid": "e9b439c59f6ffc534230ef7c"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "high",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-02-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a01136762540dc71bbdc88a5"
+    },
+    "roomId": {
+      "$oid": "dc4959cf18e668891db1cc24"
+    },
+    "contractId": {
+      "$oid": "9098b5687a0b05d35d8a8c64"
+    },
+    "tenantId": {
+      "$oid": "542eae1d0f36fc6d04a52e9a"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-12-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b41a9e20e8fc51ee48219527"
+    },
+    "roomId": {
+      "$oid": "1213e570cadae33980ee7be1"
+    },
+    "contractId": {
+      "$oid": "aff4233b0e4d8e8f226a623c"
+    },
+    "tenantId": {
+      "$oid": "055db64677a6b9c1491a1291"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-10-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5005a50926e996923631d1e7"
+    },
+    "roomId": {
+      "$oid": "727ef9c3f37d98835267065b"
+    },
+    "contractId": {
+      "$oid": "4098a1cc697c9f6ed315490e"
+    },
+    "tenantId": {
+      "$oid": "bf6335fd5dd3c096411f27af"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ef64c61c515714cc458cfb9c"
+    },
+    "roomId": {
+      "$oid": "27e4502ab1dbd4106476b8ae"
+    },
+    "contractId": {
+      "$oid": "a7c6394b5c90d476efbeb69d"
+    },
+    "tenantId": {
+      "$oid": "82250dafe87919715df08d83"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-02T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-01-27T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-02T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "abbd01be36aa7f9a2caa38ce"
+    },
+    "roomId": {
+      "$oid": "8c44aaec7356f546771c221e"
+    },
+    "contractId": {
+      "$oid": "c03b8a32e66c623eca4f4906"
+    },
+    "tenantId": {
+      "$oid": "de8a31c697de7b1ba7a2df35"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-11-27T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-27T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "972d8be6ebcd0ff1bc6fcd03"
+    },
+    "roomId": {
+      "$oid": "083f421ef926a17628824b82"
+    },
+    "contractId": {
+      "$oid": "9e05202d957a6e356b4a5e58"
+    },
+    "tenantId": {
+      "$oid": "c6bdb76bcb15a317d1bb7e2a"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-24T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-24T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "27107f22b170a789eb2dbf13"
+    },
+    "roomId": {
+      "$oid": "c67af6e09130ef1921a975c4"
+    },
+    "contractId": {
+      "$oid": "5d2661f594aa5e6201799700"
+    },
+    "tenantId": {
+      "$oid": "85162879ce5d8a5c8d3c70cb"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-23T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c6505fe0effd2d17d14f8041"
+    },
+    "roomId": {
+      "$oid": "cbb69cde37734e69435012fe"
+    },
+    "contractId": {
+      "$oid": "8a5f3046aa02b477c56611f9"
+    },
+    "tenantId": {
+      "$oid": "1f5fa5f26d81ca444ad4eac2"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-04-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "571f40903cb9bd5957e94eae"
+    },
+    "roomId": {
+      "$oid": "a9012f3419b8fc4f24fa4081"
+    },
+    "contractId": {
+      "$oid": "8469191731dbfb72d93efb5b"
+    },
+    "tenantId": {
+      "$oid": "0606af60c26fe9d5dd9efe99"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "high",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-05-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-03T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "dbdc2e51cfd8e82c5ee3573b"
+    },
+    "roomId": {
+      "$oid": "77adc361fcc8a58042cafbb4"
+    },
+    "contractId": {
+      "$oid": "beb565f6da2a817ff134a0f3"
+    },
+    "tenantId": {
+      "$oid": "b9cf1c621f3cc6cc7e734219"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-09T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-03-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c25d10371a1ba23102963c46"
+    },
+    "roomId": {
+      "$oid": "7055627003b4de41ca426ecf"
+    },
+    "contractId": {
+      "$oid": "88a357f0123431a4acddb2bb"
+    },
+    "tenantId": {
+      "$oid": "8c6ef2b7ebd4de3b772d023c"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-12-24T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-24T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bc60484c1579fa317ba669d8"
+    },
+    "roomId": {
+      "$oid": "6298ca963c63e3b488e03e9c"
+    },
+    "contractId": {
+      "$oid": "843eedae7e046b10c9b46d0a"
+    },
+    "tenantId": {
+      "$oid": "5e54ebc8dcb8af3553b54cbf"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-01-28T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-01-24T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-28T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "88a170e6fcaf9320749230f6"
+    },
+    "roomId": {
+      "$oid": "71cc9b2b9bb7f215ff51c67f"
+    },
+    "contractId": {
+      "$oid": "8e97bc5909371898c57d5c6a"
+    },
+    "tenantId": {
+      "$oid": "0b0a79f0b67677d8de990280"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-01-05T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-01-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "179f91173f41420a8b972ac2"
+    },
+    "roomId": {
+      "$oid": "edd0bbcc39f62c5991168aeb"
+    },
+    "contractId": {
+      "$oid": "1c833746f6b9749ccecb8789"
+    },
+    "tenantId": {
+      "$oid": "eb7d80de23fe8f9c3ec7f6ff"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-10-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "632cc4a0c4fc06a71567ffd9"
+    },
+    "roomId": {
+      "$oid": "492119ee528b86d2cb70e935"
+    },
+    "contractId": {
+      "$oid": "558dab23f410b017f93c4cfe"
+    },
+    "tenantId": {
+      "$oid": "26d8637ac30af7a0e0e41831"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "medium",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-11-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b41e148e10b878d2b32971a0"
+    },
+    "roomId": {
+      "$oid": "e72a08591691e71d267972a5"
+    },
+    "contractId": {
+      "$oid": "8ab65cf49f6613384b4c51fb"
+    },
+    "tenantId": {
+      "$oid": "5c85ff940e209e3f1f0996a2"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-02-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-16T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "08cbca2a1f22418910690f9e"
+    },
+    "roomId": {
+      "$oid": "d92753d6c6a492a2eea1f69b"
+    },
+    "contractId": {
+      "$oid": "a7c2fe3e86b254d6851ae061"
+    },
+    "tenantId": {
+      "$oid": "ae55894ab98832ddd1385252"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-09-30T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a386e1fef67ec9e5124e9b77"
+    },
+    "roomId": {
+      "$oid": "ace670b96c5501627f74791a"
+    },
+    "contractId": {
+      "$oid": "0f7cf20ba57ab9ee4405bc74"
+    },
+    "tenantId": {
+      "$oid": "7b6d9ad4e066f51cf8a310f5"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-11T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "73f19d0ed7557605cd478d4f"
+    },
+    "roomId": {
+      "$oid": "85a767152e054b7644f55fac"
+    },
+    "contractId": {
+      "$oid": "de0e34615875d29863bb180e"
+    },
+    "tenantId": {
+      "$oid": "e1e1b617e63ccc434c20665e"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-03T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a96153db66a3b9682edc85d4"
+    },
+    "roomId": {
+      "$oid": "64902a69ceecc1e811d9c6c5"
+    },
+    "contractId": {
+      "$oid": "47f3813634c1794da9c86d50"
+    },
+    "tenantId": {
+      "$oid": "f20fd949d05494d3e78d0095"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-02-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9d33b0d5eac6b7c22e368f9f"
+    },
+    "roomId": {
+      "$oid": "1250db543e97724a049c7dbb"
+    },
+    "contractId": {
+      "$oid": "f99a526077f586e7ea8b5586"
+    },
+    "tenantId": {
+      "$oid": "60adfe6efcf2f6f71431e2bc"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-11-19T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-11-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b7d9b2ff9d6310cd4d16e5c9"
+    },
+    "roomId": {
+      "$oid": "5e03aca9a1448ee61b5ecd06"
+    },
+    "contractId": {
+      "$oid": "2ebd53a1877436f3e2f33f5c"
+    },
+    "tenantId": {
+      "$oid": "160d2c6360132a4f8e1f97a9"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-04-12T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-12T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9fbb08ede1764190d994c0e7"
+    },
+    "roomId": {
+      "$oid": "f5b1015f53917da305ae1e36"
+    },
+    "contractId": {
+      "$oid": "965becfbc8139489de0d97ca"
+    },
+    "tenantId": {
+      "$oid": "9ef2042c2b6f22c984bb5314"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-12-03T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-11-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-03T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c17f20daa0cd10a3daaf6fb7"
+    },
+    "roomId": {
+      "$oid": "a0df33e51af5e368cb1966d6"
+    },
+    "contractId": {
+      "$oid": "dd4eb43a153eacd1df089401"
+    },
+    "tenantId": {
+      "$oid": "420a9b8fea67ff83afe8b887"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-26T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-20T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-26T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "915e766af17e3e3ad2179530"
+    },
+    "roomId": {
+      "$oid": "35caa8e1be928222aaa29ffd"
+    },
+    "contractId": {
+      "$oid": "d246fc04f2b487a332398350"
+    },
+    "tenantId": {
+      "$oid": "a71c606c7c6fb63e24f5f19b"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-15T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-15T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ffac0867d2f11cd6b7e8b8b"
+    },
+    "roomId": {
+      "$oid": "e18cd00d4e5e08c865029103"
+    },
+    "contractId": {
+      "$oid": "ff91e2cc373e6cd8d8f6ff58"
+    },
+    "tenantId": {
+      "$oid": "da0a60ffaccc3b4cd00ab405"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-12-11T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-12-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3d73d95a79fb18d377921ffb"
+    },
+    "roomId": {
+      "$oid": "70ee936bea11fbe28a160cca"
+    },
+    "contractId": {
+      "$oid": "b9708eb833ce2dc078932d61"
+    },
+    "tenantId": {
+      "$oid": "9b18fdc6e18324e8e8a77bc3"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "high",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-30T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f3019a07dbad0d0aa5012f78"
+    },
+    "roomId": {
+      "$oid": "e7c39252907d58ab48dd7da2"
+    },
+    "contractId": {
+      "$oid": "e82602ae0dbe5efeae7b4015"
+    },
+    "tenantId": {
+      "$oid": "aeaba3d0fd5e65498eb50f4b"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-11-04T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-11-02T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b2746bbe55e9306b6f3b2d65"
+    },
+    "roomId": {
+      "$oid": "888b00b3c975faf133a8df8b"
+    },
+    "contractId": {
+      "$oid": "217208d5aec33795b4c07045"
+    },
+    "tenantId": {
+      "$oid": "c5e06abba0d9b5677d64c915"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-10-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-10-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "630507adf3443ce420940800"
+    },
+    "roomId": {
+      "$oid": "5a1a15f796e306c70d21e75f"
+    },
+    "contractId": {
+      "$oid": "cb8812f597cc057bb3d66bce"
+    },
+    "tenantId": {
+      "$oid": "24cbd8cbc735e1df250605fb"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "medium",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-04-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "775f3979491db9e145359d86"
+    },
+    "roomId": {
+      "$oid": "ef12cdba976d9f5086c93ac0"
+    },
+    "contractId": {
+      "$oid": "159e88986210179c4fe2cd8d"
+    },
+    "tenantId": {
+      "$oid": "b3e17733667f536e0aafb049"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-11-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-26T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "7bcdc98f8aaeb06e3d0d39de"
+    },
+    "roomId": {
+      "$oid": "058c48e8bf116447238e3256"
+    },
+    "contractId": {
+      "$oid": "fae565f6461f971ded552b9b"
+    },
+    "tenantId": {
+      "$oid": "80143835178d5d389f2f0818"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-12-04T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-11-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a661a0b41bfb91370d85d80a"
+    },
+    "roomId": {
+      "$oid": "bf330ae4c03c5f789b0240c7"
+    },
+    "contractId": {
+      "$oid": "fe53dbb04f7678a4a1075dcf"
+    },
+    "tenantId": {
+      "$oid": "84c6cf531eb4878c4f17729f"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-01-29T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-29T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c53030fc5e7d8dfad71176f8"
+    },
+    "roomId": {
+      "$oid": "5ce296645a3243890fcdde40"
+    },
+    "contractId": {
+      "$oid": "5a4bfa074996d3595d1ca448"
+    },
+    "tenantId": {
+      "$oid": "8f062511403d049efa4c8a7a"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-20T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-03-12T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-20T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d9185377c4c40d78e55f3e65"
+    },
+    "roomId": {
+      "$oid": "8602f3c91af3c0c7adc873f4"
+    },
+    "contractId": {
+      "$oid": "17242dc218153f30a7b8f6aa"
+    },
+    "tenantId": {
+      "$oid": "d95458c5a24080b07d1b60da"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "77d534583a8979e8e1c06958"
+    },
+    "roomId": {
+      "$oid": "370415ddf75699f131fa95f4"
+    },
+    "contractId": {
+      "$oid": "94f90b83c403d4d6c44e0822"
+    },
+    "tenantId": {
+      "$oid": "5d123199bc248d05d4b8e95f"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "high",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-22T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ffe3161ebf1fb53eb0fcd81c"
+    },
+    "roomId": {
+      "$oid": "2a22c7349a2b4039abd43282"
+    },
+    "contractId": {
+      "$oid": "55a99166056226c33781644c"
+    },
+    "tenantId": {
+      "$oid": "01f3550f3ab4b34286113f5a"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-02-07T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "32c010eb529400533573dc94"
+    },
+    "roomId": {
+      "$oid": "e51993c13f5c6760b08cc9c1"
+    },
+    "contractId": {
+      "$oid": "a2114d285bf2cb1899bf5996"
+    },
+    "tenantId": {
+      "$oid": "bb80f836fc63c90e93aa98ac"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-11-23T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-11-20T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5b60c5e9a1db0388a003d12c"
+    },
+    "roomId": {
+      "$oid": "eb6ceeb13124a57fadc799e9"
+    },
+    "contractId": {
+      "$oid": "6e51fe9c27551e30124120e9"
+    },
+    "tenantId": {
+      "$oid": "85433ca9694b9afaba8964fe"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-12-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-12-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1d277e23f154369769067b62"
+    },
+    "roomId": {
+      "$oid": "bc16195839385c42bbb55aae"
+    },
+    "contractId": {
+      "$oid": "a13eafc0c4bcdaefd8a8398e"
+    },
+    "tenantId": {
+      "$oid": "a72d20b172a701ffaef652e1"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-01-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "29c527dd45ac349f8e9348d2"
+    },
+    "roomId": {
+      "$oid": "a1df2588b09eaa798c040d49"
+    },
+    "contractId": {
+      "$oid": "666dd6d1da8a83924d4966ad"
+    },
+    "tenantId": {
+      "$oid": "4a41bb4d279408e7a0f218be"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-21T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-21T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "14830ccbfff0f0b53a9dcacb"
+    },
+    "roomId": {
+      "$oid": "d6faadf77634d1c04285c27b"
+    },
+    "contractId": {
+      "$oid": "fcf800e99c342981cc9d11d8"
+    },
+    "tenantId": {
+      "$oid": "0f1d16e9e704239c167df340"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-05-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-04-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "123a56a77cb3a38c1f885fd6"
+    },
+    "roomId": {
+      "$oid": "00477c9d5f2c2fa2949f2f03"
+    },
+    "contractId": {
+      "$oid": "6c290122a4bdcad14a9b0848"
+    },
+    "tenantId": {
+      "$oid": "fa815c5355e8875e7f1fecbb"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-04-29T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-04-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-29T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9dd78a368a093d7bb237ab25"
+    },
+    "roomId": {
+      "$oid": "d1dc304e63ca2e0c6791624c"
+    },
+    "contractId": {
+      "$oid": "212ba410700a990218c05e09"
+    },
+    "tenantId": {
+      "$oid": "52370c59df74dbf31c3bf922"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-02-22T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "936c649cad3d3015923c4c61"
+    },
+    "roomId": {
+      "$oid": "9db65b0107df5d821efe4e63"
+    },
+    "contractId": {
+      "$oid": "4afe8491bfb0dbaf238eff5e"
+    },
+    "tenantId": {
+      "$oid": "6ea30fa5e591881e7aab5de4"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "high",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-12-28T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-12-28T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a458c356854bca37c8832b7e"
+    },
+    "roomId": {
+      "$oid": "874c10b08484dd4b231c972c"
+    },
+    "contractId": {
+      "$oid": "b7742a682a971ff8191f97c5"
+    },
+    "tenantId": {
+      "$oid": "bb5d88e065e456e9f9a11bdf"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-10T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-03-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cb5442e2d489038452605774"
+    },
+    "roomId": {
+      "$oid": "b12e2f71329a8a85978a804d"
+    },
+    "contractId": {
+      "$oid": "81745aa31dec56e29cdf1947"
+    },
+    "tenantId": {
+      "$oid": "6821b12b7c3983e464342992"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-23T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-03-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "322652c3111034af2e8c4bc8"
+    },
+    "roomId": {
+      "$oid": "4ca398b5a5ead94aea50ddc0"
+    },
+    "contractId": {
+      "$oid": "1b04ce2673e42fe902f6b00e"
+    },
+    "tenantId": {
+      "$oid": "5132c0aa5ac5ee9d2c27de0d"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2025-11-13T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2025-11-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e15cfe1d95237b014d32db6d"
+    },
+    "roomId": {
+      "$oid": "29c5c12575c4b0a66d4dca5d"
+    },
+    "contractId": {
+      "$oid": "bb5265188f5b92dc35234e11"
+    },
+    "tenantId": {
+      "$oid": "ee29f85acd28326da9a54949"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-13T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-03-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b8fb8945d81a507a657f4686"
+    },
+    "roomId": {
+      "$oid": "a9b12ce699f1662da3763616"
+    },
+    "contractId": {
+      "$oid": "3522008927f47cc948fca740"
+    },
+    "tenantId": {
+      "$oid": "143b954f6afbf54ac7708e96"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "298e5462ceb847dcbabe4c68"
+    },
+    "roomId": {
+      "$oid": "4e7d0674b8342e4052d18367"
+    },
+    "contractId": {
+      "$oid": "b2d7e44e1cb8926767976d10"
+    },
+    "tenantId": {
+      "$oid": "8547cee5eb320eb609119e1f"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "medium",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2025-11-28T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-11-28T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8a840d129814623d4511400f"
+    },
+    "roomId": {
+      "$oid": "d0af047b5283008afda5720b"
+    },
+    "contractId": {
+      "$oid": "45a6d1346dabe05355f19a67"
+    },
+    "tenantId": {
+      "$oid": "d34860bf58882d4eb454aeb3"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-05-27T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-05-27T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "61b4996037eca2ff0fa745e3"
+    },
+    "roomId": {
+      "$oid": "5d40e94d5463d462dba96350"
+    },
+    "contractId": {
+      "$oid": "96cadfb5c9246b87095f7671"
+    },
+    "tenantId": {
+      "$oid": "e3f717402caaa0bfbac4bc57"
+    },
+    "landlordId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-23T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "8993b5f300f1317464c0892b"
+    },
+    "roomId": {
+      "$oid": "3ff8ffb3ec85fd73413c3a58"
+    },
+    "contractId": {
+      "$oid": "1626282b41f3ee32b2f7b900"
+    },
+    "tenantId": {
+      "$oid": "145a2629aca59e44e6ffc4e9"
+    },
+    "landlordId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-03-07T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-02-27T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0f26340ffe8382ae72abc02e"
+    },
+    "roomId": {
+      "$oid": "c8a24fed9405193114364523"
+    },
+    "contractId": {
+      "$oid": "88e2511cf077165fc936c626"
+    },
+    "tenantId": {
+      "$oid": "a122d4f36a3cbc7a9079bba0"
+    },
+    "landlordId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-01-23T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "34362d32eaa337c1222a073a"
+    },
+    "roomId": {
+      "$oid": "3ffbdd491b1066c8b70a9427"
+    },
+    "contractId": {
+      "$oid": "5b21b6d392927a677486f4b8"
+    },
+    "tenantId": {
+      "$oid": "58f1a7e8b54eea2835dc5194"
+    },
+    "landlordId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-03-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5258396b1aa3a7700c453a93"
+    },
+    "roomId": {
+      "$oid": "f2a4d5b8c4c7fcab38d51166"
+    },
+    "contractId": {
+      "$oid": "9b4f0fe39911dedb740c58bd"
+    },
+    "tenantId": {
+      "$oid": "c0b25978b1175c0e76f0e8dd"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-06T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5046fef33fe6913d7a37f3c8"
+    },
+    "roomId": {
+      "$oid": "837f711c26bc16969cae8fd7"
+    },
+    "contractId": {
+      "$oid": "884ada09f630ca92384b9b6a"
+    },
+    "tenantId": {
+      "$oid": "88db70a7f010d6c2a4d8ffe0"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-09-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-09-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a8d5411f85db4693971d2930"
+    },
+    "roomId": {
+      "$oid": "abbc4bd780c92f726984296b"
+    },
+    "contractId": {
+      "$oid": "0f0f688747f51eff1dd16ac0"
+    },
+    "tenantId": {
+      "$oid": "38c601680a2d58716d79e69f"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-11-05T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-11-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "89d2e3ef1474db30f3caca92"
+    },
+    "roomId": {
+      "$oid": "4a008b923f48d791cf9bbbfc"
+    },
+    "contractId": {
+      "$oid": "e44e2a573a146a19b5467e48"
+    },
+    "tenantId": {
+      "$oid": "c71eb881f4f5ae638a7e1434"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-02T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-02T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "669e30e15b892aa82bc448a6"
+    },
+    "roomId": {
+      "$oid": "9ecc236c4495c9f897829406"
+    },
+    "contractId": {
+      "$oid": "868d8d81723bcf392aa0305b"
+    },
+    "tenantId": {
+      "$oid": "33f16115012ccf284fe52549"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-09-15T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-09-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-15T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "952ee6c286bbfd0413a5d2a4"
+    },
+    "roomId": {
+      "$oid": "88d3aa59923273c65016515f"
+    },
+    "contractId": {
+      "$oid": "b08d18ca3e054b8effed4a44"
+    },
+    "tenantId": {
+      "$oid": "befc49db20dd63f35c3e0b11"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-08-10T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-08-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e706171196050a20a65f3d3a"
+    },
+    "roomId": {
+      "$oid": "a13c8be95f6922376765b342"
+    },
+    "contractId": {
+      "$oid": "9c05206884e421c7cdf8daf1"
+    },
+    "tenantId": {
+      "$oid": "36ab0bfa140c14c272a215dd"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-11-14T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-11-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cf8a9c7168ad8ac418925573"
+    },
+    "roomId": {
+      "$oid": "b53caed4c0788ddc8c40b876"
+    },
+    "contractId": {
+      "$oid": "0188032070438718ef88deb1"
+    },
+    "tenantId": {
+      "$oid": "6fd805f0c11c2c38a5a7209c"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "559ba98636f0a17e4a6deb26"
+    },
+    "roomId": {
+      "$oid": "70c005b520bbd09c2d9fc661"
+    },
+    "contractId": {
+      "$oid": "f5ca8dc79817dd93e7b4afc3"
+    },
+    "tenantId": {
+      "$oid": "2bbd24f6744e5d70fd6ecb63"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "194f051eb1c289813e8171a9"
+    },
+    "roomId": {
+      "$oid": "f8e79972695163618af6d6ca"
+    },
+    "contractId": {
+      "$oid": "a44ed9d7e5c13d6d2041c422"
+    },
+    "tenantId": {
+      "$oid": "4fad43e08cc985a3e56570bb"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "medium",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-16T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "abea4d678b06f79c100c8d1f"
+    },
+    "roomId": {
+      "$oid": "dc4959cf18e668891db1cc24"
+    },
+    "contractId": {
+      "$oid": "712c3d735cb9d255d569fb5c"
+    },
+    "tenantId": {
+      "$oid": "592d0bc76b858517867e5f25"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-11T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3391ee85da9f10201fe113be"
+    },
+    "roomId": {
+      "$oid": "1213e570cadae33980ee7be1"
+    },
+    "contractId": {
+      "$oid": "4d7157f9ab4b4dbc5d8e693a"
+    },
+    "tenantId": {
+      "$oid": "3c8045ffe8de992a3081eb0f"
+    },
+    "landlordId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-09-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-15T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1ada1cb070f7671cf00df9a0"
+    },
+    "roomId": {
+      "$oid": "727ef9c3f37d98835267065b"
+    },
+    "contractId": {
+      "$oid": "4f9eb05187331b94f7b7293f"
+    },
+    "tenantId": {
+      "$oid": "49c6f85396d505703ecfc1fd"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "02a973338ac79e876b7e6b90"
+    },
+    "roomId": {
+      "$oid": "27e4502ab1dbd4106476b8ae"
+    },
+    "contractId": {
+      "$oid": "899621264dc5f770f6286e06"
+    },
+    "tenantId": {
+      "$oid": "329b61307ff49c5ec77c47b8"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-19T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-19T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "cfaed61b5a79ec30e20bcdfd"
+    },
+    "roomId": {
+      "$oid": "8c44aaec7356f546771c221e"
+    },
+    "contractId": {
+      "$oid": "6a717f0b789808ae84a1725b"
+    },
+    "tenantId": {
+      "$oid": "d514cd4af88fee745635d038"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-08-22T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6fea2c9069a0727247fb36d8"
+    },
+    "roomId": {
+      "$oid": "083f421ef926a17628824b82"
+    },
+    "contractId": {
+      "$oid": "df278b5b58fdefb51f33ab4f"
+    },
+    "tenantId": {
+      "$oid": "1c215bd9b0303582b11e29f9"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "high",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-08-23T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d68ac5db722ad1d7bbf6e5f5"
+    },
+    "roomId": {
+      "$oid": "c67af6e09130ef1921a975c4"
+    },
+    "contractId": {
+      "$oid": "dc6ea13ee44122535e703d06"
+    },
+    "tenantId": {
+      "$oid": "f1e3d9eaea5c5e4dd9e41962"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-23T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-22T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-23T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5a10c9cae3c95c25de740199"
+    },
+    "roomId": {
+      "$oid": "cbb69cde37734e69435012fe"
+    },
+    "contractId": {
+      "$oid": "0f286937f8df46d1e4b6333e"
+    },
+    "tenantId": {
+      "$oid": "761fedf6d5f12c9568907013"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-26T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-26T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e85018af08a39ef619dbfdd0"
+    },
+    "roomId": {
+      "$oid": "a9012f3419b8fc4f24fa4081"
+    },
+    "contractId": {
+      "$oid": "8146a3191fabf93c3da347e7"
+    },
+    "tenantId": {
+      "$oid": "6f47d1e9a27ca064c9d410c2"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-09-20T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-09-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-20T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c778ef5b9af127b7a2ff39a1"
+    },
+    "roomId": {
+      "$oid": "77adc361fcc8a58042cafbb4"
+    },
+    "contractId": {
+      "$oid": "93f32c4b24870a7a1656802f"
+    },
+    "tenantId": {
+      "$oid": "9171d7af47db4240218d2b89"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-03T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "badd7d70c762606b4c3c7fdb"
+    },
+    "roomId": {
+      "$oid": "7055627003b4de41ca426ecf"
+    },
+    "contractId": {
+      "$oid": "ed1ab39c56f1db520afbfce5"
+    },
+    "tenantId": {
+      "$oid": "1227a1e97188cdfeff1f1f11"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-08-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1cb1ebde6e5a0e465334b968"
+    },
+    "roomId": {
+      "$oid": "6298ca963c63e3b488e03e9c"
+    },
+    "contractId": {
+      "$oid": "9dcb46231644a55f44ffbbf7"
+    },
+    "tenantId": {
+      "$oid": "c821666af1f2f2f9310d343e"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "medium",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-31T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "295b1f8a70208bb261af7b3c"
+    },
+    "roomId": {
+      "$oid": "71cc9b2b9bb7f215ff51c67f"
+    },
+    "contractId": {
+      "$oid": "b30e8af63641550f76015a61"
+    },
+    "tenantId": {
+      "$oid": "1ccd037cb5067e466466fae2"
+    },
+    "landlordId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-09-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "102adb5a6407dc0557b8cdaa"
+    },
+    "roomId": {
+      "$oid": "edd0bbcc39f62c5991168aeb"
+    },
+    "contractId": {
+      "$oid": "88cf46a11be6ceccd9971307"
+    },
+    "tenantId": {
+      "$oid": "4caa073b01cdbf81366292d0"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b6c35cf5add36337bed28a18"
+    },
+    "roomId": {
+      "$oid": "492119ee528b86d2cb70e935"
+    },
+    "contractId": {
+      "$oid": "4db486e48901f054b80855eb"
+    },
+    "tenantId": {
+      "$oid": "a7f177d95f4a26e541a19a79"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-04T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a43e81ab6b43f05f18194631"
+    },
+    "roomId": {
+      "$oid": "e72a08591691e71d267972a5"
+    },
+    "contractId": {
+      "$oid": "afe24fb06fd8b1ec10736fdd"
+    },
+    "tenantId": {
+      "$oid": "c816847a1f91740635498c96"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "22c5d433bf5c68b6bd7e0628"
+    },
+    "roomId": {
+      "$oid": "d92753d6c6a492a2eea1f69b"
+    },
+    "contractId": {
+      "$oid": "0937f3aef1d06ed3c274da0b"
+    },
+    "tenantId": {
+      "$oid": "ba21fffed2a783ffea31740a"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-08-27T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-27T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bffbb21cbccd1616d530468c"
+    },
+    "roomId": {
+      "$oid": "ace670b96c5501627f74791a"
+    },
+    "contractId": {
+      "$oid": "0765dc570f3352dc495bfa41"
+    },
+    "tenantId": {
+      "$oid": "ad883af3a5635e16e85a7b89"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-07T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-02T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0ed880c76dfced98ba273ac5"
+    },
+    "roomId": {
+      "$oid": "85a767152e054b7644f55fac"
+    },
+    "contractId": {
+      "$oid": "cff1dd9840ee93e13bb8f528"
+    },
+    "tenantId": {
+      "$oid": "83c9bb7521178c1d546e646e"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "0fe359eedc697e31f17bd0dc"
+    },
+    "roomId": {
+      "$oid": "64902a69ceecc1e811d9c6c5"
+    },
+    "contractId": {
+      "$oid": "fdf499afdd5f6a697c4b1e0f"
+    },
+    "tenantId": {
+      "$oid": "478f143867afa1ee0b52817e"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-11-17T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-11-11T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ffb183e9da7803a8a6fbd537"
+    },
+    "roomId": {
+      "$oid": "1250db543e97724a049c7dbb"
+    },
+    "contractId": {
+      "$oid": "63fe638de2aff377403456e5"
+    },
+    "tenantId": {
+      "$oid": "361a49fbf315492a4ca10f64"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ba8fc9e234541fb631f0dafa"
+    },
+    "roomId": {
+      "$oid": "5e03aca9a1448ee61b5ecd06"
+    },
+    "contractId": {
+      "$oid": "3a1441baed7804f91d6ef77d"
+    },
+    "tenantId": {
+      "$oid": "28baf628ad52ed3d1ea00165"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "a73386f849d55512fb4592ca"
+    },
+    "roomId": {
+      "$oid": "f5b1015f53917da305ae1e36"
+    },
+    "contractId": {
+      "$oid": "02a600439c20d5c96cf69357"
+    },
+    "tenantId": {
+      "$oid": "2ffcd115d2a29c97dcce3b41"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "576a2103dfe12c1c784cf599"
+    },
+    "roomId": {
+      "$oid": "a0df33e51af5e368cb1966d6"
+    },
+    "contractId": {
+      "$oid": "c8a1dceb402d4223a9beebae"
+    },
+    "tenantId": {
+      "$oid": "571caa96ae6b227cb0e8c056"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-11-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-29T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1cecaa467d613779dd29c42c"
+    },
+    "roomId": {
+      "$oid": "35caa8e1be928222aaa29ffd"
+    },
+    "contractId": {
+      "$oid": "4f61e35b5fc654ab9376468c"
+    },
+    "tenantId": {
+      "$oid": "64635c0d0059a3435b4d7930"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-09-03T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-03T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4c0879cc5e1dcfe133e8587f"
+    },
+    "roomId": {
+      "$oid": "e18cd00d4e5e08c865029103"
+    },
+    "contractId": {
+      "$oid": "8c42a5c87660c350a5958b75"
+    },
+    "tenantId": {
+      "$oid": "7c12044decf566dd390dc7ff"
+    },
+    "landlordId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-18T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-12T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "dce4818e006a0d6287967f9e"
+    },
+    "roomId": {
+      "$oid": "70ee936bea11fbe28a160cca"
+    },
+    "contractId": {
+      "$oid": "6035df2aa65d57ff66f90352"
+    },
+    "tenantId": {
+      "$oid": "b267e82385e2a6c7e64ff26d"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-10T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "17d0b76cb1768918b6176c5d"
+    },
+    "roomId": {
+      "$oid": "e7c39252907d58ab48dd7da2"
+    },
+    "contractId": {
+      "$oid": "b2aad0a3e30ec336964d3a5f"
+    },
+    "tenantId": {
+      "$oid": "5fa318cb79e2d8b0dbd3e36d"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-12T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-12T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "91d4e11e3e3d3bdab95ec7a5"
+    },
+    "roomId": {
+      "$oid": "888b00b3c975faf133a8df8b"
+    },
+    "contractId": {
+      "$oid": "7265113c4b310585172b7727"
+    },
+    "tenantId": {
+      "$oid": "c3d6a42b4911491c274d70dc"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-11-14T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-11-06T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "23207ac6b5b6a15a316dd425"
+    },
+    "roomId": {
+      "$oid": "5a1a15f796e306c70d21e75f"
+    },
+    "contractId": {
+      "$oid": "44bd4e1a9d697d2cdb4b5afa"
+    },
+    "tenantId": {
+      "$oid": "4091373139b5e709bd857354"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-09-06T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-09-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4d081b98e95b2e15eb879a47"
+    },
+    "roomId": {
+      "$oid": "ef12cdba976d9f5086c93ac0"
+    },
+    "contractId": {
+      "$oid": "0f5f44f4017241a4ac7f7563"
+    },
+    "tenantId": {
+      "$oid": "74d50f16db051c56dc71ebd5"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5afdd878adc996ae552c72f6"
+    },
+    "roomId": {
+      "$oid": "058c48e8bf116447238e3256"
+    },
+    "contractId": {
+      "$oid": "851c97aa9313a166a6f6a259"
+    },
+    "tenantId": {
+      "$oid": "323185d682636bea2e1d384d"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-08-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "b87b9b5c036004c40b3d2d16"
+    },
+    "roomId": {
+      "$oid": "bf330ae4c03c5f789b0240c7"
+    },
+    "contractId": {
+      "$oid": "475f5826980d62bf427dafae"
+    },
+    "tenantId": {
+      "$oid": "7230043febda021465265c40"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "high",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-14T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ca901e561343b976a3dbf618"
+    },
+    "roomId": {
+      "$oid": "5ce296645a3243890fcdde40"
+    },
+    "contractId": {
+      "$oid": "df0c383e370000d1bf8bced0"
+    },
+    "tenantId": {
+      "$oid": "e99ace87547b4686152274ea"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-07-07T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-07-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-07T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "36ba4dea2f3d6c4db158a4f9"
+    },
+    "roomId": {
+      "$oid": "8602f3c91af3c0c7adc873f4"
+    },
+    "contractId": {
+      "$oid": "737f39de4a0458e0ec86ff1a"
+    },
+    "tenantId": {
+      "$oid": "67e33db60677d9f3d2152ac6"
+    },
+    "landlordId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "175ac4c420d563680971a74d"
+    },
+    "roomId": {
+      "$oid": "370415ddf75699f131fa95f4"
+    },
+    "contractId": {
+      "$oid": "de8075717376f9ada27a079a"
+    },
+    "tenantId": {
+      "$oid": "1b085112cd99f68f642c6917"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5a3fc4dca55a17abb6cc0c62"
+    },
+    "roomId": {
+      "$oid": "2a22c7349a2b4039abd43282"
+    },
+    "contractId": {
+      "$oid": "dcf6991ae9cc19ed4ba6e988"
+    },
+    "tenantId": {
+      "$oid": "a983c58b23391b2cf7a9cce9"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-11-05T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-31T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d48994b575a2ba4507955c88"
+    },
+    "roomId": {
+      "$oid": "e51993c13f5c6760b08cc9c1"
+    },
+    "contractId": {
+      "$oid": "c006c97c79921d5fd1a3fe22"
+    },
+    "tenantId": {
+      "$oid": "620ddc715afb41cf35137917"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c6951fb8439cab284074ad58"
+    },
+    "roomId": {
+      "$oid": "399f6dd23ab32208e884a0fb"
+    },
+    "contractId": {
+      "$oid": "9004019ff12ed17e09b1cbf9"
+    },
+    "tenantId": {
+      "$oid": "4983c159af07625060f3e132"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "medium",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-08-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "3dd7065fb961897264669b52"
+    },
+    "roomId": {
+      "$oid": "f43e5f6eec13f30d1996650f"
+    },
+    "contractId": {
+      "$oid": "17d9761c72a5e44edd4e55a5"
+    },
+    "tenantId": {
+      "$oid": "241227e389f0eafe5949701e"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-09-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6086f54359baef7519a9518a"
+    },
+    "roomId": {
+      "$oid": "a020988f20aa364eb28f5f28"
+    },
+    "contractId": {
+      "$oid": "aff01541792eb5e7f68a9c40"
+    },
+    "tenantId": {
+      "$oid": "b5f3970aa1b501d3207fb307"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Bình nóng lạnh trục trặc",
+    "description": "Nước nóng không ổn định.",
+    "images": [],
+    "priority": "low",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-09-16T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-09-15T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-09-16T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e4dbaf0f68c5c5ba01f2b6b8"
+    },
+    "roomId": {
+      "$oid": "7ad8132d872f697cbf2ac052"
+    },
+    "contractId": {
+      "$oid": "84834759a20c5fd1cb20f94c"
+    },
+    "tenantId": {
+      "$oid": "6ec35635cc25c09212e3073d"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Mạng wifi yếu",
+    "description": "Mạng internet thường xuyên mất kết nối.",
+    "images": [],
+    "priority": "high",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-06-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "f42aaec8b1b99ffe1922c59b"
+    },
+    "roomId": {
+      "$oid": "17fb6ac0619b3005f6a3f613"
+    },
+    "contractId": {
+      "$oid": "b1e8ba58ee8c55df9b1f04e7"
+    },
+    "tenantId": {
+      "$oid": "9cfc7e185e5a1e3023d0b1cb"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Thoát nước chậm",
+    "description": "Ống thoát nước khu vệ sinh có dấu hiệu tắc.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-06-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-16T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "2118967d25fc29c9f35c873f"
+    },
+    "roomId": {
+      "$oid": "71a5f06bed96efb91aba2887"
+    },
+    "contractId": {
+      "$oid": "796832baad633d008e21335f"
+    },
+    "tenantId": {
+      "$oid": "fcfbfc79af559cf7bbb09e87"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Ổ điện lỏng",
+    "description": "Ổ cắm trên tường cần kiểm tra an toàn.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-06-20T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-06-20T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "20d2166bd75607b4f5856b51"
+    },
+    "roomId": {
+      "$oid": "9af2e904c721994e408c7e3f"
+    },
+    "contractId": {
+      "$oid": "084de47867f1448e4f9612c9"
+    },
+    "tenantId": {
+      "$oid": "87764c2d09e91e78a4b49eed"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Điều hòa hoạt động yếu",
+    "description": "Điều hòa làm lạnh chậm, cần kiểm tra và vệ sinh.",
+    "images": [],
+    "priority": "medium",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-11-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-11-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "802c332c9829bee3906353bd"
+    },
+    "roomId": {
+      "$oid": "5eb393ce107f4e0857b866c4"
+    },
+    "contractId": {
+      "$oid": "83fbb300ee5ffd03b0e06a5f"
+    },
+    "tenantId": {
+      "$oid": "f18a51234d8d753f13e78bd3"
+    },
+    "landlordId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "title": "Vòi nước rò rỉ",
+    "description": "Vòi nước tại khu vệ sinh bị rỉ nước.",
+    "images": [],
+    "priority": "low",
+    "status": "pending",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-10-29T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-29T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fcc1e3c9fbfe1a699b90cb87"
+    },
+    "roomId": {
+      "$oid": "49f087aa535129db3911c5fd"
+    },
+    "contractId": {
+      "$oid": "b3f206cb1aa83eaf54087869"
+    },
+    "tenantId": {
+      "$oid": "83503434dc403bf71621879b"
+    },
+    "landlordId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "title": "Bóng đèn hỏng",
+    "description": "Đèn trần phòng bị chập chờn.",
+    "images": [],
+    "priority": "low",
+    "status": "in_progress",
+    "landlordNote": "",
+    "resolvedAt": null,
+    "createdAt": {
+      "$date": "2026-07-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-07-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "16e1bb28fdc1e996cab44fde"
+    },
+    "roomId": {
+      "$oid": "6b613f10d2555470458c1485"
+    },
+    "contractId": {
+      "$oid": "7d4ad67c8b87551c92dd4c87"
+    },
+    "tenantId": {
+      "$oid": "0003a305aa1b321126686f55"
+    },
+    "landlordId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "title": "Khóa cửa khó mở",
+    "description": "Khóa cửa bị kẹt và cần thay mới.",
+    "images": [],
+    "priority": "medium",
+    "status": "resolved",
+    "landlordNote": "Đã phối hợp kiểm tra và xử lý.",
+    "resolvedAt": {
+      "$date": "2026-10-25T12:00:00.000Z"
+    },
+    "createdAt": {
+      "$date": "2026-10-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-10-25T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]

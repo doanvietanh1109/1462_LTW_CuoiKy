@@ -1,0 +1,462 @@
+[
+  {
+    "_id": {
+      "$oid": "5be05c4f305dfdffa156f15b"
+    },
+    "name": "Khu trọ A1 - Cầu Giấy",
+    "address": "Khu vực Cầu Giấy, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Cầu Giấy, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "ownerName": "Đặng Phương Linh",
+    "defaultElectricityPrice": 3200,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 120000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "61a8843e9830220db6ccf87d"
+    },
+    "name": "Khu trọ B1 - Thanh Xuân",
+    "address": "Khu vực Thanh Xuân, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Thanh Xuân, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "ownerName": "Trịnh Hữu Sơn",
+    "defaultElectricityPrice": 3500,
+    "defaultWaterPrice": 15000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-05T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-05T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "fbb7c57c59adcf53dd388ad7"
+    },
+    "name": "Khu trọ C1 - Hà Đông",
+    "address": "Khu vực Hà Đông, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Hà Đông, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "ownerName": "Lê Ngọc Bình",
+    "defaultElectricityPrice": 3800,
+    "defaultWaterPrice": 20000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-09T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-09T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "000a9b8be46bf1f89bfdbdf1"
+    },
+    "name": "Khu trọ D1 - Nam Từ Liêm",
+    "address": "Khu vực Nam Từ Liêm, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Nam Từ Liêm, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "ownerName": "Bùi Trọng Lan",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 150000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-13T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-13T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "16f9042048338b6c89e8bc92"
+    },
+    "name": "Khu trọ E1 - Bắc Từ Liêm",
+    "address": "Khu vực Bắc Từ Liêm, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Bắc Từ Liêm, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "f5b8a45d0114ed3b30225806"
+    },
+    "ownerName": "Mai Thu Quỳnh",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 20000,
+    "defaultServiceFee": 180000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-17T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-17T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c7f304a590b5bba7d54e5932"
+    },
+    "name": "Khu trọ F1 - Đống Đa",
+    "address": "Khu vực Đống Đa, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Đống Đa, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "9c594a6581881f0317b281a5"
+    },
+    "ownerName": "Phạm Thanh Anh",
+    "defaultElectricityPrice": 3800,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-21T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-21T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "929bde19029023157ae11f36"
+    },
+    "name": "Khu trọ G1 - Hai Bà Trưng",
+    "address": "Khu vực Hai Bà Trưng, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Hai Bà Trưng, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "d7d9d80d410e2bcb9f62713b"
+    },
+    "ownerName": "Đỗ Tú Lâm",
+    "defaultElectricityPrice": 3800,
+    "defaultWaterPrice": 18000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-25T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-25T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "da6fde2be2032480ab9facb8"
+    },
+    "name": "Khu trọ H1 - Hoàng Mai",
+    "address": "Khu vực Hoàng Mai, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Hoàng Mai, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "132f24dfc146df5c31ab3d17"
+    },
+    "ownerName": "Lý Đức Quân",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 18000,
+    "defaultServiceFee": 150000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-05-29T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-05-29T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5a3e5fd253559fe494438734"
+    },
+    "name": "Khu trọ I1 - Long Biên",
+    "address": "Khu vực Long Biên, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Long Biên, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "d09367e4d0b468f200ba1bd1"
+    },
+    "ownerName": "Hoàng Quốc An",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 22000,
+    "defaultServiceFee": 70000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-02T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-02T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1afd796852e98aa18186c8f5"
+    },
+    "name": "Khu trọ J1 - Gia Lâm",
+    "address": "Khu vực Gia Lâm, Hà Nội (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Gia Lâm, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "228b42a2a0b258e86d113423"
+    },
+    "ownerName": "Hồ Văn Khánh",
+    "defaultElectricityPrice": 3200,
+    "defaultWaterPrice": 15000,
+    "defaultServiceFee": 150000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-06T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-06T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "1f9b6895b061c7832567e3e3"
+    },
+    "name": "Khu trọ K1 - Bình Thạnh",
+    "address": "Khu vực Bình Thạnh, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Bình Thạnh, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "bb307c7c38d3d2826b4507ea"
+    },
+    "ownerName": "Cao Gia Phương",
+    "defaultElectricityPrice": 3800,
+    "defaultWaterPrice": 22000,
+    "defaultServiceFee": 120000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-10T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-10T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "e54adc1c40ee76f51ec83e2f"
+    },
+    "name": "Khu trọ L1 - Gò Vấp",
+    "address": "Khu vực Gò Vấp, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Gò Vấp, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "1044c02eca01bce4fb7d317e"
+    },
+    "ownerName": "Phan Anh Vy",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 22000,
+    "defaultServiceFee": 70000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-14T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-14T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "103a3257239b48746a587205"
+    },
+    "name": "Khu trọ M1 - Tân Bình",
+    "address": "Khu vực Tân Bình, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Tân Bình, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "083e60b61c9286bd7fdba10c"
+    },
+    "ownerName": "Ngô Thị Khang",
+    "defaultElectricityPrice": 3200,
+    "defaultWaterPrice": 22000,
+    "defaultServiceFee": 150000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-18T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-18T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "4d740ab76ce4275ae034450c"
+    },
+    "name": "Khu trọ N1 - Quận 7",
+    "address": "Khu vực Quận 7, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Quận 7, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "491232f6478c4ab137f5f1d3"
+    },
+    "ownerName": "Hà Hoài Phúc",
+    "defaultElectricityPrice": 3500,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-22T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-22T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "84fe32637973b0928c866e68"
+    },
+    "name": "Khu trọ O1 - Thủ Đức",
+    "address": "Khu vực Thủ Đức, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Thủ Đức, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "83afbc0f7b19e946f3a5dcd2"
+    },
+    "ownerName": "Vũ Khánh Tuấn",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 20000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-26T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-26T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "bda40ce68a42e13baee811ed"
+    },
+    "name": "Khu trọ P1 - Bình Tân",
+    "address": "Khu vực Bình Tân, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Bình Tân, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "d1ecc5dcef85120fde3ed704"
+    },
+    "ownerName": "Dương Minh Hương",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 20000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-06-30T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-06-30T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "38807acad6cc743f0a2c4f57"
+    },
+    "name": "Khu trọ Q1 - Tân Phú",
+    "address": "Khu vực Tân Phú, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Tân Phú, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "1f65c75412b621e261fdd1bd"
+    },
+    "ownerName": "Đặng Phương Linh",
+    "defaultElectricityPrice": 3200,
+    "defaultWaterPrice": 15000,
+    "defaultServiceFee": 70000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-07-04T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-04T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "ae1792eae0e8a1d0a241bfbb"
+    },
+    "name": "Khu trọ R1 - Quận 12",
+    "address": "Khu vực Quận 12, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Quận 12, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "17490b598334486ad5d767a3"
+    },
+    "ownerName": "Trịnh Hữu Sơn",
+    "defaultElectricityPrice": 3800,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 120000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-07-08T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-08T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "c5562c9fea8fc7af163dbb04"
+    },
+    "name": "Khu trọ S1 - Nhà Bè",
+    "address": "Khu vực Nhà Bè, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Nhà Bè, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "538871290592de78a0bf4215"
+    },
+    "ownerName": "Lê Ngọc Bình",
+    "defaultElectricityPrice": 3800,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 100000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-07-12T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-12T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "de60cb874065e2a0ddd292d7"
+    },
+    "name": "Khu trọ T1 - Hóc Môn",
+    "address": "Khu vực Hóc Môn, TP. Hồ Chí Minh (địa chỉ mô phỏng)",
+    "description": "Khu nhà trọ giả lập tại Hóc Môn, có bãi xe, camera và dịch vụ vệ sinh.",
+    "ownerId": {
+      "$oid": "21415590f43c7786147e851e"
+    },
+    "ownerName": "Bùi Trọng Lan",
+    "defaultElectricityPrice": 3000,
+    "defaultWaterPrice": 25000,
+    "defaultServiceFee": 120000,
+    "status": "active",
+    "createdAt": {
+      "$date": "2025-07-16T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2025-07-16T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]

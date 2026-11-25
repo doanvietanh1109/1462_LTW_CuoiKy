@@ -1,0 +1,66 @@
+[
+  {
+    "_id": {
+      "$oid": "2b149618909217cb96e1ad76"
+    },
+    "code": "CHAO2026",
+    "value": 100000,
+    "active": true,
+    "usageLimit": 100,
+    "createdAt": {
+      "$date": "2026-01-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-01-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "eb5c464bab3ecd620e5ccc65"
+    },
+    "code": "SINHVIEN",
+    "value": 150000,
+    "active": true,
+    "usageLimit": 150,
+    "createdAt": {
+      "$date": "2026-02-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-02-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "d65a03a243712e4082bc9e5d"
+    },
+    "code": "THUETRO50",
+    "value": 50000,
+    "active": true,
+    "usageLimit": 200,
+    "createdAt": {
+      "$date": "2026-03-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-03-01T12:00:00.000Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "9ae28bbe6a683774a0aed59b"
+    },
+    "code": "THANG9",
+    "value": 120000,
+    "active": false,
+    "usageLimit": 250,
+    "createdAt": {
+      "$date": "2026-04-01T12:00:00.000Z"
+    },
+    "updatedAt": {
+      "$date": "2026-04-01T12:00:00.000Z"
+    },
+    "__v": 0
+  }
+]
