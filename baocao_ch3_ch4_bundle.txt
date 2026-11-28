@@ -1,0 +1,1335 @@
+﻿===== FILE: server/src/app.js =====
+const express = require("express");
+const cors = require("cors");
+const { env } = require("./config/env");
+const { sendSuccess, sendError } = require("./utils/response");
+const { errorHandler } = require("./middlewares/error.middleware");
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+const roomRoutes = require("./routes/room.routes");
+const reviewRoutes = require("./routes/review.routes");
+const couponRoutes = require("./routes/coupon.routes");
+const orderRoutes = require("./routes/order.routes");
+const adminRoutes = require("./routes/admin.routes");
+const rentalHistoryRoutes = require("./routes/rentalHistory.routes");
+const chatRoutes = require("./routes/chat.routes");
+const motelBlockRoutes = require("./routes/motelBlock.routes");
+const contractRoutes = require("./routes/contract.routes");
+const meterReadingRoutes = require("./routes/meterReading.routes");
+const invoiceRoutes = require("./routes/invoice.routes");
+const repairRequestRoutes = require("./routes/repairRequest.routes");
+const contactRoutes = require("./routes/contact.routes");
+const contactRequestRoutes = require("./routes/contactRequest.routes");
+const notificationRoutes = require("./routes/notification.routes");
+
+const app = express();
+
+app.use(express.json());
+
+const allowedOrigins = [
+  env.CLIENT_URL,
+  "http://127.0.0.1:5500",
+  "http://localhost:5500",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
+
+app.get("/api/health", (req, res) => {
+  return sendSuccess(res, "Backend is running", { status: "OK" });
+});
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/rooms", roomRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/coupons", couponRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/rental-history", rentalHistoryRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/motel-blocks", motelBlockRoutes);
+app.use("/api/contracts", contractRoutes);
+app.use("/api/meter-readings", meterReadingRoutes);
+app.use("/api/invoices", invoiceRoutes);
+app.use("/api/repair-requests", repairRequestRoutes);
+app.use("/api/contacts", contactRoutes);
+app.use("/api/contact-requests", contactRequestRoutes);
+app.use("/api/notifications", notificationRoutes);
+
+app.use((req, res) => {
+  return sendError(res, "Route not found", null, 404);
+});
+
+app.use(errorHandler);
+
+module.exports = app;
+
+===== FILE: server/src/middlewares/auth.middleware.js =====
+const jwt = require("jsonwebtoken");
+const { User } = require("../models/user.model");
+const { env } = require("../config/env");
+const { sendError } = require("../utils/response");
+
+const getBearerToken = (req) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) return null;
+  return authHeader.split(" ")[1];
+};
+
+const loadUserFromToken = async (token) => {
+  const decoded = jwt.verify(token, env.JWT_SECRET);
+  return User.findById(decoded.id).select("-password");
+};
+
+const requireAuth = async (req, res, next) => {
+  try {
+    const token = getBearerToken(req);
+    if (!token) {
+      return sendError(res, "Please log in to continue", null, 401);
+    }
+
+    const user = await loadUserFromToken(token);
+    if (!user) {
+      return sendError(res, "User does not exist", null, 401);
+    }
+
+    if (user.status === "blocked") {
+      return sendError(res, "Your account has been blocked", null, 403);
+    }
+
+    req.user = user;
+    return next();
+  } catch (error) {
+    return sendError(res, "Invalid or expired token", null, 401);
+  }
+};
+
+const optionalAuth = async (req, res, next) => {
+  try {
+    const token = getBearerToken(req);
+    if (token) {
+      const user = await loadUserFromToken(token);
+      if (user && user.status !== "blocked") req.user = user;
+    }
+  } catch (error) {
+    // Optional auth intentionally ignores invalid tokens.
+  }
+
+  return next();
+};
+
+const requireAdmin = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return sendError(res, "You do not have permission to perform this action", null, 403);
+  }
+  return next();
+};
+
+const requireLandlord = (req, res, next) => {
+  if (!req.user || !["landlord", "admin"].includes(req.user.role)) {
+    return sendError(res, "You do not have permission to perform this action", null, 403);
+  }
+  return next();
+};
+
+module.exports = { requireAuth, optionalAuth, requireAdmin, requireLandlord };
+
+===== FILE: server/src/middlewares/error.middleware.js =====
+const { sendError } = require("../utils/response");
+
+const errorHandler = (err, req, res, next) => {
+  console.error("Error:", err.message || err);
+
+  // Mongoose bad ObjectId
+  if (err.name === "CastError") {
+    return sendError(res, "Äá»‹nh dáº¡ng ID khĂ´ng há»£p lá»‡", null, 400);
+  }
+
+  // Mongoose duplicate key
+  if (err.code === 11000) {
+    const fields = Object.keys(err.keyValue || {}).join(", ");
+    return sendError(res, `Dá»¯ liá»‡u bá»‹ trĂ¹ng láº·p (${fields})`, err.keyValue, 400);
+  }
+
+  // Mongoose validation error
+  if (err.name === "ValidationError") {
+    const messages = Object.values(err.errors || {}).map((val) => val.message);
+    return sendError(res, messages.join("; ") || "Dá»¯ liá»‡u Ä‘áº§u vĂ o khĂ´ng há»£p lá»‡", messages, 400);
+  }
+
+  // JWT errors
+  if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+    return sendError(res, "Token khĂ´ng há»£p lá»‡ hoáº·c Ä‘Ă£ háº¿t háº¡n", null, 401);
+  }
+
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  const details = process.env.NODE_ENV === "development" ? err.stack : null;
+  return sendError(res, message, details, statusCode);
+};
+
+module.exports = { errorHandler };
+
+===== FILE: server/src/utils/response.js =====
+const sendSuccess = (res, message, data = null, statusCode = 200) => {
+  return res.status(statusCode).json({
+    success: true,
+    message,
+    data,
+  });
+};
+
+const sendError = (res, message, errors = null, statusCode = 500) => {
+  return res.status(statusCode).json({
+    success: false,
+    message,
+    errors,
+  });
+};
+
+module.exports = { sendSuccess, sendError };
+
+===== FILE: server/API_DOCS.md =====
+# API Documentation - ThuĂª PhĂ²ng Sinh ViĂªn
+
+**Base URL:** `http://localhost:4000/api`
+
+---
+
+## đŸ” 1. Auth API (`/api/auth`)
+
+### 1.1 ÄÄƒng kĂ½
+- **Endpoint:** `POST /auth/register`
+- **Auth required:** KhĂ´ng
+- **Body:**
+```json
+{
+  "name": "Nguyen Van A",
+  "email": "nva@gmail.com",
+  "password": "password123"
+}
+```
+- **Response:**
+```json
+{
+  "success": true,
+  "message": "ÄÄƒng kĂ½ thĂ nh cĂ´ng",
+  "data": {
+    "user": { ... },
+    "token": "eyJhbGciOi..."
+  }
+}
+```
+
+### 1.2 ÄÄƒng nháº­p
+- **Endpoint:** `POST /auth/login`
+- **Auth required:** KhĂ´ng
+- **Body:**
+```json
+{
+  "email": "nva@gmail.com",
+  "password": "password123"
+}
+```
+- **Response:** (Giá»‘ng Ä‘Äƒng kĂ½)
+
+### 1.3 Láº¥y thĂ´ng tin tĂ i khoáº£n hiá»‡n táº¡i
+- **Endpoint:** `GET /auth/me`
+- **Auth required:** CĂ³ (Token)
+- **Response:**
+```json
+{
+  "success": true,
+  "message": "Láº¥y thĂ´ng tin thĂ nh cĂ´ng",
+  "data": { "user": { ... } }
+}
+```
+
+---
+
+## đŸ‘¤ 2. User API (`/api/users`)
+
+### 2.1 Láº¥y danh sĂ¡ch ngÆ°á»i dĂ¹ng
+- **Endpoint:** `GET /users`
+- **Auth required:** CĂ³ (Admin)
+
+### 2.2 Xem chi tiáº¿t ngÆ°á»i dĂ¹ng
+- **Endpoint:** `GET /users/:id`
+- **Auth required:** CĂ³ (Admin hoáº·c chĂ­nh chá»§)
+
+### 2.3 KhĂ³a/Má»Ÿ khĂ³a tĂ i khoáº£n
+- **Endpoint:** `PATCH /users/:id/status`
+- **Auth required:** CĂ³ (Admin)
+- **Body:**
+```json
+{ "status": "blocked" }
+```
+
+---
+
+## đŸ  3. Room API (`/api/rooms`)
+
+### 3.1 Láº¥y danh sĂ¡ch phĂ²ng
+- **Endpoint:** `GET /rooms`
+- **Auth required:** KhĂ´ng
+- **Query Params:** `?search=...&category=...&district=...&minPrice=...&maxPrice=...`
+
+### 3.2 Láº¥y chi tiáº¿t phĂ²ng
+- **Endpoint:** `GET /rooms/:id`
+- **Auth required:** KhĂ´ng
+
+### 3.3 ThĂªm phĂ²ng má»›i
+- **Endpoint:** `POST /rooms`
+- **Auth required:** CĂ³ (Admin)
+- **Body:**
+```json
+{
+  "title": "PhĂ²ng VIP",
+  "category": "KTX",
+  "price": 2500000,
+  "district": "Quáº­n 1",
+  "image": "url",
+  "description": "MĂ´ táº£",
+  "amenities": ["Wifi", "MĂ¡y láº¡nh"]
+}
+```
+
+### 3.4 Sá»­a phĂ²ng
+- **Endpoint:** `PUT /rooms/:id`
+- **Auth required:** CĂ³ (Admin)
+- **Body:** Báº¥t ká»³ trÆ°á»ng nĂ o cáº§n cáº­p nháº­t.
+
+### 3.5 XĂ³a phĂ²ng (Soft Delete)
+- **Endpoint:** `DELETE /rooms/:id`
+- **Auth required:** CĂ³ (Admin)
+
+### 3.6 Táº¡o dá»¯ liá»‡u phĂ²ng máº«u (Seed)
+- **Endpoint:** `POST /rooms/seed`
+- **Auth required:** CĂ³ (Admin)
+
+---
+
+## â­ 4. Review API (`/api/reviews`)
+
+### 4.1 Láº¥y Ä‘Ă¡nh giĂ¡ cá»§a má»™t phĂ²ng
+- **Endpoint:** `GET /reviews/room/:roomId`
+- **Auth required:** KhĂ´ng
+
+### 4.2 ThĂªm Ä‘Ă¡nh giĂ¡
+- **Endpoint:** `POST /reviews`
+- **Auth required:** Tuá»³ chá»n (Token Ä‘á»ƒ láº¥y tĂªn, khĂ´ng thĂ¬ "áº¨n danh")
+- **Body:**
+```json
+{
+  "roomId": "id_cua_phong",
+  "stars": 5,
+  "content": "PhĂ²ng ráº¥t sáº¡ch Ä‘áº¹p"
+}
+```
+
+---
+
+## đŸ« 5. Coupon API (`/api/coupons`)
+
+### 5.1 Láº¥y danh sĂ¡ch mĂ£ giáº£m giĂ¡
+- **Endpoint:** `GET /coupons`
+- **Auth required:** CĂ³ (Admin)
+
+### 5.2 Táº¡o mĂ£ má»›i
+- **Endpoint:** `POST /coupons`
+- **Auth required:** CĂ³ (Admin)
+- **Body:**
+```json
+{ "code": "SALE50", "value": 50000 }
+```
+
+### 5.3 Ăp dá»¥ng mĂ£ giáº£m giĂ¡
+- **Endpoint:** `POST /coupons/apply`
+- **Auth required:** Tuá»³ chá»n
+- **Body:**
+```json
+{ "code": "SALE50", "roomPrice": 2000000 }
+```
+- **Response:** Tráº£ vá» sá»‘ tiá»n giáº£m vĂ  giĂ¡ cuá»‘i cĂ¹ng (`finalPrice`).
+
+### 5.4 Báº­t/táº¯t mĂ£
+- **Endpoint:** `PATCH /coupons/:id/toggle`
+- **Auth required:** CĂ³ (Admin)
+
+### 5.5 XĂ³a mĂ£ giáº£m giĂ¡
+- **Endpoint:** `DELETE /coupons/:id`
+- **Auth required:** CĂ³ (Admin)
+
+---
+
+## đŸ›’ 6. Order API (`/api/orders`)
+
+### 6.1 Táº¡o Ä‘Æ¡n Ä‘áº·t phĂ²ng
+- **Endpoint:** `POST /orders`
+- **Auth required:** Tuá»³ chá»n
+- **Body:**
+```json
+{
+  "roomId": "...",
+  "roomName": "PhĂ²ng VIP",
+  "originalPrice": 2000000,
+  "discount": 50000,
+  "couponCode": "SALE50",
+  "pricePaid": 1950000,
+  "paymentMethod": "cash"
+}
+```
+
+### 6.2 Xem danh sĂ¡ch Ä‘Æ¡n hĂ ng
+- **Endpoint:** `GET /orders`
+- **Auth required:** CĂ³ (Admin)
+
+### 6.3 XĂ³a lá»‹ch sá»­ Ä‘Æ¡n hĂ ng
+- **Endpoint:** `DELETE /orders/clear`
+- **Auth required:** CĂ³ (Admin)
+
+---
+
+## đŸ“ 7. Admin Dashboard API (`/api/admin`)
+
+### 7.1 Thá»‘ng kĂª tá»•ng quan
+- **Endpoint:** `GET /admin/dashboard`
+- **Auth required:** CĂ³ (Admin)
+- **Response:** Tráº£ vá» tá»•ng doanh thu, sá»‘ phĂ²ng, sá»‘ lÆ°á»£ng Ä‘Æ¡n, v.v.
+
+### 7.2 Thá»‘ng kĂª doanh thu
+- **Endpoint:** `GET /admin/revenue`
+- **Auth required:** CĂ³ (Admin)
+
+### 7.3 Láº¥y Ä‘Æ¡n hĂ ng (Alias)
+- **Endpoint:** `GET /admin/orders`
+- **Auth required:** CĂ³ (Admin)
+
+### 7.4 Láº¥y danh sĂ¡ch Coupon (Alias)
+- **Endpoint:** `GET /admin/coupons`
+- **Auth required:** CĂ³ (Admin)
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\constants\roles.js =====
+const USER_ROLES = {
+  USER: "user",
+  LANDLORD: "landlord",
+  ADMIN: "admin",
+};
+
+module.exports = { USER_ROLES };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\constants\statuses.js =====
+const USER_STATUS = {
+  ACTIVE: "active",
+  BLOCKED: "blocked",
+};
+
+const ROOM_STATUS = {
+  AVAILABLE: "available",
+  HIDDEN: "hidden",
+  DELETED: "deleted",
+};
+
+const ORDER_STATUS = {
+  SUCCESS: "success",
+  PENDING: "pending",
+  CANCELLED: "cancelled",
+};
+
+module.exports = { USER_STATUS, ROOM_STATUS, ORDER_STATUS };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\contactInquiry.model.js =====
+const mongoose = require("mongoose");
+
+const contactInquirySchema = new mongoose.Schema(
+  {
+    roomId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+      required: true,
+    },
+    landlordId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    name: { type: String, required: true, trim: true },
+    phone: { type: String, required: true, trim: true },
+    email: { type: String, trim: true, default: "" },
+    message: { type: String, trim: true, default: "" },
+    status: {
+      type: String,
+      enum: ["new", "contacted"],
+      default: "new",
+    },
+  },
+  { timestamps: true }
+);
+
+const ContactInquiry = mongoose.model("ContactInquiry", contactInquirySchema);
+
+module.exports = { ContactInquiry };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\contactRequest.model.js =====
+const mongoose = require("mongoose");
+
+const contactRequestSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true, maxlength: 100 },
+  email: { type: String, required: true, trim: true, lowercase: true, maxlength: 254 },
+  subject: { type: String, required: true, trim: true, maxlength: 120 },
+  message: { type: String, required: true, trim: true, maxlength: 5000 },
+  status: { type: String, enum: ["new", "in_review", "resolved"], default: "new" },
+}, { timestamps: true, collection: "contactrequests" });
+
+const ContactRequest = mongoose.models.ContactRequest || mongoose.model("ContactRequest", contactRequestSchema);
+module.exports = { ContactRequest };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\contract.model.js =====
+const mongoose = require("mongoose");
+
+const contractSchema = new mongoose.Schema(
+  {
+    contractCode: { type: String, required: true, unique: true, trim: true },
+    roomId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+      required: true,
+    },
+    blockId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MotelBlock",
+      default: null,
+    },
+    landlordId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    tenantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    tenantName: { type: String, required: true, trim: true },
+    tenantEmail: { type: String, required: true, trim: true, lowercase: true },
+    tenantPhone: { type: String, required: true, trim: true },
+    identityCard: { type: String, trim: true, default: "" },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, default: null },
+    actualEndDate: { type: Date, default: null },
+    rentPrice: { type: Number, required: true, min: 0 },
+    deposit: { type: Number, default: 0, min: 0 },
+    electricityPrice: { type: Number, default: 3500, min: 0 },
+    waterPrice: { type: Number, default: 15000, min: 0 },
+    serviceFee: { type: Number, default: 100000, min: 0 },
+    initialElectricity: { type: Number, default: 0, min: 0 },
+    initialWater: { type: Number, default: 0, min: 0 },
+    notes: { type: String, default: "" },
+    status: {
+      type: String,
+      enum: ["active", "terminated"],
+      default: "active",
+    },
+  },
+  { timestamps: true }
+);
+
+// A database constraint closes the race between concurrent requests that both
+// pass the controller's availability check for the same room.
+contractSchema.index(
+  { roomId: 1 },
+  { unique: true, partialFilterExpression: { status: "active" }, name: "uniq_active_contract_per_room" }
+);
+
+const Contract = mongoose.model("Contract", contractSchema);
+
+module.exports = { Contract };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\coupon.model.js =====
+const mongoose = require("mongoose");
+
+const couponSchema = new mongoose.Schema(
+  {
+    code: { type: String, required: true, unique: true, uppercase: true, trim: true },
+    value: { type: Number, required: true, min: 0 },
+    active: { type: Boolean, default: true },
+    expiryDate: { type: Date },
+    usageLimit: { type: Number, min: 0 },
+  },
+  { timestamps: true }
+);
+
+const Coupon = mongoose.model("Coupon", couponSchema);
+
+module.exports = { Coupon };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\invoice.model.js =====
+const mongoose = require("mongoose");
+
+const invoiceSchema = new mongoose.Schema(
+  {
+    invoiceCode: { type: String, required: true, unique: true, trim: true },
+    roomId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+      required: true,
+    },
+    contractId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contract",
+      default: null,
+    },
+    tenantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    landlordId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    meterReadingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MeterReading",
+      default: null,
+    },
+    month: { type: Number, required: true, min: 1, max: 12 },
+    year: { type: Number, required: true, min: 2020, max: 2100 },
+    roomPrice: { type: Number, required: true, min: 0 },
+    oldElectricity: { type: Number, required: true, min: 0 },
+    newElectricity: { type: Number, required: true, min: 0 },
+    electricityUsage: { type: Number, required: true, min: 0 },
+    electricityPrice: { type: Number, required: true, min: 0 },
+    electricityCost: { type: Number, required: true, min: 0 },
+    useTieredElectricity: { type: Boolean, default: false },
+    oldWater: { type: Number, required: true, min: 0 },
+    newWater: { type: Number, required: true, min: 0 },
+    waterUsage: { type: Number, required: true, min: 0 },
+    waterPrice: { type: Number, required: true, min: 0 },
+    waterCost: { type: Number, required: true, min: 0 },
+    serviceFee: { type: Number, required: true, default: 0, min: 0 },
+    totalAmount: { type: Number, required: true, min: 0 },
+    status: {
+      type: String,
+      enum: ["unpaid", "pending_confirmation", "paid"],
+      default: "unpaid",
+    },
+    paymentConfirmationStatus: { type: String, enum: ["none", "pending", "confirmed", "rejected"], default: "none" },
+    paymentMethod: { type: String, enum: ["bank_transfer", "cash", null], default: null },
+    paymentRejectionReason: { type: String, default: "", maxlength: 300 },
+    paymentSubmittedAt: { type: Date, default: null },
+    paymentConfirmedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    paymentConfirmationRequests: [{ tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, submittedAt: { type: Date, default: Date.now }, status: { type: String, enum: ["pending", "confirmed", "rejected"] }, reviewedAt: Date, reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, note: { type: String, maxlength: 300 } }],
+    paidAt: { type: Date, default: null },
+    dueDate: { type: Date, default: null },
+    reminderSentAt: { type: Date, default: null },
+    reminderCount: { type: Number, default: 0 },
+    note: { type: String, default: "" },
+  },
+  { timestamps: true }
+);
+
+// Má»™t há»£p Ä‘á»“ng cĂ³ tá»‘i Ä‘a má»™t hĂ³a Ä‘Æ¡n cho má»—i ká»³; phĂ²ng cĂ³ thá»ƒ Ä‘á»•i ngÆ°á»i thuĂª giá»¯a thĂ¡ng.
+invoiceSchema.index(
+  { roomId: 1, month: 1, year: 1, contractId: 1 },
+  { unique: true, name: "uniq_invoice_room_period_contract" }
+);
+
+const Invoice = mongoose.model("Invoice", invoiceSchema);
+
+module.exports = { Invoice };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\meterReading.model.js =====
+const mongoose = require("mongoose");
+
+const meterReadingSchema = new mongoose.Schema(
+  {
+    roomId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+      required: true,
+    },
+    contractId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contract",
+      default: null,
+    },
+    landlordId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    month: { type: Number, required: true, min: 1, max: 12 },
+    year: { type: Number, required: true, min: 2020, max: 2100 },
+    oldElectricity: { type: Number, required: true, min: 0 },
+    newElectricity: { type: Number, required: true, min: 0 },
+    oldWater: { type: Number, required: true, min: 0 },
+    newWater: { type: Number, required: true, min: 0 },
+    note: { type: String, default: "" },
+  },
+  { timestamps: true }
+);
+
+// Giá»¯ riĂªng chá»‰ sá»‘ theo há»£p Ä‘á»“ng khi phĂ²ng bĂ n giao trong cĂ¹ng má»™t ká»³.
+meterReadingSchema.index(
+  { roomId: 1, month: 1, year: 1, contractId: 1 },
+  { unique: true, name: "uniq_meter_room_period_contract" }
+);
+
+const MeterReading = mongoose.model("MeterReading", meterReadingSchema);
+
+module.exports = { MeterReading };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\motelBlock.model.js =====
+const mongoose = require("mongoose");
+
+const motelBlockSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    address: { type: String, required: true, trim: true },
+    description: { type: String, default: "" },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    ownerName: { type: String },
+    defaultElectricityPrice: { type: Number, default: 3500, min: 0 },
+    defaultWaterPrice: { type: Number, default: 15000, min: 0 },
+    defaultServiceFee: { type: Number, default: 100000, min: 0 },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
+  },
+  { timestamps: true }
+);
+
+const MotelBlock = mongoose.model("MotelBlock", motelBlockSchema);
+
+module.exports = { MotelBlock };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\notification.model.js =====
+const mongoose = require("mongoose");
+
+const notificationSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
+  type: { type: String, enum: ["invoice", "contract", "repair", "system"], default: "system" },
+  title: { type: String, required: true, trim: true, maxlength: 160 },
+  message: { type: String, required: true, trim: true, maxlength: 500 },
+  resourceType: { type: String, enum: ["invoice", "contract", "repair", null], default: null },
+  resourceId: { type: mongoose.Schema.Types.ObjectId, default: null },
+  readAt: { type: Date, default: null },
+}, { timestamps: true });
+
+notificationSchema.index({ userId:  1, createdAt: -1 });
+const Notification = mongoose.model("Notification", notificationSchema);
+module.exports = { Notification };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\order.model.js =====
+const mongoose = require("mongoose");
+
+const orderSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userName: { type: String, required: true },
+    roomId: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
+    roomName: { type: String, required: true },
+    landlordId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    originalPrice: { type: Number, required: true, min: 0 },
+    discount: { type: Number, required: true, default: 0, min: 0 },
+    couponCode: { type: String },
+    pricePaid: { type: Number, required: true, min: 0 },
+    paymentMethod: { type: String, enum: ["cash", "qr"], required: true },
+    status: {
+      type: String,
+      enum: ["success", "pending", "cancelled"],
+      default: "pending",
+    },
+  },
+  { timestamps: true }
+);
+
+const Order = mongoose.model("Order", orderSchema);
+
+module.exports = { Order };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\rentalHistory.model.js =====
+const mongoose = require("mongoose");
+
+const rentalHistorySchema = new mongoose.Schema(
+    {
+        roomId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Room",
+            required: true,
+        },
+        roomTitle: {
+            type: String,
+            required: true,
+        },
+        landlordId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        tenantId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        tenantName: {
+            type: String,
+            required: true,
+        },
+        tenantEmail: {
+            type: String,
+            required: true,
+        },
+        tenantPhone: {
+            type: String,
+            required: true,
+        },
+        startDate: {
+            type: Date,
+            required: true,
+        },
+        endDate: {
+            type: Date,
+        },
+        actualEndDate: {
+            type: Date, // NgĂ y thá»±c táº¿ tráº£ phĂ²ng
+        },
+        price: {
+            type: Number,
+            required: true,
+        },
+        status: {
+            type: String,
+            enum: ["active", "completed"],
+            default: "active",
+        },
+    },
+    {
+        timestamps: true,
+    }
+);
+
+const RentalHistory = mongoose.model("RentalHistory", rentalHistorySchema);
+
+module.exports = { RentalHistory };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\repairRequest.model.js =====
+const mongoose = require("mongoose");
+
+const repairRequestSchema = new mongoose.Schema(
+  {
+    roomId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Room",
+      required: true,
+    },
+    contractId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Contract",
+      default: null,
+    },
+    tenantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    landlordId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    title: { type: String, required: true, trim: true },
+    description: { type: String, required: true, trim: true },
+    images: { type: [String], default: [] },
+    priority: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "medium",
+    },
+    status: {
+      type: String,
+      enum: ["new", "in_progress", "resolved"],
+      default: "new",
+    },
+    landlordNote: { type: String, default: "" },
+    resolvedAt: { type: Date, default: null },
+  },
+  { timestamps: true }
+);
+
+const RepairRequest = mongoose.model("RepairRequest", repairRequestSchema);
+
+module.exports = { RepairRequest };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\review.model.js =====
+const mongoose = require("mongoose");
+
+const reviewSchema = new mongoose.Schema(
+  {
+    roomId: { type: mongoose.Schema.Types.ObjectId, ref: "Room", required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    userName: { type: String, required: true },
+    stars: { type: Number, required: true, min: 1, max: 5 },
+    content: { type: String, required: true, trim: true },
+  },
+  { timestamps: true }
+);
+
+const Review = mongoose.model("Review", reviewSchema);
+
+module.exports = { Review };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\room.model.js =====
+const mongoose = require("mongoose");
+
+const roomSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    category: { type: String, required: true, trim: true },
+    price: { type: Number, required: true, min: 0 },
+    district: { type: String, required: true, trim: true },
+    image: { type: String }, // Main image (backward compatible)
+    images: { type: [String], default: [] }, // Multiple images array
+    description: { type: String },
+    amenities: { type: [String], default: [] },
+    // bedrooms: { type: Number, default: 1 },
+    // bathrooms: { type: Number, default: 1 },
+    area: { type: Number, default: 25, min: 0 }, // mÂ²
+    roomNumber: { type: String, trim: true, default: "" },
+    blockId: { type: mongoose.Schema.Types.ObjectId, ref: "MotelBlock", default: null },
+    electricityPrice: { type: Number, default: 3500, min: 0 },
+    waterPrice: { type: Number, default: 15000, min: 0 },
+    serviceFee: { type: Number, default: 100000, min: 0 },
+    currentElectricity: { type: Number, default: 0, min: 0 },
+    currentWater: { type: Number, default: 0, min: 0 },
+    ownerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    ownerName: { type: String },
+    tenant: {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      name: { type: String },
+      email: { type: String },
+      phone: { type: String },
+      startDate: { type: Date },
+      endDate: { type: Date },
+    },
+    status: {
+      type: String,
+      enum: ["available", "rented", "maintenance", "hidden", "deleted"],
+      default: "available",
+    },
+  },
+  { timestamps: true }
+);
+
+const Room = mongoose.model("Room", roomSchema);
+
+module.exports = { Room };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\models\user.model.js =====
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    password: { type: String },
+    role: {
+      type: String,
+      enum: ["user", "landlord", "admin"],
+      default: "user",
+    },
+    phone: { type: String, trim: true },
+    bankAccount: {
+      type: new mongoose.Schema({
+        bankBin: { type: String, required: true, match: /^\d{6}$/ },
+        bankName: { type: String, required: true, trim: true, maxlength: 120 },
+        accountNumber: { type: String, required: true, match: /^[A-Za-z0-9]{6,19}$/ },
+        accountName: { type: String, required: true, trim: true, minlength: 5, maxlength: 50, match: /^[^\u0000-\u001f\u007f]+$/ },
+        updatedAt: { type: Date, default: Date.now },
+      }, { _id: false }),
+      default: undefined,
+      select: false,
+    },
+    status: {
+      type: String,
+      enum: ["active", "blocked"],
+      default: "active",
+    },
+    bookmarkedRooms: [{ type: mongoose.Schema.Types.ObjectId, ref: "Room" }],
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = { User };
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\admin.routes.js =====
+const { Router } = require("express");
+const {
+    getDashboardStats,
+    getRevenue,
+    getOccupiedRooms,
+    getAllRentals,
+    getAllReviews,
+    deleteReviewByAdmin,
+} = require("../controllers/admin.controller");
+const { getOrders } = require("../controllers/order.controller");
+const { getCoupons } = require("../controllers/coupon.controller");
+const { getAllUsers, updateUserStatus, updateUserRole } = require("../controllers/user.controller");
+const { requireAuth, requireAdmin } = require("../middlewares/auth.middleware");
+
+const router = Router();
+
+router.use(requireAuth, requireAdmin);
+
+// Tá»•ng quan
+router.get("/dashboard", getDashboardStats);
+router.get("/revenue", getRevenue);
+router.get("/orders", getOrders);
+router.get("/coupons", getCoupons);
+
+// 4.1 - Quáº£n lĂ½ tĂ i khoáº£n ngÆ°á»i dĂ¹ng
+router.get("/users", getAllUsers);
+router.patch("/users/:id/status", updateUserStatus);
+router.patch("/users/:id/role", updateUserRole);
+
+// 4.2 - Quáº£n lĂ½ ngÆ°á»i thuĂª trong tá»«ng phĂ²ng
+router.get("/occupied-rooms", getOccupiedRooms);
+router.get("/rentals", getAllRentals);
+
+// 4.3 - Quáº£n lĂ½ Ä‘Ă¡nh giĂ¡ vĂ  pháº£n há»“i
+router.get("/reviews", getAllReviews);
+router.delete("/reviews/:id", deleteReviewByAdmin);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\auth.routes.js =====
+const { Router } = require("express");
+const { register, login, getMe } = require("../controllers/auth.controller");
+const { requireAuth } = require("../middlewares/auth.middleware");
+
+const router = Router();
+
+router.post("/register", register);
+router.post("/login", login);
+router.get("/me", requireAuth, getMe);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\chat.routes.js =====
+const { Router } = require("express");
+const { chatWithGemini } = require("../controllers/chat.controller");
+
+const router = Router();
+
+router.post("/gemini", chatWithGemini);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\contact.routes.js =====
+const { Router } = require("express");
+const {
+  createContactInquiry,
+  getContactInquiries,
+  updateContactStatus,
+} = require("../controllers/contact.controller");
+const { requireAuth, requireLandlord } = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+const { contactRateLimit } = require("../middlewares/contactRateLimit");
+
+const router = Router();
+
+// KhĂ¡ch (khĂ´ng Ä‘Äƒng nháº­p) Ä‘á»ƒ láº¡i thĂ´ng tin liĂªn há»‡
+router.post("/", contactRateLimit, createContactInquiry);
+
+// Chá»§ trá» xem vĂ  cáº­p nháº­t tráº¡ng thĂ¡i liĂªn há»‡
+router.get("/", requireAuth, requireLandlord, getContactInquiries);
+router.patch("/:id/status", requireAuth, requireLandlord, validateObjectId("id"), updateContactStatus);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\contactRequest.routes.js =====
+const { Router } = require("express");
+const { createContactRequest, getContactRequests } = require("../controllers/contactRequest.controller");
+const { requireAuth, requireAdmin } = require("../middlewares/auth.middleware");
+const { contactRateLimit } = require("../middlewares/contactRateLimit");
+
+const router = Router();
+router.post("/", contactRateLimit, createContactRequest);
+router.get("/", requireAuth, requireAdmin, getContactRequests);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\contract.routes.js =====
+const { Router } = require("express");
+const {
+  getContracts,
+  getMyActiveContract,
+  getContractById,
+  createContract,
+  selfBookRoomAndCreateContract,
+  extendContract,
+  terminateContract,
+} = require("../controllers/contract.controller");
+const { requireAuth, requireLandlord } = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+
+const router = Router();
+
+router.use(requireAuth);
+router.get("/", getContracts);
+router.get("/my-active", getMyActiveContract);
+router.post("/self-book", selfBookRoomAndCreateContract);
+router.get("/:id", validateObjectId("id"), getContractById);
+router.post("/", requireLandlord, createContract);
+router.patch("/:id/extend", validateObjectId("id"), extendContract);
+router.patch("/:id/tenant-terminate", validateObjectId("id"), terminateContract);
+router.patch("/:id/terminate", requireLandlord, validateObjectId("id"), terminateContract);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\coupon.routes.js =====
+const { Router } = require("express");
+const {
+  getCoupons,
+  createCoupon,
+  applyCoupon,
+  toggleCoupon,
+  deleteCoupon,
+} = require("../controllers/coupon.controller");
+const { requireAuth, requireAdmin, optionalAuth } = require("../middlewares/auth.middleware");
+
+const router = Router();
+
+router.post("/apply", optionalAuth, applyCoupon);
+
+router.use(requireAuth, requireAdmin);
+router.get("/", getCoupons);
+router.post("/", createCoupon);
+router.patch("/:id/toggle", toggleCoupon);
+router.delete("/:id", deleteCoupon);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\invoice.routes.js =====
+const { Router } = require("express");
+const {
+  getInvoices,
+  getInvoiceById,
+  getPaymentInstructions,
+  createInvoice,
+  markInvoicePaid,
+  tenantPayInvoice,
+  rejectPaymentRequest,
+  sendDebtReminder,
+  getDashboardAggregations,
+} = require("../controllers/invoice.controller");
+const { requireAuth, requireLandlord } = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+
+const router = Router();
+
+router.use(requireAuth);
+router.get("/stats/aggregation", requireLandlord, getDashboardAggregations);
+router.get("/:id/payment-instructions", validateObjectId("id"), getPaymentInstructions);
+router.get("/", getInvoices);
+router.get("/:id", validateObjectId("id"), getInvoiceById);
+router.post("/", requireLandlord, createInvoice);
+router.patch("/:id/tenant-pay", validateObjectId("id"), tenantPayInvoice);
+router.patch("/:id/pay", requireLandlord, validateObjectId("id"), markInvoicePaid);
+router.patch("/:id/payment-reject", requireLandlord, validateObjectId("id"), rejectPaymentRequest);
+router.post("/:id/remind", requireLandlord, validateObjectId("id"), sendDebtReminder);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\meterReading.routes.js =====
+const { Router } = require("express");
+const {
+  getMeterSheet,
+  saveBatchMeterReadings,
+} = require("../controllers/meterReading.controller");
+const { requireAuth, requireLandlord } = require("../middlewares/auth.middleware");
+
+const router = Router();
+
+router.use(requireAuth, requireLandlord);
+router.get("/sheet", getMeterSheet);
+router.post("/batch", saveBatchMeterReadings);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\motelBlock.routes.js =====
+const { Router } = require("express");
+const {
+  getMotelBlocks,
+  getMotelBlockById,
+  createMotelBlock,
+  updateMotelBlock,
+  deleteMotelBlock,
+} = require("../controllers/motelBlock.controller");
+const {
+  requireAuth,
+  optionalAuth,
+  requireLandlord,
+} = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+
+const router = Router();
+
+router.get("/", optionalAuth, getMotelBlocks);
+router.get("/:id", optionalAuth, validateObjectId("id"), getMotelBlockById);
+router.post("/", requireAuth, requireLandlord, createMotelBlock);
+router.put("/:id", requireAuth, requireLandlord, validateObjectId("id"), updateMotelBlock);
+router.delete("/:id", requireAuth, requireLandlord, validateObjectId("id"), deleteMotelBlock);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\notification.routes.js =====
+const { Router } = require("express");
+const { listNotifications, markRead, markAllRead } = require("../controllers/notification.controller");
+const { requireAuth } = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+const router = Router();
+router.use(requireAuth);
+router.get("/", listNotifications);
+router.patch("/read-all", markAllRead);
+router.patch("/:id/read", validateObjectId("id"), markRead);
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\order.routes.js =====
+const { Router } = require("express");
+const { createOrder, getOrders, clearOrders } = require("../controllers/order.controller");
+const { requireAuth, requireAdmin, requireLandlord, optionalAuth } = require("../middlewares/auth.middleware");
+
+const router = Router();
+
+router.post("/", optionalAuth, createOrder);
+router.get("/", requireAuth, requireLandlord, getOrders);
+router.delete("/clear", requireAuth, requireAdmin, clearOrders);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\rentalHistory.routes.js =====
+const { Router } = require("express");
+const { requireAuth } = require("../middlewares/auth.middleware");
+const {
+    getRentalHistory,
+    getRentalHistoryById,
+} = require("../controllers/rentalHistory.controller");
+
+const router = Router();
+
+// Get all rental history of current user
+router.get("/", requireAuth, getRentalHistory);
+
+// Get rental history detail by id
+router.get("/:id", requireAuth, getRentalHistoryById);
+
+module.exports = router;
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\repairRequest.routes.js =====
+const { Router } = require("express");
+const {
+  getRepairRequests,
+  createRepairRequest,
+  updateRepairStatus,
+} = require("../controllers/repairRequest.controller");
+const { requireAuth, requireLandlord } = require("../middlewares/auth.middleware");
+const { validateObjectId } = require("../middlewares/validate.middleware");
+const { upload, handleMulterError, validateImageFiles } = require("../middlewares/upload.middleware");
+
+const router = Router();
+
+router.use(requireAuth);
+router.get("/", getRepairRequests);
+router.post("/", upload.array("images", 3), handleMulterError, validateImageFiles, createRepairRequest);
+router.patch("/:id/status", requireLandlord, validateObjectId("id"), updateRepairStatus);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\review.routes.js =====
+const { Router } = require("express");
+const { getReviewsByRoomId, createReview, updateReview, deleteReview } = require("../controllers/review.controller");
+const { optionalAuth } = require("../middlewares/auth.middleware");
+
+const router = Router();
+
+router.get("/room/:roomId", getReviewsByRoomId);
+router.post("/", optionalAuth, createReview);
+router.put("/:id", optionalAuth, updateReview);
+router.delete("/:id", optionalAuth, deleteReview);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\room.routes.js =====
+const { Router } = require("express");
+const {
+  getRooms,
+  getRoomById,
+  createRoom,
+  updateRoom,
+  deleteRoom,
+  seedRooms,
+  getSearchSuggestions,
+  addTenant,
+  removeTenant,
+} = require("../controllers/room.controller");
+const { requireAuth, requireAdmin, requireLandlord, optionalAuth } = require("../middlewares/auth.middleware");
+const { upload, handleMulterError, validateImageFiles } = require("../middlewares/upload.middleware");
+
+const router = Router();
+
+router.get("/", optionalAuth, getRooms);
+router.get("/suggestions", getSearchSuggestions);
+router.get("/:id", optionalAuth, getRoomById);
+router.post("/seed", requireAuth, requireAdmin, seedRooms);
+router.post("/", requireAuth, requireLandlord, upload.array("images", 8), handleMulterError, validateImageFiles, createRoom);
+router.put("/:id", requireAuth, requireLandlord, upload.array("images", 8), handleMulterError, validateImageFiles, updateRoom);
+router.delete("/:id", requireAuth, requireLandlord, deleteRoom);
+router.post("/:id/tenant", requireAuth, requireLandlord, addTenant);
+router.delete("/:id/tenant", requireAuth, requireLandlord, removeTenant);
+router.post("/:id/release", requireAuth, requireLandlord, removeTenant);
+
+module.exports = router;
+
+===== FILE: C:\LTW_CK\1462_LTW_CuoiKy\server\src\routes\user.routes.js =====
+const { Router } = require("express");
+const { getAllUsers, getUserById, updateUserStatus, updateUserRole, toggleBookmark, getBookmarkedRooms, getUserByEmail } = require("../controllers/user.controller");
+const { requireAuth, requireAdmin, requireLandlord } = require("../middlewares/auth.middleware");
+
+const router = Router();
+const { getBankOptions, getMyBankAccount, updateMyBankAccount } = require("../controllers/user.controller");
+
+router.use(requireAuth);
+router.get("/bank-options", getBankOptions);
+router.get("/me/bank-account", getMyBankAccount);
+router.patch("/me/bank-account", requireLandlord, updateMyBankAccount);
+router.get("/", requireAdmin, getAllUsers);
+router.get("/search/email", requireLandlord, getUserByEmail);
+router.get("/:id", getUserById);
+router.patch("/:id/status", requireAdmin, updateUserStatus);
+router.patch("/:id/role", requireAdmin, updateUserRole);
+router.post("/bookmarks/:roomId", toggleBookmark);
+router.get("/bookmarks/list/all", getBookmarkedRooms);
+
+module.exports = router;
+
